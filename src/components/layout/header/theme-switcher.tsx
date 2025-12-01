@@ -1,8 +1,8 @@
 "use client";
 
+import { useMemo } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,9 +10,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "@/providers/translation-provider";
+import { Lang } from "@/utils/translation/dictionary-utils";
+import { isRTL } from "@/utils/translation/language-utils";
 
-export function ThemeSwitcher() {
+const FALLBACK_DICT = {
+  name: "Theme",
+  light: "Light",
+  dark: "Dark",
+  system: "System",
+};
+
+export function ThemeSwitcher({ lang }: { lang: Lang }) {
   const { setTheme } = useTheme();
+  const raw = useTranslation?.()?.navBar?.switchers?.themeSwitchers;
+  const dict = useMemo(() => ({ ...FALLBACK_DICT, ...(raw ?? {}) }), [raw]);
+
+  const rtl = isRTL(lang);
 
   return (
     <DropdownMenu>
@@ -20,40 +34,52 @@ export function ThemeSwitcher() {
         <Button
           variant="ghost"
           size="icon"
-          className="bg-background shadow-2xl shadow-foreground"
+          aria-label={dict.name}
+          className="relative bg-background hover:bg-muted/10 focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer"
         >
           <Sun
             strokeWidth={2}
-            className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90 text-primary"
+            className="h-5 w-5 transition-transform motion-reduce:transition-none motion-reduce:transform-none dark:scale-0 dark:-rotate-90 text-primary"
+            aria-hidden
           />
           <Moon
             strokeWidth={2}
-            className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0 text-primary"
+            className="absolute inset-0 m-auto h-5 w-5 scale-0 rotate-90 transition-transform motion-reduce:transition-none motion-reduce:transform-none dark:scale-100 dark:rotate-0 text-primary"
+            aria-hidden
           />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{dict.name}</span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent
-        align="end"
-        className="bg-background text-foreground border border-border"
+        align={rtl ? "start" : "end"}
+        className="bg-background text-foreground border border-border shadow-md min-w-25"
       >
         <DropdownMenuItem
-          className="hover:bg-muted hover:text-muted-foreground"
+          dir={rtl ? "rtl" : "ltr"}
+          className="hover:bg-muted hover:text-muted-foreground cursor-pointer"
           onClick={() => setTheme("light")}
+          role="menuitem"
         >
-          Light
+          {dict.light}
         </DropdownMenuItem>
+
         <DropdownMenuItem
-          className="hover:bg-muted hover:text-muted-foreground"
+          dir={rtl ? "rtl" : "ltr"}
+          className="hover:bg-muted hover:text-muted-foreground cursor-pointer"
           onClick={() => setTheme("dark")}
+          role="menuitem"
         >
-          Dark
+          {dict.dark}
         </DropdownMenuItem>
+
         <DropdownMenuItem
-          className="hover:bg-muted hover:text-muted-foreground"
+          dir={rtl ? "rtl" : "ltr"}
+          className="hover:bg-muted hover:text-muted-foreground cursor-pointer"
           onClick={() => setTheme("system")}
+          role="menuitem"
         >
-          System
+          {dict.system}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

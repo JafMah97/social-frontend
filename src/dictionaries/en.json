@@ -1,55 +1,45 @@
 {
   "siteName": "Social",
-  "nav": {
-    "home": "Home",
-    "feeds": "Feeds",
-    "about": "About"
+  "logo": {
+    "mainChar": "K",
+    "restChars": "onekta"
   },
-  "hero": {
-    "title": "Connect. Share. Belong.",
-    "subtitle": "A modern social experience built for meaningful conversations and real connections.",
-    "ctaPrimary": "Get Started",
-    "ctaSecondary": "Learn More",
-    "stat1": "100k+ active users",
-    "stat2": "Real-time conversations",
-    "previewNote": "This is a live preview. Sign up to customize your feed."
-  },
-  "features": {
-    "title": "Why people love it",
-    "subtitle": "Built for speed, privacy, and real conversations.",
-    "f1Title": "Real-time feed",
-    "f1Desc": "Instant updates and threaded conversations.",
-    "f2Title": "Privacy first",
-    "f2Desc": "You control who sees your posts and data.",
-    "f3Title": "Customizable",
-    "f3Desc": "Themes, languages, and layout options."
-  },
-  "testimonial": {
-    "quote": "“A beautiful, fast, and friendly place to share ideas.”"
-  },
-  "newsletter": {
-    "title": "Stay in the loop",
-    "subtitle": "Get product updates and tips delivered to your inbox.",
-    "placeholder": "you@example.com",
-    "cta": "Subscribe"
-  },
-  "auth": {
-    "login": "Login",
-    "register": "Register"
-  },
-  "footer": {
-    "rights": "All rights reserved."
-  },
+
   "notFoundPage": {
-    "title":"Page Not Found",
-    "description":"The page you're looking for doesn't exist or has been moved.",
-    "goHome":"Go Home",
-    "goback":"Go Back",
-    "footer":" Konekta • Page Not Found"
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go Home",
+    "goback": "Go Back",
+    "footer": " Konekta • Page Not Found"
   },
   "loadingPage": {
-      "title": "Loading",
-      "subtitle": "Please wait while we prepare your experience",
-      "status": "Preparing your experience"
-  }
+    "title": "Loading",
+    "subtitle": "Please wait while we prepare your experience",
+    "status": "Preparing your experience"
+  },
+
+  "navBar": {
+    "links": {
+      "home":"Home",
+      "about":"About",
+      "feeds":"Feeds",
+      "contact":"Contact"
+    },
+    "switchers": {
+      "themeSwitchers":{
+        "name":"Toggle Theme",
+        "light":"Light",
+        "dark":"Dark",
+        "system":"system"
+      }
+    },
+    "authButtons":{
+      "login":"Login",
+      "register":"register"
+    }
+  },
+  "footer": {},
+  "mainPage": {},
+  "registerPage": {},
+  "loginPage": {}
 }

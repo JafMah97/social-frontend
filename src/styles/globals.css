@@ -156,6 +156,5 @@
 
 html {
   scrollbar-gutter: stable !important;
-  overflow-y: auto !important;
   scroll-behavior: smooth;
 }

@@ -1,4 +1,3 @@
-// components/header/mobile-navbar.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -27,8 +26,9 @@ import {
 import { CustomSearch } from "../custom-component/custom-search";
 import { ThemeSwitcher } from "../header/theme-switcher";
 import LanguageSwitcher from "../header/language-switcher";
+import { Lang } from "@/utils/translation/dictionary-utils";
 
-export default function MobileNavbar() {
+export default function MobileNavbar({lang}:{lang:Lang}) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname() || "/";
 
@@ -133,7 +133,7 @@ export default function MobileNavbar() {
             <div className="w-full flex items-start justify-around gap-6">
               <div className="flex flex-col items-center justify-center gap-2">
                 <div className="p-0">
-                  <ThemeSwitcher />
+                  <ThemeSwitcher lang={lang} />
                 </div>
                 <span className="text-xs text-muted-foreground">Theme</span>
               </div>
@@ -219,7 +219,7 @@ function MobileNavLink({
       aria-current={isActive ? "page" : undefined}
     >
       <div
-        className={`flex-shrink-0 transition-transform duration-200 ${
+        className={`shrink-0 transition-transform duration-200 ${
           isActive
             ? "text-primary scale-105"
             : "text-foreground/70 group-hover:text-primary"

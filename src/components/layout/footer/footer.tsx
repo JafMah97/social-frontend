@@ -21,6 +21,8 @@ export default function Footer() {
 
   return (
     <footer className="bg-background border-t border-border">
+      <div className="bg-primary/10">
+
       {/* Main Footer Content */}
       <div className="container mx-auto max-w-7xl px-4 py-12">
         {/* Top Section - 4 Column Layout */}
@@ -157,6 +159,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </footer>
   );
