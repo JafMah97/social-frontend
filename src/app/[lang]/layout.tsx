@@ -36,11 +36,14 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
+      <TranslationsProvider translations={translations}>
       <body
-        className={`${fontClass} home-image min-h-screen w-full antialiased`}
-        style={{margin:"0px !important"}}
+        className={`${fontClass} home-image`}
+        style={{
+          overflow: "initial !important",
+          margin: "0px !important",
+        }}
       >
-        <TranslationsProvider translations={translations}>
           <ThemeProvider
             attribute={"class"}
             defaultTheme="system"
@@ -51,8 +54,8 @@ export default async function RootLayout({
             {children}
             <Footer />
           </ThemeProvider>
-        </TranslationsProvider>
       </body>
+        </TranslationsProvider>
     </html>
   );
 }

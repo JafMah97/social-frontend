@@ -6,7 +6,7 @@ function sleep(ms: number) {
 }
 
 export default async function HomePage() {
-    //  await sleep(10000);
+     await sleep(10000);
   return (
     <div className=" flex flex-col  bg-primary/10 ">
       <div className="dark:bg-background/50 backdrop-blur-md">

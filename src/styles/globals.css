@@ -153,8 +153,9 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-
-html {
-  scrollbar-gutter: stable !important;
-  scroll-behavior: smooth;
+.force-body-reset {
+  margin-right: 0 !important;
+  overflow: initial !important;
 }
+
+

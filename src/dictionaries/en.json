@@ -19,6 +19,8 @@
   },
 
   "navBar": {
+    "menu":"Menu",
+    "quickActions":"Quick actions",
     "links": {
       "home":"Home",
       "about":"About",
@@ -27,10 +29,17 @@
     },
     "switchers": {
       "themeSwitchers":{
+        "themes":"Themes",
         "name":"Toggle Theme",
         "light":"Light",
         "dark":"Dark",
         "system":"system"
+      },
+      "langaugeSitchers":{
+        "languages":"Languages",
+        "arabic":"Arabic",
+        "english":"English",
+        "name":"Select language"
       }
     },
     "authButtons":{

@@ -1,179 +1,149 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Menu,
-  Home,
-  Newspaper,
-  Info,
-  User,
-  UserPlus,
-  X,
-  Search,
+
+  HomeIcon,
+  NewspaperIcon,
+  FileQuestion,
+  MailIcon,
+  XIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
-import { CustomSearch } from "../custom-component/custom-search";
+
 import { ThemeSwitcher } from "../header/theme-switcher";
 import LanguageSwitcher from "../header/language-switcher";
-import { Lang } from "@/utils/translation/dictionary-utils";
+import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
+import NavLink from "./nav-link";
+import { isRTL } from "@/utils/translation/language-utils";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../custom-component/custom-sheet";
 
-export default function MobileNavbar({lang}:{lang:Lang}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname() || "/";
+export default async function MobileNavbar({ lang }: { lang: Lang }) {
+  const dict = (await getDictionary(lang)).navBar;
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
-
-  // Defensive removal of injected default close button if present
-  useEffect(() => {
-    if (!isOpen) return;
-    const timer = setTimeout(() => {
-      const sheetRoot = document.querySelector(".no-default-close");
-      const injectedBtn = sheetRoot
-        ?.querySelector("button > svg.lucide-x")
-        ?.closest("button");
-      if (injectedBtn) injectedBtn.remove();
-    }, 50);
-    return () => clearTimeout(timer);
-  }, [isOpen]);
+  const navItems = [
+    {
+      href: `/${lang}/`,
+      label: dict.links.home,
+      icon: <HomeIcon className="w-4 h-4" strokeWidth={2} />,
+    },
+    {
+      href: `/${lang}/feeds`,
+      label: dict.links.feeds,
+      icon: <NewspaperIcon className="w-4 h-4" strokeWidth={2} />,
+    },
+    {
+      href: `/${lang}/about`,
+      label: dict.links.about,
+      icon: <FileQuestion className="w-4 h-4" strokeWidth={2} />,
+    },
+    {
+      href: `/${lang}/contact`,
+      label: dict.links.contact,
+      icon: <MailIcon className="w-4 h-4" strokeWidth={2} />,
+    },
+  ];
 
   return (
-    <div className="sm:hidden">
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <div className="md:hidden">
+      <Sheet>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
             size="lg"
             aria-label="Open menu"
-            className="text-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200"
+            className="text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200 cursor-pointer"
           >
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
 
         <SheetContent
-          side="left"
-          className="p-0 w-80 border-r border-border/40 bg-background/95 backdrop-blur-sm no-default-close safe-bottom"
+          dir={isRTL(lang) ? "rtl" : "ltr"}
+          side={isRTL(lang) ? "right" : "left"}
+          className="p-0 w-80 border-r border-border/40 bg-background/95 backdrop-blur-sm"
         >
           {/* Header */}
-          <SheetHeader className="px-6 py-4 border-b border-border/40 relative">
-            <div className="flex items-center gap-3">
-              <SheetTitle className="text-lg font-semibold text-foreground">
-                Menu
-              </SheetTitle>
-              <span className="ml-1 text-xs text-muted-foreground">
-                Quick actions
-              </span>
-            </div>
-
-            <SheetClose asChild>
-              <Button
-                size="icon"
-                aria-label="Close menu"
-                className="absolute top-3 right-3 text-foreground hover:bg-muted/20"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </SheetClose>
-
-            {/* Search */}
-            <div className="pt-4">
-              <label htmlFor="mobile-search" className="sr-only">
-                Search
-              </label>
-              <div className="relative">
-                <CustomSearch />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <SheetHeader className="px-6 py-4 border-b border-border/40 relative ">
+            <div className="flex flex-row justify-between">
+              <div className="flex items-center gap-3">
+                <SheetTitle className="text-lg font-semibold text-foreground">
+                  {dict.menu}
+                </SheetTitle>
+                <span className="ml-1 text-xs text-muted-foreground">
+                  {dict.quickActions}
+                </span>
               </div>
+              <SheetClose className="p-2 cursor-pointer hover:bg-primary text-primary rounded-lg hover:text-foreground transition-colors duration-200">
+                <XIcon
+                  strokeWidth={2}
+                  className="h-5 w-5 group-hover:bg-primary/10"
+                />
+              </SheetClose>
             </div>
           </SheetHeader>
+          {/* Switchers with labels underneath and generous gap */}
+          <div className="w-full flex items-start justify-around gap-6 border-b border-border/40 py-4">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="p-0">
+                <ThemeSwitcher lang={lang} />
+              </div>
+              <span className="text-xs text-muted-foreground">{dict.switchers.themeSwitchers.themes}</span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="p-0">
+                <LanguageSwitcher lang={lang} />
+              </div>
+              <span className="text-xs text-muted-foreground">{dict.switchers.langaugeSitchers.languages}</span>
+            </div>
+          </div>
 
           {/* Navigation */}
           <nav className="py-4" aria-label="Mobile navigation">
             <div className="flex flex-col gap-2 px-4">
-              <MobileNavLink
-                href="/"
-                icon={<Home className="h-5 w-5" />}
-                label="Home"
-                isActive={isActive("/")}
-                onClick={() => setIsOpen(false)}
-              />
-              <MobileNavLink
-                href="/feeds"
-                icon={<Newspaper className="h-5 w-5" />}
-                label="Feeds"
-                isActive={isActive("/feeds")}
-                onClick={() => setIsOpen(false)}
-              />
-              <MobileNavLink
-                href="/about"
-                icon={<Info className="h-5 w-5" />}
-                label="About"
-                isActive={isActive("/about")}
-                onClick={() => setIsOpen(false)}
-              />
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  isMobile={true}
+                />
+              ))}
             </div>
-
           </nav>
 
           {/* Bottom area: simplified, stacked, flex-start */}
           <div className="mt-4 p-4 border-t border-border/40 bg-background/95 flex flex-col items-start gap-4">
-            {/* Switchers with labels underneath and generous gap */}
-            <div className="w-full flex items-start justify-around gap-6">
-              <div className="flex flex-col items-center justify-center gap-2">
-                <div className="p-0">
-                  <ThemeSwitcher lang={lang} />
-                </div>
-                <span className="text-xs text-muted-foreground">Theme</span>
-              </div>
-
-              <div className="flex flex-col items-center justify-center gap-2">
-                <div className="p-0">
-                  <LanguageSwitcher />
-                </div>
-                <span className="text-xs text-muted-foreground">Language</span>
-              </div>
-            </div>
-
             {/* Auth buttons: reduced height, balanced spacing */}
             <div className="w-full mt-1 flex flex-col gap-2">
               <Link
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                className="w-full"
+                href={`/${lang}/login`}
+                className="h-full flex items-center w-full"
               >
                 <Button
                   variant="ghost"
-                  className="w-full justify-center h-10 rounded-md border border-border text-foreground font-medium hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-primary/50 text-sm"
+                  className="h-9 px-4 bg-primary/10 cursor-pointer text-foreground/80 w-full hover:text-foreground font-medium transition-all duration-200 hover:bg-accent rounded-lg"
                   aria-label="Login"
                 >
-                  <User className="h-4 w-4 mr-2" />
-                  <span>Login</span>
+                  <span className="text-sm font-medium">
+                    {dict.authButtons.login}
+                  </span>
                 </Button>
               </Link>
 
               <Link
-                href="/register"
-                onClick={() => setIsOpen(false)}
-                className="w-full"
+                href={`/${lang}/register`}
+                className="h-full flex items-center w-full"
               >
                 <Button
-                  className="w-full justify-center h-10 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/95 focus-visible:ring-2 focus-visible:ring-primary/60 text-sm"
+                  className="h-9 px-4 bg-primary cursor-pointer w-full text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg"
                   aria-label="Register"
                 >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  <span>Register</span>
+                  <span className="text-sm font-medium">
+                    {dict.authButtons.register}
+                  </span>
                 </Button>
               </Link>
             </div>
@@ -181,61 +151,5 @@ export default function MobileNavbar({lang}:{lang:Lang}) {
         </SheetContent>
       </Sheet>
     </div>
-  );
-}
-
-/* MobileNavLink component */
-function MobileNavLink({
-  href,
-  icon,
-  label,
-  variant = "default",
-  isActive = false,
-  onClick,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  variant?: "default" | "primary";
-  isActive?: boolean;
-  onClick: () => void;
-}) {
-  const base =
-    "flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50";
-  const variantClasses =
-    variant === "primary"
-      ? "bg-primary text-primary-foreground font-semibold hover:bg-primary/95 shadow"
-      : `text-foreground ${
-          isActive
-            ? "bg-primary/10 text-primary font-medium border-l-4 border-primary"
-            : "hover:bg-muted/50 text-foreground/90"
-        }`;
-
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className={`${base} ${variantClasses}`}
-      aria-current={isActive ? "page" : undefined}
-    >
-      <div
-        className={`shrink-0 transition-transform duration-200 ${
-          isActive
-            ? "text-primary scale-105"
-            : "text-foreground/70 group-hover:text-primary"
-        }`}
-      >
-        {icon}
-      </div>
-
-      <span className="font-medium text-base flex-1">{label}</span>
-
-      {isActive && variant === "default" && (
-        <div
-          className="w-2 h-2 bg-primary rounded-full animate-pulse"
-          aria-hidden
-        />
-      )}
-    </Link>
   );
 }

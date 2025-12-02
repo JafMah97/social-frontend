@@ -34,8 +34,8 @@ export function ThemeSwitcher({ lang }: { lang: Lang }) {
         <Button
           variant="ghost"
           size="icon"
+          className="bg-primary/10 shadow-2xl shadow-foreground cursor-pointer relative"
           aria-label={dict.name}
-          className="relative bg-background hover:bg-muted/10 focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer"
         >
           <Sun
             strokeWidth={2}

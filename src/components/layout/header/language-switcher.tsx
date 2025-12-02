@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { Languages } from "lucide-react";
 import { setCookie } from "@/utils/cookies";
@@ -14,11 +14,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "@/providers/translation-provider";
+import { isRTL } from "@/utils/translation/language-utils";
+import { Lang } from "@/utils/translation/dictionary-utils";
 
-export function LanguageSwitcher() {
-  const router = useRouter();
+export function LanguageSwitcher({lang}:{lang:Lang}) {
   const pathname = usePathname();
   const [, startTransition] = useTransition();
+  const dict = useTranslation().navBar.switchers.langaugeSitchers
 
   const currentLang = pathname?.split("/")[1] || "en";
 
@@ -28,7 +31,7 @@ export function LanguageSwitcher() {
 
     const newPath = pathname.replace(`/${currentLang}`, `/${lang}`);
     startTransition(() => {
-      router.push(newPath);
+      window.location.href = (newPath)
     });
   }
 
@@ -39,13 +42,13 @@ export function LanguageSwitcher() {
           variant="ghost"
           size="icon"
           aria-label="Select language"
-          className="bg-background shadow-2xl shadow-foreground"
+          className="bg-primary/10 cursor-pointer shadow-2xl shadow-foreground"
         >
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center">
               <Languages className="h-4 w-4 text-primary" strokeWidth={2} />
             </div>
-            <span className="sr-only">Select language</span>
+            <span className="sr-only">{dict.name}</span>
           </div>
         </Button>
       </DropdownMenuTrigger>
@@ -62,10 +65,10 @@ export function LanguageSwitcher() {
           }`}
           onClick={() => handleChange("en")}
         >
-          <div className="flex h-6 w-6 items-center justify-center">
+          <div dir={isRTL(lang)?"rtl":"ltr"} className="flex h-6 w-6 items-center justify-center">
             <span className="text-xs font-medium text-primary">EN</span>
           </div>
-          English
+          {dict.english}
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -79,7 +82,7 @@ export function LanguageSwitcher() {
           <div className="flex h-6 w-6 items-center justify-center">
             <span className="text-xs font-medium text-primary">AR</span>
           </div>
-          العربية
+          {dict.arabic}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

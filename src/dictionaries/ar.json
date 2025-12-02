@@ -17,18 +17,27 @@
     "status": "نقوم بتحضير تجربتك"
   },
   "navBar": {
+    "menu": "القائمة",
+    "quickActions": "إجراءات سريعة",
     "links": {
       "home": "الرئيسية",
       "about": "حول",
-      "feeds": "الموجز",
+      "feeds": "المنشورات",
       "contact": "اتصل بنا"
     },
     "switchers": {
       "themeSwitchers": {
-        "name":"تغير السّمة",
+        "themes": "السّمات",
+        "name": "تغير السّمة",
         "light": "فاتح",
         "dark": "داكن",
         "system": "النظام"
+      },
+      "langaugeSitchers": {
+        "languages": "اللّغات",
+        "arabic": "العربية",
+        "english": "الانجليزية",
+        "name": "اختر لغة"
       }
     },
     "authButtons": {
