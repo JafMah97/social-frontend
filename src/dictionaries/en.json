@@ -47,8 +47,13 @@
       "register":"register"
     }
   },
+  "mainPage": {
+    "hero":{
+      "headline":"",
+      "highlighted":""
+    }
+  },
   "footer": {},
-  "mainPage": {},
   "registerPage": {},
   "loginPage": {}
 }

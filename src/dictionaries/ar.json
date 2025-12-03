@@ -46,8 +46,8 @@
     }
   },
 
-  "footer": {},
   "mainPage": {},
+  "footer": {},
   "registerPage": {},
   "loginPage": {}
 }
