@@ -19,41 +19,125 @@
   },
 
   "navBar": {
-    "menu":"Menu",
-    "quickActions":"Quick actions",
+    "menu": "Menu",
+    "quickActions": "Quick actions",
     "links": {
-      "home":"Home",
-      "about":"About",
-      "feeds":"Feeds",
-      "contact":"Contact"
+      "home": "Home",
+      "about": "About",
+      "feeds": "Feeds",
+      "contact": "Contact"
     },
     "switchers": {
-      "themeSwitchers":{
-        "themes":"Themes",
-        "name":"Toggle Theme",
-        "light":"Light",
-        "dark":"Dark",
-        "system":"system"
+      "themeSwitchers": {
+        "themes": "Themes",
+        "name": "Toggle Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "system"
       },
-      "langaugeSitchers":{
-        "languages":"Languages",
-        "arabic":"Arabic",
-        "english":"English",
-        "name":"Select language"
+      "langaugeSitchers": {
+        "languages": "Languages",
+        "arabic": "Arabic",
+        "english": "English",
+        "name": "Select language"
       }
     },
-    "authButtons":{
-      "login":"Login",
-      "register":"register"
+    "authButtons": {
+      "login": "Login",
+      "register": "register"
     }
   },
   "mainPage": {
-    "hero":{
-      "headline":"",
-      "highlighted":""
+    "hero": {
+      "headline": {
+        "connect": "Connect",
+        "share": "Share",
+        "inspire": "Inspire"
+      },
+      "subtitle": "Join millions of people sharing their stories, building communities, and making meaningful connections on Konekta.",
+      "cta": {
+        "getStarted": "Get Started",
+        "watchDemo": "Watch Demo"
+      },
+      "stats": {
+        "activeUsers": {
+          "label": "Users",
+          "value": "2M+"
+        },
+        "communities": {
+          "label": "Communities",
+          "value": "50K+"
+        },
+        "uptime": {
+          "label": "Uptime",
+          "value": "99.9%"
+        },
+        "support": {
+          "label": "Support",
+          "value": "24/7"
+        }
+      },
+      "features": {
+        "title": "Why Choose Konekta?",
+        "subtitle": "We empower millions with tools to connect, share, and inspire every day.",
+        "globalReach": {
+          "title": "Global Reach",
+          "description": "Connect with people across the world and share your story without boundaries."
+        },
+        "community": {
+          "title": "Thriving Communities",
+          "description": "Join groups that matter to you and build meaningful relationships."
+        },
+        "performance": {
+          "title": "Reliable Performance",
+          "description": "Enjoy fast, secure, and always‑on access with 99.9% uptime."
+        }
+      }
     }
   },
-  "footer": {},
+  "footer": {
+    "brand": {
+      "description": "Building amazing experiences for everyone. Join our community and be part of something extraordinary."
+    },
+    "navigation": {
+      "title": "Navigation",
+      "links": {
+        "home": "Home",
+        "feeds": "Feeds",
+        "about": "About Us",
+        "blog": "Blog",
+        "contact": "Contact"
+      }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "email": "hello@konekta.com",
+      "phone": "+1 (234) 567-890",
+      "address": "123 Innovation Street\nTech City, TC 12345"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "subtitle": "Subscribe to our newsletter for the latest updates.",
+      "placeholder": "Your email"
+    },
+    "social": {
+      "title": "Follow Us",
+      "links": {
+        "twitter": "Twitter",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "website": "Website"
+      }
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "status": "All systems operational",
+    "copyright": "© {{year}} Konekta"
+  },
+
   "registerPage": {},
   "loginPage": {}
 }

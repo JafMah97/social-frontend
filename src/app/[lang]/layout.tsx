@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: string }>;
+  params: Promise<{ lang: Lang }>;
 }
 
 export async function generateStaticParams() {
@@ -30,7 +30,7 @@ export default async function RootLayout({
   params,
   children,
 }: RootLayoutProps) {
-  const { lang } = (await params) as { lang: Lang };
+  const { lang } = (await params)
   const translations = await getDictionary(lang);
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
@@ -38,11 +38,7 @@ export default async function RootLayout({
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
       <TranslationsProvider translations={translations}>
       <body
-        className={`${fontClass} home-image`}
-        style={{
-          overflow: "initial !important",
-          margin: "0px !important",
-        }}
+        className={`${fontClass}`}
       >
           <ThemeProvider
             attribute={"class"}
@@ -50,9 +46,9 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
+            <Navbar lang={lang} />
             {children}
-            <Footer />
+            <Footer lang={lang} />
           </ThemeProvider>
       </body>
         </TranslationsProvider>

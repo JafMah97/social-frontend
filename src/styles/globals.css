@@ -153,9 +153,17 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-.force-body-reset {
-  margin-right: 0 !important;
-  overflow: initial !important;
+
+
+.height-custom{
+height: calc(100vh - 64px);
 }
 
-
+@layer base {  
+  @supports (scrollbar-gutter: stable) {
+    body[data-scroll-locked] {
+      margin-right: 0 !important;
+      overflow: initial !important;
+    }
+  }
+}

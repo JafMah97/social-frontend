@@ -29,7 +29,7 @@ export function ThemeSwitcher({ lang }: { lang: Lang }) {
   const rtl = isRTL(lang);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"

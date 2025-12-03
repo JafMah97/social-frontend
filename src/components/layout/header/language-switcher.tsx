@@ -36,7 +36,7 @@ export function LanguageSwitcher({lang}:{lang:Lang}) {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"

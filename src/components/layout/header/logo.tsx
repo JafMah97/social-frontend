@@ -1,9 +1,7 @@
-import { getDictionary } from "@/utils/translation/dictionary-utils";
-import { getCurrentLang } from "@/utils/translation/language-utils";
+import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import Link from "next/link";
 
-export default async function Logo() {
-  const lang = await getCurrentLang()
+export default async function Logo({lang}:{lang:Lang}) {
   const dict = (await getDictionary(lang)).logo
   return (
     <>
