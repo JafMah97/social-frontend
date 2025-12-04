@@ -6,10 +6,6 @@ import {
   Phone,
   MapPin,
   ArrowRight,
-  Twitter,
-  Github,
-  Linkedin,
-  ExternalLink,
   ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +14,12 @@ import { Separator } from "@/components/ui/separator";
 import Logo from "../header/logo";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import { fmt, isRTL } from "@/utils/translation/language-utils";
+import { FaFacebook } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
+
+
 
 export default async function Footer({ lang }: { lang: Lang }) {
   const currentYear = new Date().getFullYear();
@@ -181,24 +183,24 @@ export default async function Footer({ lang }: { lang: Lang }) {
 // Social Links Data
 const socialLinks = [
   {
-    icon: <Twitter className="h-4 w-4" />,
+    icon: <FaSquareXTwitter className="h-4 w-4" />,
     href: "https://twitter.com/konekta",
     label: "Twitter",
   },
   {
-    icon: <Github className="h-4 w-4" />,
+    icon: <FaGithub className="h-4 w-4" />,
     href: "https://github.com/konekta",
     label: "GitHub",
   },
   {
-    icon: <Linkedin className="h-4 w-4" />,
+    icon: <FaLinkedin className="h-4 w-4" />,
     href: "https://linkedin.com/company/konekta",
     label: "LinkedIn",
   },
   {
-    icon: <ExternalLink className="h-4 w-4" />,
-    href: "https://konekta.com",
-    label: "Website",
+    icon: <FaFacebook className="h-4 w-4" />,
+    href: "https://facebook.com/konekta",
+    label: "Facebook",
   },
 ];
 

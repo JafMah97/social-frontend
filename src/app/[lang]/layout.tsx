@@ -11,6 +11,8 @@ import {
   Lang,
 } from "@/utils/translation/dictionary-utils";
 import { getDirection } from "@/utils/translation/language-utils";
+import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Konekta Social",
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: Lang }>;
+  params: Promise<{ lang: string }>;
 }
 
 export async function generateStaticParams() {
@@ -30,16 +32,25 @@ export default async function RootLayout({
   params,
   children,
 }: RootLayoutProps) {
-  const { lang } = (await params)
+  const { lang } = (await params) as {lang:Lang}
   const translations = await getDictionary(lang);
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
+        <body className={`${fontClass}`}>
       <TranslationsProvider translations={translations}>
-      <body
-        className={`${fontClass}`}
-      >
+          <NextTopLoader color="var(--color-primary)" showSpinner={false} />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                fontSize: "0.875rem",
+                textAlign: "start",
+              },
+              className: `antialiased ${fontClass}`,
+            }}
+          />
           <ThemeProvider
             attribute={"class"}
             defaultTheme="system"
@@ -50,8 +61,8 @@ export default async function RootLayout({
             {children}
             <Footer lang={lang} />
           </ThemeProvider>
-      </body>
-        </TranslationsProvider>
+      </TranslationsProvider>
+        </body>
     </html>
   );
 }

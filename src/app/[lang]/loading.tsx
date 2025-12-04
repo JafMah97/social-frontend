@@ -1,56 +1,75 @@
 // app/loading.tsx
-'use client'
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+"use client";
+
 import Logo from "@/components/layout/header/logo";
 import { useTranslation } from "@/providers/translation-provider";
+import { useCurrentLang } from "../hooks/useCurrentLang";
+import { Loader2 } from "lucide-react";
 
 export default function Loading() {
-  const [dots, setDots] = useState(".");
-  const dict = useTranslation().loadingPage
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDots((prev) => {
-        if (prev === "...") return ".";
-        if (prev === "..") return "...";
-        return "..";
-      });
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const dict = useTranslation().loadingPage;
+  const lang = useCurrentLang();
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm">
-      {/* Centered loader */}
-      <div className="flex flex-col items-center gap-6">
-        {/* Logo */}
-        <Logo/>
-        {/* Spinner */}
-        <div className="relative">
-          <div className="h-20 w-20">
-            <div className="absolute inset-0 border-3 border-primary/20 rounded-full"></div>
-            <div className="absolute inset-0 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Loader2 className="h-6 w-6 text-primary animate-spin" />
-          </div>
-        </div>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <div className="w-full max-w-md px-6">
+        <div className="rounded-xl border border-border bg-card/60 shadow-lg">
+          <div className="flex flex-col items-center gap-6 p-8">
+            {/* Logo */}
+            <Logo lang={lang} />
 
-        {/* Loading text */}
-        <div className="text-center space-y-2">
-          <p className="text-lg font-medium text-foreground">{dict.title}{dots}</p>
-          <p className="text-sm text-muted-foreground max-w-xs">
-            {dict.subtitle}
-          </p>
+            {/* Spinner */}
+            <div className="relative h-16 w-16">
+              <div className="absolute inset-0 rounded-full border-4 border-primary/20" />
+              <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader2
+                  aria-hidden
+                  className="h-5 w-5 text-primary animate-spin"
+                />
+              </div>
+            </div>
+
+            {/* Text */}
+            <div className="text-center space-y-1">
+              <p className="text-base font-semibold text-foreground">
+                {dict.title}
+              </p>
+              <p className="text-sm text-muted-foreground">{dict.subtitle}</p>
+            </div>
+
+            {/* Subtle skeleton lines */}
+            <div className="w-full space-y-2">
+              <div className="h-2 rounded bg-muted animate-pulse" />
+              <div className="h-2 w-5/6 rounded bg-muted animate-pulse" />
+            </div>
+          </div>
+
+          {/* Bottom gradient progress bar */}
+          <div className="h-1 w-full overflow-hidden rounded-b-xl">
+            <div className="h-full w-1/2 animate-[progress_1.8s_ease_infinite] bg-linear-to-r from-transparent via-primary to-transparent" />
+          </div>
         </div>
       </div>
 
-      {/* Progress indicator at bottom */}
-      <div className="absolute bottom-8 left-0 right-0">
-        <div className="h-1 bg-linear-to-r from-transparent via-primary to-transparent animate-pulse" />
-      </div>
+      {/* Keyframes for progress */}
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </div>
   );
 }

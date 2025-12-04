@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import Link from "next/link";
-
+// const sleep = (ms:number)=>{
+//   return  new Promise<void> ((reslover)=>{
+//     setTimeout(reslover,ms)
+//   })
+// }
 export default async function HomePage({params}:{params:Promise<{lang:Lang}>}) {
+  
   const lang =  (await params).lang
   const dict = (await getDictionary(lang)).mainPage;
   return (
