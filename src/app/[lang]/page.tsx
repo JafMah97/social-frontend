@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
+import { fmt } from "@/utils/translation/language-utils";
 import Link from "next/link";
 // const sleep = (ms:number)=>{
 //   return  new Promise<void> ((reslover)=>{
 //     setTimeout(reslover,ms)
 //   })
 // }
-export default async function HomePage({params}:{params:Promise<{lang:Lang}>}) {
-  
-  const lang =  (await params).lang
-  const dict = (await getDictionary(lang)).mainPage;
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ lang: Lang }>;
+}) {
+  const lang = (await params).lang;
+  const { mainPage: dict, siteName } = await getDictionary(lang);
   return (
     <div className="flex flex-col bg-primary/10">
       {/* Hero Section with Background */}
@@ -33,7 +37,7 @@ export default async function HomePage({params}:{params:Promise<{lang:Lang}>}) {
 
               {/* Subtitle */}
               <p className="text-lg leading-5 md:leading-relaxed md:text-xl text-white rounded-2xl mb-10 md:mb-14 px-5 max-w-2xl mx-auto">
-                {dict.hero.subtitle}
+                {fmt(dict.hero.subtitle, { siteName: siteName })}
               </p>
 
               {/* CTA Buttons */}
@@ -96,7 +100,7 @@ export default async function HomePage({params}:{params:Promise<{lang:Lang}>}) {
           <div className="max-w-6xl mx-auto text-center">
             {/* Section Heading */}
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {dict.hero.features.title}
+              {fmt(dict.hero.features.title,{siteName:siteName})}
             </h2>
             <p className="text-lg md:text-xl text-accent-foreground max-w-3xl mx-auto mb-16 leading-snug">
               {dict.hero.features.subtitle}

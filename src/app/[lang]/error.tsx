@@ -4,6 +4,8 @@
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Home, RefreshCw, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "@/providers/translation-provider";
+import { fmt } from "@/utils/translation/language-utils";
 
 export default function Error({
   error,
@@ -12,10 +14,12 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+const { siteName, errorPage: dict } = useTranslation();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-background to-primary/5 p-2">
+    <div className="custom-height flex items-center justify-center bg-linear-to-br from-background via-background to-primary/5 p-2">
       <div className="container max-w-4xl mx-auto">
-        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-5 md:p-8 shadow-2xl shadow-primary/5">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-2 md:p-4 mt-4 shadow-2xl shadow-primary/5 relative">
           {/* Error Icon */}
           <div className="flex justify-center mb-4">
             <div className="relative">
@@ -29,73 +33,71 @@ export default function Error({
           {/* Error Message */}
           <div className="text-center space-y-6 mb-6">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-              Something went wrong
+              {dict.title}
             </h1>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-destructive/10 text-destructive rounded-lg">
               <AlertCircle className="h-4 w-4" />
               <span className="text-sm font-medium">
-                Error: {error.message || "Unknown error"}
+                {dict.errorLabel}: {error.message || dict.unknownError}
               </span>
             </div>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              We apologize for the inconvenience. Our team has been notified and
-              is working to fix the issue.
+              {dict.subtitle}
             </p>
 
-            {/* Error Code if available */}
             {error.digest && (
               <div className="inline-block px-4 py-2 bg-muted rounded-lg">
-                <code className="text-sm font-mono text-muted-foreground">
-                  Error ID: {error.digest}
+                <code className="text-sm text-muted-foreground">
+                  {dict.errorId}: {error.digest}
                 </code>
               </div>
             )}
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col gap-2 justify-center items-center">
+            {/* Home */}
             <Button
-              onClick={reset}
-              className="px-6 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl shadow-primary/25"
+              variant="default"
+              className="px-6 py-2 border-2 transition-all duration-300 hover:scale-105"
             >
-              <RefreshCw className="h-5 w-5 mr-2" />
-              Try Again
-            </Button>
-
-            <Button
-              asChild
-              variant="outline"
-              className="px-6 py-6 border-2 hover:bg-accent hover:border-accent transition-all duration-300 hover:scale-105"
-            >
-              <Link href="/">
-                <Home className="h-5 w-5 mr-2" />
-                Go Home
+              <Link className="flex items-center" href="/">
+                <Home className="h-5 w-5 mx-2" />
+                {dict.goHome}
               </Link>
             </Button>
-
-            <Button
-              variant="ghost"
-              onClick={() => window.history.back()}
-              className="px-6 py-6 hover:bg-muted transition-all duration-300 hover:scale-105"
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Go Back
-            </Button>
+            <div className="flex flex-row items-center justify-center gap-4">
+              {/* back */}
+              <Button
+                variant="outline"
+                onClick={() => window.history.back()}
+                className="cursor-pointer px-6 py-2 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl shadow-primary/25"
+              >
+                {dict.goBack}
+              </Button>
+              {/* try again */}
+              <Button
+                variant={"outline"}
+                onClick={reset}
+                className="cursor-pointer px-6 py-2 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl shadow-primary/25"
+              >
+                <RefreshCw className="h-5 w-5 mr-2" />
+                {dict.tryAgain}
+              </Button>
+            </div>
           </div>
 
           {/* Contact Support */}
-          <div className="mt-6 pt-8 border-t border-border/40 text-center">
-            <p className="text-muted-foreground mb-4">
-              Still experiencing issues?
-            </p>
+          <div className="mt-4 border-t border-border/40 text-center">
+            <p className="text-muted-foreground mt-4">{dict.supportPrompt}</p>
             <Button
               asChild
               variant="ghost"
               className="text-primary hover:text-primary/80 hover:bg-primary/10"
             >
-              <Link href="/contact">Contact Support →</Link>
+              <Link href="/contact">{dict.contactSupport}</Link>
             </Button>
           </div>
 
@@ -105,12 +107,18 @@ export default function Error({
         </div>
 
         {/* Footer Note */}
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Konekta • Error Page</p>
+        <div className="mt-4 text-center text-sm text-muted-foreground">
+          <p>
+            {fmt(dict.footerNote, {
+              year: new Date().getFullYear().toString(),
+              siteName: siteName,
+            })}
+          </p>
+
           <p className="mt-2 flex items-center justify-center gap-2">
             <span className="flex items-center gap-2">
               <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
-              System Status: Error Detected
+              {dict.systemStatus}
             </span>
           </p>
         </div>

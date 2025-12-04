@@ -23,7 +23,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default async function Footer({ lang }: { lang: Lang }) {
   const currentYear = new Date().getFullYear();
-  const dict = (await getDictionary(lang)).footer;
+  const { footer: dict, siteName } = await getDictionary(lang);
 
   return (
     <footer className="bg-background border-t border-border ">
@@ -169,7 +169,7 @@ export default async function Footer({ lang }: { lang: Lang }) {
 
               <div className="hidden md:block text-muted-foreground/50">•</div>
               <div className="flex items-center gap-1">
-                <span>{fmt(dict.copyright,{year:currentYear})}</span>
+                <span>{fmt(dict.copyright,{year:currentYear,siteName:siteName})}</span>
                 <Heart className="h-3 w-3 text-red-500 ml-1" />
               </div>
             </div>

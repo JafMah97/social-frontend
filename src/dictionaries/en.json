@@ -1,5 +1,5 @@
 {
-  "siteName": "Social",
+  "siteName": "konekta",
   "logo": {
     "mainChar": "K",
     "restChars": "onekta"
@@ -10,12 +10,26 @@
     "description": "The page you're looking for doesn't exist or has been moved.",
     "goHome": "Go Home",
     "goback": "Go Back",
-    "footer": " Konekta • Page Not Found"
+    "footer": " {{siteName}} • Page Not Found"
   },
   "loadingPage": {
     "title": "Loading",
     "subtitle": "Please wait while we prepare your experience",
     "status": "Preparing your experience"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "errorLabel": "Error",
+    "unknownError": "Unknown error",
+    "subtitle": "We apologize for the inconvenience. Our team has been notified and is working to fix the issue.",
+    "errorId": "Error ID",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home",
+    "goBack": "Go Back",
+    "supportPrompt": "Still experiencing issues?",
+    "contactSupport": "Contact Support",
+    "footerNote": "© {{year}}, Error Page, {{siteName}} ",
+    "systemStatus": "System Status: Error Detected"
   },
 
   "navBar": {
@@ -54,7 +68,7 @@
         "share": "Share",
         "inspire": "Inspire"
       },
-      "subtitle": "Join millions of people sharing their stories, building communities, and making meaningful connections on Konekta.",
+      "subtitle": "Join millions of people sharing their stories, building communities, and making meaningful connections on {{siteName}}.",
       "cta": {
         "getStarted": "Get Started",
         "watchDemo": "Watch Demo"
@@ -78,7 +92,7 @@
         }
       },
       "features": {
-        "title": "Why Choose Konekta?",
+        "title": "Why Choose {{siteName}}?",
         "subtitle": "We empower millions with tools to connect, share, and inspire every day.",
         "globalReach": {
           "title": "Global Reach",
@@ -135,7 +149,7 @@
       "cookies": "Cookie Policy"
     },
     "status": "All systems operational",
-    "copyright": "© {{year}} Konekta"
+    "copyright": "© {{year}} {{siteName}}"
   },
 
   "registerPage": {},

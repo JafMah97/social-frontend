@@ -47,7 +47,7 @@ export default function NotFoundContent({ lang }: { lang: Lang }) {
               <Link href={`/${lang}`} className="flex items-center gap-2">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 px-5 cursor-pointer"
+              className="bg-primary hover:bg-primary/90 px-5 cursor-pointer w-full"
             >
                 <Home className="h-5 w-5" />
                 {dict.goHome || "Go Home"}
@@ -56,10 +56,10 @@ export default function NotFoundContent({ lang }: { lang: Lang }) {
             <Button
               variant="outline"
               size="lg"
-              className="border-2 hover:bg-accent cursor-pointer"
+              className="border-2 hover:bg-accent cursor-pointer "
               onClick={() => router.back()}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 ">
                 <ArrowLeft className="h-5 w-5" />
                 {dict.goback || "Go Back"}
               </span>
