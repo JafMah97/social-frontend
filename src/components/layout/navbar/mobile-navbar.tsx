@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   Menu,
-
   HomeIcon,
   NewspaperIcon,
   FileQuestion,
@@ -10,13 +9,19 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-
 import { ThemeSwitcher } from "../header/theme-switcher";
 import LanguageSwitcher from "../header/language-switcher";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import NavLink from "./nav-link";
 import { isRTL } from "@/utils/translation/language-utils";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../custom-component/custom-sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../custom/custom-sheet";
 
 export default async function MobileNavbar({ lang }: { lang: Lang }) {
   const dict = (await getDictionary(lang)).navBar;
@@ -88,14 +93,18 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
               <div className="p-0">
                 <ThemeSwitcher lang={lang} />
               </div>
-              <span className="text-xs text-muted-foreground">{dict.switchers.themeSwitchers.themes}</span>
+              <span className="text-xs text-muted-foreground">
+                {dict.switchers.themeSwitchers.themes}
+              </span>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="p-0">
                 <LanguageSwitcher lang={lang} />
               </div>
-              <span className="text-xs text-muted-foreground">{dict.switchers.langaugeSitchers.languages}</span>
+              <span className="text-xs text-muted-foreground">
+                {dict.switchers.langaugeSitchers.languages}
+              </span>
             </div>
           </div>
 
@@ -119,7 +128,7 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
             {/* Auth buttons: reduced height, balanced spacing */}
             <div className="w-full mt-1 flex flex-col gap-2">
               <Link
-                href={`/${lang}/login`}
+                href={`/${lang}/auth/login`}
                 className="h-full flex items-center w-full"
               >
                 <Button
@@ -134,7 +143,7 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
               </Link>
 
               <Link
-                href={`/${lang}/register`}
+                href={`/${lang}/auth/register`}
                 className="h-full flex items-center w-full"
               >
                 <Button

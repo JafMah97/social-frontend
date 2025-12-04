@@ -150,6 +150,52 @@
     "status": "جميع الأنظمة تعمل",
     "copyright": "© {{year}} {{siteName}}"
   },
-  "registerPage": {},
-  "loginPage": {}
+  "registerPage": {
+    "title": "أنشئ حسابك",
+    "description": "أدخل بريدك الإلكتروني أدناه لإنشاء حسابك",
+    "fields": {
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "m@example.com"
+      },
+      "fullName": {
+        "label": "الاسم الكامل",
+        "placeholder": "محمد أحمد"
+      },
+      "userName": {
+        "label": "اسم المستخدم",
+        "placeholder": "@Mohammed123"
+      },
+      "password": {
+        "label": "كلمة المرور"
+      },
+      "confirmPassword": {
+        "label": "تأكيد كلمة المرور"
+      }
+    },
+    "actions": {
+      "submit": "إنشاء حساب",
+      "alreadyHave": "هل لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول"
+    },
+    "terms": "بالضغط على متابعة، فإنك توافق على شروط الخدمة وسياسة الخصوصية."
+  },
+  "loginPage": {
+    "title": "سجّل الدخول إلى حسابك",
+    "description": "أدخل بريدك الإلكتروني أدناه لتسجيل الدخول",
+    "fields": {
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "m@example.com"
+      },
+      "password": {
+        "label": "كلمة المرور"
+      }
+    },
+    "actions": {
+      "submit": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "register": "إنشاء حساب"
+    }
+  }
 }

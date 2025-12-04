@@ -4,7 +4,6 @@
     "mainChar": "K",
     "restChars": "onekta"
   },
-
   "notFoundPage": {
     "title": "Page Not Found",
     "description": "The page you're looking for doesn't exist or has been moved.",
@@ -151,7 +150,54 @@
     "status": "All systems operational",
     "copyright": "© {{year}} {{siteName}}"
   },
-
-  "registerPage": {},
-  "loginPage": {}
+  "registerPage": {
+    "title": "Create your account",
+    "description": "Enter your email below to create your account",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "m@example.com"
+      },
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "John Doe"
+      },
+      "userName": {
+        "label": "User Name",
+        "placeholder": "@John123"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password"
+      }
+    },
+    "passwordHint": "Must be at least 8 characters long.",
+    "actions": {
+      "submit": "Create Account",
+      "alreadyHave": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "terms": "By clicking continue, you agree to our Terms of Service and Privacy Policy."
+  },
+  "loginPage": {
+    "title": "Login into your account",
+    "description": "Enter your email below to login",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "m@example.com"
+      },
+      "password": {
+        "label": "Password"
+      }
+    },
+    "passwordHint": "Must be at least 8 characters long.",
+    "actions": {
+      "submit": "Login",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    }
+  }
 }

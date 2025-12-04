@@ -63,7 +63,7 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
         {/* Auth actions */}
         <div className="flex items-center gap-3 h-full" >
           <div className="hidden sm:flex items-center gap-2 h-full">
-            <Link href={`/${lang}/login`} className="h-full flex items-center">
+            <Link href={`/${lang}/auth/login`} className="h-full flex items-center">
               <Button
                 variant="ghost"
                 className="h-9 px-4 cursor-pointer text-foreground/80 hover:text-foreground font-medium transition-all duration-200 hover:bg-accent rounded-lg"
@@ -74,7 +74,7 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
             </Link>
 
             <Link
-              href={`/${lang}/register`}
+              href={`/${lang}/auth/register`}
               className="h-full flex items-center"
             >
               <Button

@@ -11,7 +11,6 @@ export function isRTL(lang: Lang): boolean {
 
 export const getCurrentLang = async (): Promise<Lang> => {
   const { cookies } = await import("next/headers");
-  console.log( ((await cookies()).get(LANG_COOKIE)?.value || "en") )
   return ((await cookies()).get(LANG_COOKIE)?.value || "en") as Lang;
 };
 
