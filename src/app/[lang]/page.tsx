@@ -2,11 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import { fmt } from "@/utils/translation/language-utils";
 import Link from "next/link";
-// const sleep = (ms:number)=>{
-//   return  new Promise<void> ((reslover)=>{
-//     setTimeout(reslover,ms)
-//   })
-// }
+
 export default async function HomePage({
   params,
 }: {

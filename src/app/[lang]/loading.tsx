@@ -7,9 +7,8 @@ import { useCurrentLang } from "../hooks/useCurrentLang";
 import { Loader2 } from "lucide-react";
 
 export default function Loading() {
-  const dict = useTranslation().loadingPage;
+  const { loadingPage: dict, logo: dictLogo } = useTranslation();
   const lang = useCurrentLang();
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
@@ -20,7 +19,7 @@ export default function Loading() {
         <div className="rounded-xl border border-border bg-card/60 shadow-lg">
           <div className="flex flex-col items-center gap-6 p-8">
             {/* Logo */}
-            <Logo lang={lang} />
+            <Logo dict={dictLogo} lang={lang} />
 
             {/* Spinner */}
             <div className="relative h-16 w-16">

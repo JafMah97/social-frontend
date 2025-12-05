@@ -58,31 +58,37 @@ export function LanguageSwitcher({lang}:{lang:Lang}) {
         className="bg-background text-foreground border border-border rounded-lg"
       >
         <DropdownMenuItem
-          className={`flex items-center gap-3 ${
+          className={`flex items-center gap-3 cursor-pointer ${
             currentLang === "en"
               ? "text-primary bg-primary/10"
               : "hover:bg-muted hover:text-muted-foreground"
           }`}
           onClick={() => handleChange("en")}
         >
-          <div dir={isRTL(lang)?"rtl":"ltr"} className="flex h-6 w-6 items-center justify-center">
+          <div
+            dir={!isRTL(lang) ? "rtl" : "ltr"}
+            className="flex h-6 w-full items-center justify-between gap-2"
+          >
             <span className="text-xs font-medium text-primary">EN</span>
+            <span>{dict.english}</span>
           </div>
-          {dict.english}
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          className={`flex items-center gap-3 ${
+          className={`flex items-center gap-3 cursor-pointer ${
             currentLang === "ar"
               ? "text-primary bg-primary/10"
               : "hover:bg-muted hover:text-muted-foreground"
           }`}
           onClick={() => handleChange("ar")}
         >
-          <div className="flex h-6 w-6 items-center justify-center">
+          <div
+            dir={!isRTL(lang) ? "rtl" : "ltr"}
+            className="flex h-6 w-full items-center justify-between gap-2"
+          >
             <span className="text-xs font-medium text-primary">AR</span>
+            <span>{dict.arabic}</span>
           </div>
-          {dict.arabic}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

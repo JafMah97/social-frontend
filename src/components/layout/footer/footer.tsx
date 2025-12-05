@@ -23,7 +23,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default async function Footer({ lang }: { lang: Lang }) {
   const currentYear = new Date().getFullYear();
-  const { footer: dict, siteName } = await getDictionary(lang);
+  const { footer: dict, siteName, logo: dictLogo } = await getDictionary(lang);
 
   return (
     <footer className="bg-background border-t border-border ">
@@ -35,7 +35,7 @@ export default async function Footer({ lang }: { lang: Lang }) {
             {/* Brand Column */}
             <div className="space-y-4">
               <div className="mb-4">
-                <Logo lang={lang} />
+                <Logo dict={dictLogo} lang={lang} />
               </div>
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {dict.brand.description}

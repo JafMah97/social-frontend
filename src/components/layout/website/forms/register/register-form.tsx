@@ -36,9 +36,9 @@ export function RegisterForm({ className, children, lang, ...props }: Props) {
           <svg
             className={`absolute top-0 ${
               isRTL(lang)
-                ? "w-[800px] right-0 md:w-[1150px] lg:w-[1200px]"
-                : "w-[800px] left-0 sm:w-[1050px] md:w-[1200px] lg:w-[1200px]"
-            } sm:-top-15 z-10 ${
+                ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 md:-top-6 lg:-top-18 xl:-top-24"
+                : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 md:-top-6 lg:-top-18 xl:-top-24"
+            } z-10 ${
               isRTL(lang) ? "transform scale-x-[-1]" : "transform scale-x-[1]"
             }`}
             xmlns="http://www.w3.org/2000/svg"

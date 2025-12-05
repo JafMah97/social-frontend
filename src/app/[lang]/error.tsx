@@ -1,8 +1,7 @@
 // app/error.tsx
 "use client";
-
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Home, RefreshCw, ArrowLeft } from "lucide-react";
+import { AlertCircle, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "@/providers/translation-provider";
 import { fmt } from "@/utils/translation/language-utils";
@@ -115,12 +114,12 @@ const { siteName, errorPage: dict } = useTranslation();
             })}
           </p>
 
-          <p className="mt-2 flex items-center justify-center gap-2">
+          <div className="mt-2 flex items-center justify-center gap-2">
             <span className="flex items-center gap-2">
               <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
               {dict.systemStatus}
             </span>
-          </p>
+          </div>
         </div>
       </div>
     </div>

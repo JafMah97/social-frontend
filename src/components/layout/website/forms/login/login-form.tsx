@@ -39,8 +39,8 @@ export function LoginForm({
           <svg
             className={`absolute  ${
               isRTL(lang)
-                ? "w-[1200px] md:w-[1400px] lg:w-[1500px] left-0 top-0"
-                : "w-[1000px] md:w-[1200px] lg:w-[1200px] left-0 -top-10"
+                ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 lg:-top-15 xl:-top-22"
+                : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 lg:-top-15 xl:-top-22"
             } z-10 ${
               !isRTL(lang) ? "transform scale-x-[1]" : "transform scale-x-[-1]"
             }`}
