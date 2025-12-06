@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Menu,
   HomeIcon,
@@ -22,9 +21,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../custom/custom-sheet";
+import UserMenu from "../header/user-menu";
+import AuthButtons from "../header/auth-buttons";
 
 export default async function MobileNavbar({ lang }: { lang: Lang }) {
   const dict = (await getDictionary(lang)).navBar;
+  const isLogged= true
 
   const navItems = [
     {
@@ -51,7 +53,7 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
 
   return (
     <div className="md:hidden">
-      <Sheet>
+      <Sheet modal={false}>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
@@ -90,7 +92,7 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
           {/* Switchers with labels underneath and generous gap */}
           <div className="w-full flex items-start justify-around gap-6 border-b border-border/40 py-4">
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="p-0">
+              <div>
                 <ThemeSwitcher lang={lang} />
               </div>
               <span className="text-xs text-muted-foreground">
@@ -99,7 +101,7 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="p-0">
+              <div>
                 <LanguageSwitcher lang={lang} />
               </div>
               <span className="text-xs text-muted-foreground">
@@ -123,38 +125,16 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
             </div>
           </nav>
 
-          {/* Bottom area: simplified, stacked, flex-start */}
           <div className="mt-4 p-4 border-t border-border/40 bg-background/95 flex flex-col items-start gap-4">
-            {/* Auth buttons: reduced height, balanced spacing */}
             <div className="w-full mt-1 flex flex-col gap-2">
-              <Link
-                href={`/${lang}/auth/login`}
-                className="h-full flex items-center w-full"
-              >
-                <Button
-                  variant="ghost"
-                  className="h-9 px-4 bg-primary/10 cursor-pointer text-foreground/80 w-full hover:text-foreground font-medium transition-all duration-200 hover:bg-accent rounded-lg"
-                  aria-label="Login"
-                >
-                  <span className="text-sm font-medium">
-                    {dict.authButtons.login}
-                  </span>
-                </Button>
-              </Link>
-
-              <Link
-                href={`/${lang}/auth/register`}
-                className="h-full flex items-center w-full"
-              >
-                <Button
-                  className="h-9 px-4 bg-primary cursor-pointer w-full text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg"
-                  aria-label="Register"
-                >
-                  <span className="text-sm font-medium">
-                    {dict.authButtons.register}
-                  </span>
-                </Button>
-              </Link>
+              {isLogged?(
+                <>
+                <UserMenu lang={lang} isMobile={true}/>
+                </>
+            ):(
+              <> 
+              <AuthButtons lang={lang} isMobile/>
+              </>)}
             </div>
           </div>
         </SheetContent>

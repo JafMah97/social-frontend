@@ -1,13 +1,15 @@
-import Link from "next/link";
 import LanguageSwitcher from "../header/language-switcher";
 import { ThemeSwitcher } from "../header/theme-switcher";
-import { Button } from "@/components/ui/button";
 import { FileQuestion, HomeIcon, MailIcon, NewspaperIcon } from "lucide-react";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import NavLink from "./nav-link";
+import UserMenu from "../header/user-menu";
+import AuthButtons from "../header/auth-buttons";
 
 export default async function DesktopNavbar({lang}:{lang:Lang}) {
   const dict =(await getDictionary(lang)).navBar
+
+  const isLogged = true; //TODO:replace with real auth check
 
   const navItems = [
     {
@@ -50,9 +52,9 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
         </nav>
 
         {/* Theme + Language */}
-        <div className="flex items-center gap-1 pl-3 border-l border-border/30 h-full">
+        <div className="flex items-center gap-1 border-l border-border/30 h-full mr-3">
           <div className="p-2 rounded-lg transition-all duration-200 hover:bg-accent">
-            <ThemeSwitcher lang={lang}/>
+            <ThemeSwitcher lang={lang} />
           </div>
 
           <div className="p-2 rounded-lg transition-all duration-200 hover:bg-accent">
@@ -61,31 +63,15 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
         </div>
 
         {/* Auth actions */}
-        <div className="flex items-center gap-3 h-full" >
-          <div className="hidden sm:flex items-center gap-2 h-full">
-            <Link href={`/${lang}/auth/login`} className="h-full flex items-center">
-              <Button
-                variant="ghost"
-                className="h-9 px-4 cursor-pointer text-foreground/80 hover:text-foreground font-medium transition-all duration-200 hover:bg-accent rounded-lg"
-                aria-label="Login"
-              >
-                <span className="text-sm font-medium">{dict.authButtons.login}</span>
-              </Button>
-            </Link>
-
-            <Link
-              href={`/${lang}/auth/register`}
-              className="h-full flex items-center"
-            >
-              <Button
-                className="h-9 px-4 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg"
-                aria-label="Register"
-              >
-                <span className="text-sm font-medium">{dict.authButtons.register}</span>
-              </Button>
-            </Link>
+        <div className="flex items-center gap-4 h-full">
+            {!isLogged ? (
+              <AuthButtons lang={lang}/>
+            ) : (
+              <>
+              <UserMenu lang={lang} isMobile={false}/>
+              </>
+            )}
           </div>
-        </div>
       </div>
     </div>
   );

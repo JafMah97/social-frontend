@@ -16,7 +16,6 @@
     "subtitle": "يرجى الانتظار بينما نجهز تجربتك",
     "status": "نقوم بتحضير تجربتك"
   },
-
   "errorPage": {
     "title": "حدث خطأ ما",
     "errorLabel": "خطأ",
@@ -58,6 +57,12 @@
     "authButtons": {
       "login": "تسجيل الدخول",
       "register": "إنشاء حساب"
+    },
+    "userMenu": {
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "help": "المساعدة",
+      "logout": "تسجيل الخروج"
     }
   },
   "mainPage": {
@@ -150,6 +155,7 @@
     "status": "جميع الأنظمة تعمل",
     "copyright": "© {{year}} {{siteName}}"
   },
+  
   "registerPage": {
     "title": "أنشئ حسابك",
     "description": "أدخل بريدك الإلكتروني أدناه لإنشاء حسابك",
@@ -192,10 +198,57 @@
         "label": "كلمة المرور"
       }
     },
+
     "actions": {
+      "forgotPassword": "نسيت كلمة المرور؟",
       "submit": "تسجيل الدخول",
       "noAccount": "ليس لديك حساب؟",
       "register": "إنشاء حساب"
+    }
+  },
+  "forgotPasswordPage": {
+    "title": "استعادة كلمة المرور",
+    "description": "أدخل بريدك الإلكتروني لاستعادة كلمة المرور الخاصة بك",
+    "fields": {
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "m@example.com"
+      }
+    },
+    "actions": {
+      "submit": "إرسال التعليمات",
+      "noAccount": "ليس لديك حساب؟",
+      "register": "إنشاء حساب"
+    }
+  },
+  "verifyEmailPage": {
+    "title": "تحقق من بريدك الإلكتروني",
+    "description": "أدخل الرمز أدناه للتحقق من بريدك الإلكتروني",
+    "fields": {
+      "otp": {
+        "label": "رمز التحقق",
+        "hint": "أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك الإلكتروني."
+      }
+    },
+    "actions": {
+      "submit": "تحقق",
+      "resendPrompt": "لم تستلم الرمز؟",
+      "resend": "إعادة الإرسال"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "إعادة تعيين كلمة المرور",
+    "description": "أدخل كلمة المرور الجديدة أدناه",
+    "fields": {
+      "newPassword": {
+        "label": "كلمة المرور الجديدة"
+      },
+      "confirmPassword": {
+        "label": "تأكيد كلمة المرور"
+      }
+    },
+    "actions": {
+      "submit": "إعادة التعيين"
     }
   }
 }

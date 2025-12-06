@@ -58,6 +58,12 @@
     "authButtons": {
       "login": "Login",
       "register": "register"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "help": "Help",
+      "logout": "Logout"
     }
   },
   "mainPage": {
@@ -173,7 +179,6 @@
         "label": "Confirm Password"
       }
     },
-    "passwordHint": "Must be at least 8 characters long.",
     "actions": {
       "submit": "Create Account",
       "alreadyHave": "Already have an account?",
@@ -193,9 +198,56 @@
         "label": "Password"
       }
     },
-    "passwordHint": "Must be at least 8 characters long.",
     "actions": {
+      "forgotPassword": "Forgot password?",
       "submit": "Login",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    }
+  },
+  "forgotPasswordPage": {
+    "title": "Reset your password",
+    "description": "Enter your email below Reset your password",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "m@example.com"
+      }
+    },
+    "actions": {
+      "submit": "Send Reset Instructions",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    }
+  },
+  "verifyEmailPage": {
+    "title": "Verify your email",
+    "description": "Enter the code below to verify your email",
+    "fields": {
+      "otp": {
+        "label": "Verification code",
+        "hint": "Enter the 6-digit code sent to your email."
+      }
+    },
+    "actions": {
+      "submit": "Verify",
+      "resendPrompt": "Didn't receive the code?",
+      "resend": "Resend"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Set a new password",
+    "description": "Enter your new password below to reset it",
+    "fields": {
+      "newPassword": {
+        "label": "New Password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password"
+      }
+    },
+    "actions": {
+      "submit": "Reset Password",
       "noAccount": "Don't have an account?",
       "register": "Register"
     }

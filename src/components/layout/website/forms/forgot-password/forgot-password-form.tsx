@@ -25,7 +25,7 @@ interface Props extends React.ComponentProps<"div"> {
   children?: React.ReactNode;
 }
 
-export function LoginForm({
+export default function ForgotPasswordForm({
   children,
   className,
   lang,
@@ -57,10 +57,10 @@ export function LoginForm({
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
               <CardTitle className="text-2xl md:text-4xl">
-                {dict.loginPage.title}
+                {dict.forgotPasswordPage.title}
               </CardTitle>
               <CardDescription className="text-foreground">
-                {dict.loginPage.description}{" "}
+                {dict.forgotPasswordPage.description}{" "}
               </CardDescription>
             </div>
           </CardHeader>
@@ -69,39 +69,27 @@ export function LoginForm({
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="email">
-                    {dict.loginPage.fields.email.label}
+                    {dict.forgotPasswordPage.fields.email.label}
                   </FieldLabel>
                   <Input
                     className="bg-foreground/10"
                     id="email"
                     type="email"
-                    placeholder={dict.loginPage.fields.email.placeholder}
+                    placeholder={
+                      dict.forgotPasswordPage.fields.email.placeholder
+                    }
                     required
                   />
                 </Field>
-
                 <Field>
-                  <Field>
-                    <FieldLabel htmlFor="password">
-                      {dict.loginPage.fields.password.label}
-                    </FieldLabel>
-                    <Input
-                      className="bg-foreground/10"
-                      id="password"
-                      type="password"
-                      required
-                    />
-                    <Link href={`/${lang}/auth/forgot-password`} className="hover:text-primary underline text-xs text-end text-muted-foreground">
-                    {dict.loginPage.actions.forgotPassword}
-                    </Link>
-                  </Field>
-                  
-                </Field>
-                <Field>
-                  <Button type="submit">{dict.loginPage.actions.submit}</Button>
+                  <Button type="submit">
+                    {dict.forgotPasswordPage.actions.submit}
+                  </Button>
                   <FieldDescription className="text-center">
-                    {dict.loginPage.actions.noAccount}{" "}
-                    <Link href="#">{dict.loginPage.actions.register}</Link>
+                    {dict.forgotPasswordPage.actions.noAccount}{" "}
+                    <Link href="#">
+                      {dict.forgotPasswordPage.actions.register}
+                    </Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>

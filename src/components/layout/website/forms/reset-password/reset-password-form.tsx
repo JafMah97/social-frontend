@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -18,20 +17,14 @@ import { Input } from "@/components/ui/input";
 import { isRTL } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
-import Link from "next/link";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
 }
 
-export function LoginForm({
-  children,
-  className,
-  lang,
-  ...props
-}: Props) {
-  const dict = useTranslation()
+export function ResetPasswordForm({ children, className, lang, ...props }: Props) {
+  const dict = useTranslation().resetPasswordPage;
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
@@ -57,10 +50,10 @@ export function LoginForm({
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
               <CardTitle className="text-2xl md:text-4xl">
-                {dict.loginPage.title}
+                {dict.title}
               </CardTitle>
               <CardDescription className="text-foreground">
-                {dict.loginPage.description}{" "}
+                {dict.description}{" "}
               </CardDescription>
             </div>
           </CardHeader>
@@ -68,41 +61,31 @@ export function LoginForm({
             <form>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="email">
-                    {dict.loginPage.fields.email.label}
-                  </FieldLabel>
-                  <Input
-                    className="bg-foreground/10"
-                    id="email"
-                    type="email"
-                    placeholder={dict.loginPage.fields.email.placeholder}
-                    required
-                  />
-                </Field>
-
-                <Field>
                   <Field>
-                    <FieldLabel htmlFor="password">
-                      {dict.loginPage.fields.password.label}
+                    <FieldLabel htmlFor="new-password">
+                      {dict.fields.newPassword.label}
                     </FieldLabel>
                     <Input
                       className="bg-foreground/10"
-                      id="password"
+                      id="new-password"
                       type="password"
                       required
                     />
-                    <Link href={`/${lang}/auth/forgot-password`} className="hover:text-primary underline text-xs text-end text-muted-foreground">
-                    {dict.loginPage.actions.forgotPassword}
-                    </Link>
                   </Field>
-                  
+                  <Field>
+                    <FieldLabel htmlFor="confirm-password">
+                      {dict.fields.confirmPassword.label}
+                    </FieldLabel>
+                    <Input
+                      className="bg-foreground/10"
+                      id="confirm-password"
+                      type="password"
+                      required
+                    />
+                  </Field>
                 </Field>
                 <Field>
-                  <Button type="submit">{dict.loginPage.actions.submit}</Button>
-                  <FieldDescription className="text-center">
-                    {dict.loginPage.actions.noAccount}{" "}
-                    <Link href="#">{dict.loginPage.actions.register}</Link>
-                  </FieldDescription>
+                  <Button type="submit" className="cursor-pointer">{dict.actions.submit}</Button>
                 </Field>
               </FieldGroup>
             </form>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +14,14 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { isRTL } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import Link from "next/link";
 
 interface Props extends React.ComponentProps<"div"> {
@@ -25,13 +29,13 @@ interface Props extends React.ComponentProps<"div"> {
   children?: React.ReactNode;
 }
 
-export function LoginForm({
+export default function VerifyEmailCode({
   children,
   className,
   lang,
   ...props
 }: Props) {
-  const dict = useTranslation()
+  const dict = useTranslation().verifyEmailPage;
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
@@ -57,53 +61,41 @@ export function LoginForm({
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
               <CardTitle className="text-2xl md:text-4xl">
-                {dict.loginPage.title}
+                {dict.title}
               </CardTitle>
               <CardDescription className="text-foreground">
-                {dict.loginPage.description}{" "}
+                {dict.description}{" "}
               </CardDescription>
             </div>
           </CardHeader>
-          <CardContent className="w-full relative z-20 mt-8">
+          <CardContent className="w-full z-20 mt-8">
             <form>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="email">
-                    {dict.loginPage.fields.email.label}
+                  <FieldLabel htmlFor="otp" className="sr-only">
+                    {dict.fields.otp.label}
                   </FieldLabel>
-                  <Input
-                    className="bg-foreground/10"
-                    id="email"
-                    type="email"
-                    placeholder={dict.loginPage.fields.email.placeholder}
-                    required
-                  />
-                </Field>
-
-                <Field>
-                  <Field>
-                    <FieldLabel htmlFor="password">
-                      {dict.loginPage.fields.password.label}
-                    </FieldLabel>
-                    <Input
-                      className="bg-foreground/10"
-                      id="password"
-                      type="password"
-                      required
-                    />
-                    <Link href={`/${lang}/auth/forgot-password`} className="hover:text-primary underline text-xs text-end text-muted-foreground">
-                    {dict.loginPage.actions.forgotPassword}
-                    </Link>
-                  </Field>
-                  
-                </Field>
-                <Field>
-                  <Button type="submit">{dict.loginPage.actions.submit}</Button>
+                  <InputOTP maxLength={6} id="otp" required>
+                    <InputOTPGroup className="gap-2.5 flex items-center w-full justify-center *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+                      <InputOTPSlot index={0} className="bg-foreground/30" />
+                      <InputOTPSlot index={1} className="bg-foreground/30" />
+                      <InputOTPSlot index={2} className="bg-foreground/30" />
+                      <InputOTPSlot index={3} className="bg-foreground/30" />
+                      <InputOTPSlot index={4} className="bg-foreground/30" />
+                      <InputOTPSlot index={5} className="bg-foreground/30" />
+                    </InputOTPGroup>
+                  </InputOTP>
                   <FieldDescription className="text-center">
-                    {dict.loginPage.actions.noAccount}{" "}
-                    <Link href="#">{dict.loginPage.actions.register}</Link>
+                    {dict.fields.otp.hint}
                   </FieldDescription>
                 </Field>
+                <Button type="submit" className="cursor-pointer">
+                  {dict.actions.submit}
+                </Button>
+                <FieldDescription className="text-center">
+                  {dict.actions.resendPrompt}{" "}
+                  <Link href="#">{dict.actions.resend}</Link>
+                </FieldDescription>
               </FieldGroup>
             </form>
           </CardContent>
