@@ -9,7 +9,7 @@ export default async function Navbar({ lang }: { lang: Lang }) {
   return (
     <nav
       dir={isRTL(lang) === true ? "rtl" : "ltr"}
-      className="z-50 sticky w-full h-16 bg-background top-0 shadow-2xl"
+      className="z-50 sticky w-full h-16 bg-background top-0 shadow-lg"
     >
       <div className="bg-primary/10 h-full">
         <div className="container mx-auto max-w-7xl px-4 h-full">

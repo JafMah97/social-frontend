@@ -154,6 +154,18 @@
   background-position: center;
 }
 
-.height-custom {
-  height: calc(100vh - 64px);
+.height-custom-m {
+  height: calc(100vh - 96px);
+}
+
+.height-custom-40 {
+  height: calc((100vh - 96px) * 0.4 - 28px);
+}
+
+.height-custom-60 {
+  height: calc((100vh - 96px) * 0.6 - 20px);
+}
+
+.height-custom-50 {
+  height: calc((100vh - 96px) * 0.5 - 20px);
 }

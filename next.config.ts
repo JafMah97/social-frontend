@@ -57,7 +57,12 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     // Add remotePatterns entries if you load images from external hosts.
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+    ],
   },
 
   // Apply security headers globally. You can scope the `source` to specific

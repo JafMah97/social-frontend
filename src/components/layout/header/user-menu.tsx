@@ -1,9 +1,9 @@
 "use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/providers/translation-provider";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { isRTL } from "@/utils/translation/language-utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,7 +97,7 @@ const CustomAvatar = React.forwardRef<HTMLDivElement, { isMobile: boolean }>(
         <Avatar className="rounded-full w-9 h-9 cursor-pointer">
           <AvatarImage
             className="rounded-full"
-            src={"https://github.com/shadcn.png"}
+            src={"/images/profile-placeholder.jpg"}
             alt="User avatar"
           />
           <AvatarFallback className="rounded-full text-sm bg-primary/10 w-9 h-9 flex items-center justify-center">
