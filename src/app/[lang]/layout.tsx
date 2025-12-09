@@ -13,6 +13,7 @@ import {
 import { getDirection } from "@/utils/translation/language-utils";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
+import ReactQueryProvider from "@/providers/react-query-provider";
 
 export const metadata: Metadata = {
   title: "Konekta Social",
@@ -32,25 +33,16 @@ export default async function RootLayout({
   params,
   children,
 }: RootLayoutProps) {
-  const { lang } = (await params) as {lang:Lang}
+  const { lang } = (await params) as { lang: Lang };
   const translations = await getDictionary(lang);
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
-        <body className={`${fontClass}`}>
-      <TranslationsProvider translations={translations}>
+      <body className={`${fontClass}`}>
+        <TranslationsProvider translations={translations}>
           <NextTopLoader color="var(--color-primary)" showSpinner={false} />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              style: {
-                fontSize: "0.875rem",
-                textAlign: "start",
-              },
-              className: `antialiased ${fontClass}`,
-            }}
-          />
+
           <ThemeProvider
             attribute={"class"}
             defaultTheme="system"
@@ -58,11 +50,23 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <Navbar lang={lang} />
-            {children}
+            <ReactQueryProvider>
+              {children}
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  className: `antialiased ${fontClass}`,
+                  style:{
+                    backgroundColor:"var(--color-background)",
+                    color:"var(--color-foreground"
+                  }
+                }}
+              />
+            </ReactQueryProvider>
             <Footer lang={lang} />
           </ThemeProvider>
-      </TranslationsProvider>
-        </body>
+        </TranslationsProvider>
+      </body>
     </html>
   );
 }

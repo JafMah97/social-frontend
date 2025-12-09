@@ -1,6 +1,9 @@
-"use client"
+"use client";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -11,6 +14,7 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -19,25 +23,56 @@ import { isRTL } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
+import * as z from "zod";
+import { loginSchema } from "./login-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "@/app/hooks/api-hooks/auth/useLogin";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
 }
 
-export function LoginForm({
-  children,
-  className,
-  lang,
-  ...props
-}: Props) {
-  const dict = useTranslation()
+export function LoginForm({ children, className, lang, ...props }: Props) {
+
+  const dict = useTranslation().loginPage;
+  const [error,setError] = useState("");
+  const router = useRouter()
+  
+  const { mutate, isPending } = useLogin({
+    onSuccess: () => {
+      setError("")
+      toast.success(dict.toast.loginSuccess)
+      router.push(`/${lang}/`);
+    }
+        ,
+    onError: (err) => {
+      toast.error(dict.toast.loginError);
+      setError(err.error.message + `${err.error.code?" (Code:"+err.error.code+")":""}`)
+    },
+  });
+
+
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof loginSchema>) {
+    mutate(data);
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
         <Card className="px-0 md:p-6 py-4 md:py-10 relative z-20 overflow-hidden bg-primary/10">
           <svg
-            className={`absolute  ${
+            className={`absolute ${
               isRTL(lang)
                 ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 lg:-top-15 xl:-top-22"
                 : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 lg:-top-15 xl:-top-22"
@@ -57,51 +92,87 @@ export function LoginForm({
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
               <CardTitle className="text-2xl md:text-4xl">
-                {dict.loginPage.title}
+                {dict.title}
               </CardTitle>
               <CardDescription className="text-foreground">
-                {dict.loginPage.description}{" "}
+                {dict.description}
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent className="w-full relative z-20 mt-8">
-            <form>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="email">
-                    {dict.loginPage.fields.email.label}
-                  </FieldLabel>
-                  <Input
-                    className="bg-foreground/10"
-                    id="email"
-                    type="email"
-                    placeholder={dict.loginPage.fields.email.placeholder}
-                    required
-                  />
-                </Field>
+                {/* Email */}
+                <Controller
+                  name="email"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="email">
+                        {dict.fields.email.label}
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="email"
+                        type="email"
+                        placeholder={dict.fields.email.placeholder}
+                        className="bg-foreground/10"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
+                {/* Password */}
+                <Controller
+                  name="password"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="password">
+                        {dict.fields.password.label}
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="password"
+                        type="password"
+                        className="bg-foreground/10"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                      <Link
+                        href={`/${lang}/auth/forgot-password`}
+                        className="hover:text-primary underline text-xs text-end text-muted-foreground"
+                      >
+                        {dict.actions.forgotPassword}
+                      </Link>
+                    </Field>
+                  )}
+                />
+
+
+                {/* Submit */}
                 <Field>
-                  <Field>
-                    <FieldLabel htmlFor="password">
-                      {dict.loginPage.fields.password.label}
-                    </FieldLabel>
-                    <Input
-                      className="bg-foreground/10"
-                      id="password"
-                      type="password"
-                      required
-                    />
-                    <Link href={`/${lang}/auth/forgot-password`} className="hover:text-primary underline text-xs text-end text-muted-foreground">
-                    {dict.loginPage.actions.forgotPassword}
-                    </Link>
-                  </Field>
-                  
-                </Field>
-                <Field>
-                  <Button type="submit">{dict.loginPage.actions.submit}</Button>
+                {error&&<p className="text-sm text-red-500 text-center">{error }</p>}
+                  <Button disabled={isPending} className="cursor-pointer">
+                    {isPending?(
+
+                    <Spinner/>
+                    ):(
+                      <span>
+
+                        {dict.actions.submit}
+                      </span>
+                    )}
+                  </Button>
                   <FieldDescription className="text-center">
-                    {dict.loginPage.actions.noAccount}{" "}
-                    <Link href="#">{dict.loginPage.actions.register}</Link>
+                    {dict.actions.noAccount}{" "}
+                    <Link href="#">{dict.actions.register}</Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>

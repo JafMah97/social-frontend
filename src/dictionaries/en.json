@@ -203,6 +203,10 @@
       "submit": "Login",
       "noAccount": "Don't have an account?",
       "register": "Register"
+    },
+    "toast":{
+      "loginSuccess":"Login successful!",
+      "loginError":"Login failed. Please try again."
     }
   },
   "forgotPasswordPage": {

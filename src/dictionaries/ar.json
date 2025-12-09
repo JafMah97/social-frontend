@@ -204,6 +204,10 @@
       "submit": "تسجيل الدخول",
       "noAccount": "ليس لديك حساب؟",
       "register": "إنشاء حساب"
+    },
+    "toast": {
+      "loginSuccess": "تم تسجيل الدخول بنجاح!",
+      "loginError":  "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى."
     }
   },
   "forgotPasswordPage": {
