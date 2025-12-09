@@ -12,11 +12,11 @@ import {
 export default function CreatePost() {
   return (
     <>
-      <div className="flex flex-row justify-between items-start gap-4">
+      <div className="flex flex-row justify-between items-start gap-2 md:gap-4">
         <CustomAvatar
           src="/images/profile-placeholder.jpg"
           fallback={"CN"}
-          className="w-15 h-15"
+          className="md:w-15 md:h-15 w-10 h-10"
         />
         <div className="flex flex-col justify-between items-center w-full gap-2">
           <Textarea

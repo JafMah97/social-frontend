@@ -13,8 +13,8 @@ export default async function HomePage({
   return (
     <div className="flex flex-col bg-primary/10">
       {/* Hero Section with Background */}
-      <div className="home-image height-custom">
-        <section className="flex-1 flex items-start justify-center py-24 px-4 relative height-custom dark:bg-background/50 backdrop-blur-md shadow-2xl">
+      <div className="home-image ">
+        <section className="flex-1 custom-height flex items-start justify-center py-24 px-4 relative height-custom dark:bg-background/50 backdrop-blur-md shadow-2xl">
           {/* Content */}
           <div className="container max-w-6xl mx-auto relative z-10 rounded-xl">
             <div className="text-center max-w-3xl mx-auto">
@@ -43,14 +43,18 @@ export default async function HomePage({
                   size="lg"
                   className="p-6 bg-primary/10 text-white text-lg font-semibold border-2 hover:bg-accent/50 hover:border-accent transition-all duration-300 hover:scale-105"
                 >
-                  <Link href="/demo">{dict.hero.cta.watchDemo}</Link>
+                  <Link href={`${lang}/auth/login`}>
+                    {dict.hero.cta.login}
+                  </Link>
                 </Button>
                 <Button
                   asChild
                   size="lg"
                   className="p-6 text-lg font-semibold bg-primary hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl shadow-primary/25 group"
                 >
-                  <Link href="/auth/register">{dict.hero.cta.getStarted}</Link>
+                  <Link href={`${lang}/auth/register`}>
+                    {dict.hero.cta.getStarted}
+                  </Link>
                 </Button>
               </div>
 
@@ -96,7 +100,7 @@ export default async function HomePage({
           <div className="max-w-6xl mx-auto text-center">
             {/* Section Heading */}
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {fmt(dict.hero.features.title,{siteName:siteName})}
+              {fmt(dict.hero.features.title, { siteName: siteName })}
             </h2>
             <p className="text-lg md:text-xl text-accent-foreground max-w-3xl mx-auto mb-16 leading-snug">
               {dict.hero.features.subtitle}

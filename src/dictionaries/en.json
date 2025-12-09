@@ -76,7 +76,7 @@
       "subtitle": "Join millions of people sharing their stories, building communities, and making meaningful connections on {{siteName}}.",
       "cta": {
         "getStarted": "Get Started",
-        "watchDemo": "Watch Demo"
+        "login": "Login"
       },
       "stats": {
         "activeUsers": {
