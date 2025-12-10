@@ -19,16 +19,21 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { isRTL } from "@/utils/translation/language-utils";
+import { fmt, isRTL } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
-import * as z from "zod";
-import { loginSchema } from "./login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/app/hooks/api-hooks/auth/useLogin";
 import { toast } from "sonner";
 import { useState } from "react";
+import z from "zod";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Eye, EyeClosed } from "lucide-react";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -36,24 +41,37 @@ interface Props extends React.ComponentProps<"div"> {
 }
 
 export function LoginForm({ children, className, lang, ...props }: Props) {
-
   const dict = useTranslation().loginPage;
-  const [error,setError] = useState("");
-  const router = useRouter()
-  
-  const { mutate, isPending } = useLogin({
-    onSuccess: () => {
-      setError("")
-      toast.success(dict.toast.loginSuccess)
-      router.push(`/${lang}/`);
-    }
-        ,
-    onError: (err) => {
-      toast.error(dict.toast.loginError);
-      setError(err.error.message + `${err.error.code?" (Code:"+err.error.code+")":""}`)
-    },
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+
+  const loginSchema = z.object({
+    email: z
+      .email(dict.schemaErrors.email.invalid)
+      .min(5, fmt(dict.schemaErrors.email.min, { min: 5 }))
+      .max(32, fmt(dict.schemaErrors.email.max, { max: 32 })),
+    password: z
+      .string()
+      .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
+      .max(100, fmt(dict.schemaErrors.password.max, { max: 100 })),
   });
 
+  const { mutate, isPending } = useLogin({
+    onSuccess: () => {
+      setError("");
+      toast.success(dict.toast.loginSuccess);
+      router.push(`/${lang}/`);
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(dict.toast.loginError);
+      setError(
+        err.error.message +
+          `${err.error.code ? " (Code:" + err.error.code + ")" : ""}`
+      );
+    },
+  });
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -101,7 +119,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
           </CardHeader>
           <CardContent className="w-full relative z-20 mt-8">
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <FieldGroup>
+              <FieldGroup className="gap-1">
                 {/* Email */}
                 <Controller
                   name="email"
@@ -119,9 +137,14 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
                         className="bg-foreground/10"
                         aria-invalid={fieldState.invalid}
                       />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
+                      <div className="min-h-5">
+                        {fieldState.invalid && (
+                          <FieldError
+                            className="text-xs"
+                            errors={[fieldState.error]}
+                          />
+                        )}
+                      </div>
                     </Field>
                   )}
                 />
@@ -135,39 +158,65 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
                       <FieldLabel htmlFor="password">
                         {dict.fields.password.label}
                       </FieldLabel>
-                      <Input
-                        {...field}
-                        id="password"
-                        type="password"
-                        className="bg-foreground/10"
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <Link
-                        href={`/${lang}/auth/forgot-password`}
-                        className="hover:text-primary underline text-xs text-end text-muted-foreground"
-                      >
-                        {dict.actions.forgotPassword}
-                      </Link>
+                      <InputGroup>
+                        <InputGroupInput
+                          {...field}
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          className="bg-foreground/10"
+                          aria-invalid={fieldState.invalid}
+                        />
+                        <InputGroupAddon align={"inline-end"}>
+                          <Button
+                            variant={"ghost"}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setShowPassword(!showPassword);
+                            }}
+                          >
+                            {showPassword ? (
+                              <Eye className="w-5 h-5" />
+                            ) : (
+                              <EyeClosed className="w-5 h-5" />
+                            )}
+                          </Button>
+                        </InputGroupAddon>
+                      </InputGroup>
+
+                      <div className="w-full flex flex-row justify-between">
+                        <div className="min-h-5">
+                          {fieldState.invalid && (
+                            <FieldError
+                              className="text-xs"
+                              errors={[fieldState.error]}
+                            />
+                          )}
+                        </div>
+                        <Link
+                          href={`/${lang}/auth/forgot-password`}
+                          className="hover:text-primary underline text-xs text-end text-muted-foreground"
+                        >
+                          {dict.actions.forgotPassword}
+                        </Link>
+                      </div>
                     </Field>
                   )}
                 />
 
-
                 {/* Submit */}
                 <Field>
-                {error&&<p className="text-sm text-red-500 text-center">{error }</p>}
+                  <div className="min-h-5">
+                    {error && (
+                      <p className="text-sm text-red-500 text-center">
+                        {error}
+                      </p>
+                    )}
+                  </div>
                   <Button disabled={isPending} className="cursor-pointer">
-                    {isPending?(
-
-                    <Spinner/>
-                    ):(
-                      <span>
-
-                        {dict.actions.submit}
-                      </span>
+                    {isPending ? (
+                      <Spinner />
+                    ) : (
+                      <span>{dict.actions.submit}</span>
                     )}
                   </Button>
                   <FieldDescription className="text-center">

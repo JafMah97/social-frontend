@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  timeout:5000
+  timeout:60*1000,
 });
 
 interface RequestOptions {

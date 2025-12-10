@@ -10,16 +10,24 @@ export const loginApi = async (data: LoginData): Promise<LoginResponse> => {
         "Content-Type": "application/json",
       },
     });
-  } catch (err: unknown) {
+  } catch (err) {
+    console.log(err)
     if (isAxiosError(err) && err.response?.data?.error) {
-      console.log(err.response.data);
       throw err.response.data as ApiErrorResponse;
+    }
+    if (isAxiosError(err) ) {
+      throw {
+      success: false,
+      error: {
+        code: "unknownError",
+        message: err?.message as string || "An unknown error occurred",
+      },} as ApiErrorResponse;
     }
     throw {
       success: false,
       error: {
         code: "unknownError",
-        message: "Unexpected error",
+        message: "An unknown error occurred",
       },
     } as ApiErrorResponse;
   }

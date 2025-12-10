@@ -207,6 +207,17 @@
     "toast":{
       "loginSuccess":"Login successful!",
       "loginError":"Login failed. Please try again."
+    },
+    "schemaErrors": {
+      "email": {
+        "invalid": "Invalid email address",
+        "min": "Email must be at least {min} characters long",
+        "max": "Email must be at most {max} characters long"
+      },
+      "password": {
+        "min": "Password must be at least {min} characters long",
+        "max": "Password must be at most {max} characters long"
+      }
     }
   },
   "forgotPasswordPage": {
