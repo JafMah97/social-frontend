@@ -43,28 +43,28 @@ export default async function RootLayout({
         <TranslationsProvider translations={translations}>
           <NextTopLoader color="var(--color-primary)" showSpinner={false} />
 
-          <ThemeProvider
-            attribute={"class"}
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar lang={lang} />
-            <ReactQueryProvider>
+          <ReactQueryProvider>
+            <ThemeProvider
+              attribute={"class"}
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar lang={lang} />
               {children}
               <Toaster
                 position="top-center"
                 toastOptions={{
                   className: `antialiased ${fontClass}`,
-                  style:{
-                    backgroundColor:"var(--color-background)",
-                    color:"var(--color-foreground"
-                  }
+                  style: {
+                    backgroundColor: "var(--color-background)",
+                    color: "var(--color-foreground",
+                  },
                 }}
               />
-            </ReactQueryProvider>
-            <Footer lang={lang} />
-          </ThemeProvider>
+              <Footer lang={lang} />
+            </ThemeProvider>
+          </ReactQueryProvider>
         </TranslationsProvider>
       </body>
     </html>

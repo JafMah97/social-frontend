@@ -1,11 +1,13 @@
+"use client"
 import { Button } from "@/components/ui/button";
-import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
+import { useTranslation } from "@/providers/translation-provider";
+import { Lang } from "@/utils/translation/dictionary-utils";
 import Link from "next/link";
 
-export default async function AuthButtons({lang,isMobile=false}:{lang:Lang,isMobile?:boolean}) {
-  const dict =  (await getDictionary(lang)).navBar.authButtons
+export default function AuthButtons({lang,isMobile=false}:{lang:Lang,isMobile?:boolean}) {
+  const dict =  useTranslation().navBar.authButtons
   return (
-    <>
+    <div className="flex flex-row gap-4 mx-4">
       <Link href={`/${lang}/auth/login`} className="h-full flex items-center">
         <Button
           variant="ghost"
@@ -31,17 +33,7 @@ export default async function AuthButtons({lang,isMobile=false}:{lang:Lang,isMob
           <span className="text-sm font-medium">{dict.register}</span>
         </Button>
       </Link>
-    </>
+    </div>
   );
 }
 
-{/* <Avatar className="rounded-full w-9 h-9 cursor-pointer">
-  <AvatarImage
-    className="rounded-full"
-    src={"https://github.com/shadcn.png"}
-    alt="@shadcn"
-  />
-  <AvatarFallback className="rounded-full text-sm bg-primary/10 w-9 h-9 block text-center pt-2">
-    CN
-  </AvatarFallback>
-</Avatar>; */}

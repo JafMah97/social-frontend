@@ -3,13 +3,11 @@ import { ThemeSwitcher } from "../header/theme-switcher";
 import { FileQuestion, HomeIcon, MailIcon, NewspaperIcon } from "lucide-react";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 import NavLink from "./nav-link";
-import UserMenu from "../header/user-menu";
-import AuthButtons from "../header/auth-buttons";
+import AuthNavSection from "./auth-section";
 
 export default async function DesktopNavbar({lang}:{lang:Lang}) {
   const dict =(await getDictionary(lang)).navBar
 
-  const isLogged = true; //TODO:replace with real auth check
 
   const navItems = [
     {
@@ -63,15 +61,7 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
         </div>
 
         {/* Auth actions */}
-        <div className="flex items-center gap-4 h-full">
-            {!isLogged ? (
-              <AuthButtons lang={lang}/>
-            ) : (
-              <>
-              <UserMenu lang={lang} isMobile={false}/>
-              </>
-            )}
-          </div>
+      <AuthNavSection lang={lang} />
       </div>
     </div>
   );

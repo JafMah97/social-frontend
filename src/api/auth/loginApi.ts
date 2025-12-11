@@ -1,6 +1,6 @@
 import { postRequest } from "../axios";
 import { isAxiosError } from "axios";
-import { ApiErrorResponse, LoginData, LoginResponse } from "./login-types";
+import { ApiErrorResponse, LoginData, LoginResponse } from "../api-types";
 
 export const loginApi = async (data: LoginData): Promise<LoginResponse> => {
   try {
@@ -11,7 +11,6 @@ export const loginApi = async (data: LoginData): Promise<LoginResponse> => {
       },
     });
   } catch (err) {
-    console.log(err)
     if (isAxiosError(err) && err.response?.data?.error) {
       throw err.response.data as ApiErrorResponse;
     }

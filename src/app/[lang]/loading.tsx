@@ -3,7 +3,7 @@
 
 import Logo from "@/components/layout/header/logo";
 import { useTranslation } from "@/providers/translation-provider";
-import { useCurrentLang } from "../hooks/useCurrentLang";
+import { useCurrentLang } from "../../hooks/useCurrentLang";
 import { Loader2 } from "lucide-react";
 
 export default function Loading() {

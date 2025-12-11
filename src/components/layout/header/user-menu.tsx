@@ -1,18 +1,14 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/providers/translation-provider";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { isRTL } from "@/utils/translation/language-utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+
 import { Edit, HelpCircle, Settings } from "lucide-react";
 import Link from "next/link";
-import * as React from "react";
+import CustomAvatar from "../custom/custom-avatar";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function UserMenu({
   lang,
@@ -23,7 +19,7 @@ export default function UserMenu({
 }) {
   const dict = useTranslation().navBar.userMenu;
   const rtl = isRTL(lang);
-
+  const { data } = useCurrentLoggedUser();
   return (
     <div
       className={`flex ${
@@ -32,7 +28,13 @@ export default function UserMenu({
     >
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild aria-label="User menu">
-          <CustomAvatar isMobile={isMobile} />
+          <div className="flex flex-row gap-2">
+            <CustomAvatar
+              className="w-10 h-10"
+              src={data?.data.profileImage}
+              fallback={data?.data.username.slice(0, 2)}
+            />
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align={rtl ? "start" : "end"}
@@ -84,39 +86,3 @@ export default function UserMenu({
     </div>
   );
 }
-
-// ForwardRef so Radix can treat it asChild
-const CustomAvatar = React.forwardRef<HTMLDivElement, { isMobile: boolean }>(
-  ({ isMobile, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        {...props}
-        className="w-full flex flex-row justify-center items-center gap-2"
-      >
-        <Avatar className="rounded-full w-9 h-9 cursor-pointer">
-          <AvatarImage
-            className="rounded-full"
-            src={"/images/profile-placeholder.jpg"}
-            alt="User avatar"
-          />
-          <AvatarFallback className="rounded-full text-sm bg-primary/10 w-9 h-9 flex items-center justify-center">
-            CN
-          </AvatarFallback>
-        </Avatar>
-        <div
-          className={`flex-col justify-center items-start ${
-            isMobile ? "flex" : "hidden lg:flex"
-          }`}
-        >
-          <p className="text-sm">Name</p>
-          <Link className="text-xs -my-1" href={"#"}>
-            @userName
-          </Link>
-        </div>
-      </div>
-    );
-  }
-);
-
-CustomAvatar.displayName = "CustomAvatar";

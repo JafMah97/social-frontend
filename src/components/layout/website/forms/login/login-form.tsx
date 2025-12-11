@@ -24,7 +24,7 @@ import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "@/app/hooks/api-hooks/auth/useLogin";
+import { useLogin } from "@/hooks/api-hooks/auth/useLogin";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
@@ -34,7 +34,8 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Eye, EyeClosed } from "lucide-react";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
@@ -43,9 +44,11 @@ interface Props extends React.ComponentProps<"div"> {
 export function LoginForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().loginPage;
   const [error, setError] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
+  const queryClient = useQueryClient();
+  
   const loginSchema = z.object({
     email: z
       .email(dict.schemaErrors.email.invalid)
@@ -56,11 +59,13 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
       .max(100, fmt(dict.schemaErrors.password.max, { max: 100 })),
   });
-
+  
   const { mutate, isPending } = useLogin({
-    onSuccess: () => {
+    onSuccess: async () => {
+      setLoggedIn(true)
       setError("");
       toast.success(dict.toast.loginSuccess);
+      await queryClient.invalidateQueries({ queryKey: ["currentLoggedUser"] });
       router.push(`/${lang}/`);
     },
     onError: (err) => {
@@ -72,7 +77,8 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       );
     },
   });
-
+  
+  useCurrentLoggedUser(loggedIn);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -80,7 +86,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       password: "",
     },
   });
-
+  
   function onSubmit(data: z.infer<typeof loginSchema>) {
     mutate(data);
   }
@@ -221,7 +227,9 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
                   </Button>
                   <FieldDescription className="text-center">
                     {dict.actions.noAccount}{" "}
-                    <Link href="#">{dict.actions.register}</Link>
+                    <Link href={`/${lang}/auth/register`}>
+                      {dict.actions.register}
+                    </Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>

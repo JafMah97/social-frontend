@@ -2,14 +2,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface CustomAvatarProps {
-  src?: string; // image source
-  fallback?: React.ReactNode; // fallback content (e.g. initials)
-  className?: string; // extra classes for Avatar
+  src?: string; 
+  fallback?: React.ReactNode; 
+  className?: string; 
 }
 
 export default function CustomAvatar({
   src,
-  fallback = "?", // default fallback
+  fallback = "?",
   className,
 }: CustomAvatarProps) {
   return (
