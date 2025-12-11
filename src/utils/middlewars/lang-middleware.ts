@@ -27,7 +27,7 @@ export async function langMiddleware(request: NextRequest) {
 
   // Redirect permanently (301)
   url.pathname = `/${redirectLang}`;
-  const res = NextResponse.redirect(url, 301);
+  const res = NextResponse.redirect(url, 307);
   res.cookies.set("lang", redirectLang, { path: "/" });
   return res;
 }

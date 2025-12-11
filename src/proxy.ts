@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+// proxy.ts
+import { NextRequest } from "next/server";
 import { langMiddleware } from "./utils/middlewars/lang-middleware";
 
-export async function proxy(request: NextRequest) {
-  const langResult = await langMiddleware(request);
-  if (langResult) return langResult;
-
-  return NextResponse.next();
+export function proxy(request: NextRequest) {
+  return langMiddleware(request);
 }
 
 export const config = {

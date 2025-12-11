@@ -1,3 +1,4 @@
+"use client";
 import {
   Menu,
   HomeIcon,
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button";
 
 import { ThemeSwitcher } from "../header/theme-switcher";
 import LanguageSwitcher from "../header/language-switcher";
-import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
+import { Lang } from "@/utils/translation/dictionary-utils";
 import NavLink from "./nav-link";
 import { isRTL } from "@/utils/translation/language-utils";
 import {
@@ -23,12 +24,19 @@ import {
 } from "../custom/custom-sheet";
 import UserMenu from "../header/user-menu";
 import AuthButtons from "../header/auth-buttons";
+import { useTranslation } from "@/providers/translation-provider";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
+import { useState } from "react";
 
-export default async function MobileNavbar({ lang }: { lang: Lang }) {
-  const dict = (await getDictionary(lang)).navBar;
-  const isLogged= true
+export default function MobileNavbar({ lang }: { lang: Lang }) {
+  const { data } = useCurrentLoggedUser();
+  const dict = useTranslation().navBar;
+  const [isOpend,setIsOpend] = useState(false)
 
-  const navItems = [
+  // ✅ Extracted logic into functions
+  const isLogged = () => Boolean(data);
+
+  const getNavItems = () => [
     {
       href: `/${lang}/`,
       label: dict.links.home,
@@ -51,15 +59,31 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
     },
   ];
 
+  const renderAuthSection = () => {
+    if (isLogged()) {
+      return (
+        <UserMenu
+          lang={lang}
+          isMobile={true}
+          onAction={() => setIsOpend(false)}
+        />
+      );
+    }
+    return <AuthButtons lang={lang} isMobile onAction={()=>setIsOpend(false)}/>;
+  };
+
   return (
     <div className="md:hidden">
-      <Sheet modal={false}>
+      <Sheet modal={false} open={isOpend} onOpenChange={setIsOpend}>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
             size="lg"
             aria-label="Open menu"
             className="text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200 cursor-pointer"
+            onClick={() => {
+              setIsOpend(true);
+            }}
           >
             <Menu className="h-6 w-6" />
           </Button>
@@ -89,21 +113,17 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
               </SheetClose>
             </div>
           </SheetHeader>
-          {/* Switchers with labels underneath and generous gap */}
+
+          {/* Switchers */}
           <div className="w-full flex items-start justify-around gap-6 border-b border-border/40 py-4">
             <div className="flex flex-col items-center justify-center gap-2">
-              <div>
-                <ThemeSwitcher lang={lang} />
-              </div>
+              <ThemeSwitcher lang={lang} />
               <span className="text-xs text-muted-foreground">
                 {dict.switchers.themeSwitchers.themes}
               </span>
             </div>
-
             <div className="flex flex-col items-center justify-center gap-2">
-              <div>
-                <LanguageSwitcher lang={lang} />
-              </div>
+              <LanguageSwitcher lang={lang} />
               <span className="text-xs text-muted-foreground">
                 {dict.switchers.langaugeSitchers.languages}
               </span>
@@ -113,8 +133,9 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
           {/* Navigation */}
           <nav className="py-4" aria-label="Mobile navigation">
             <div className="flex flex-col gap-2 px-4">
-              {navItems.map((item) => (
+              {getNavItems().map((item) => (
                 <NavLink
+                  onAction={() => setIsOpend(false)}
                   key={item.href}
                   href={item.href}
                   label={item.label}
@@ -125,16 +146,10 @@ export default async function MobileNavbar({ lang }: { lang: Lang }) {
             </div>
           </nav>
 
+          {/* Auth/User section */}
           <div className="mt-4 p-4 border-t border-border/40 bg-background/95 flex flex-col items-start gap-4">
             <div className="w-full mt-1 flex flex-col gap-2">
-              {isLogged?(
-                <>
-                <UserMenu lang={lang} isMobile={true}/>
-                </>
-            ):(
-              <> 
-              <AuthButtons lang={lang} isMobile/>
-              </>)}
+              {renderAuthSection()}
             </div>
           </div>
         </SheetContent>

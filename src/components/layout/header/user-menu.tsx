@@ -8,18 +8,48 @@ import { Edit, HelpCircle, Settings } from "lucide-react";
 import Link from "next/link";
 import CustomAvatar from "../custom/custom-avatar";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useLogout } from "@/hooks/api-hooks/auth/useLogout";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function UserMenu({
   lang,
   isMobile = false,
+  onAction
 }: {
   lang: Lang;
   isMobile?: boolean;
+  onAction?:()=> void
 }) {
   const dict = useTranslation().navBar.userMenu;
   const rtl = isRTL(lang);
   const { data } = useCurrentLoggedUser();
+  const queryClient = useQueryClient();
+  const logoutMutation = useLogout();
+ const logoutHandler = () => {
+  
+   logoutMutation.mutate(null, {
+     onSuccess: () => {
+      if (onAction) {
+        onAction();
+      }
+       queryClient.setQueryData(["currentLoggedUser"], null); // ✅ clear data
+       toast.success(dict.logoutSuccess);
+     },
+     onError: () => {
+       toast.error(dict.logoutError);
+     },
+   });
+ };
+
+
   return (
     <div
       className={`flex ${
@@ -76,12 +106,18 @@ export default function UserMenu({
       </DropdownMenu>
 
       <Button
-        className={`h-9 px-4 bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
+        className={`h-9 px-4 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
           isMobile ? "w-full" : ""
         } `}
         aria-label="Logout"
+        onClick={logoutHandler}
+        disabled={logoutMutation.isPending}
       >
-        <span className="text-sm font-medium">{dict.logout}</span>
+        {logoutMutation.isPending ? (
+          <Spinner />
+        ) : (
+          <span className="text-sm font-medium">{dict.logout}</span>
+        )}
       </Button>
     </div>
   );

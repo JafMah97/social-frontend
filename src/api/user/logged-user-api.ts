@@ -4,7 +4,6 @@ import { isAxiosError } from "axios";
 
 export const loggedUser = async (): Promise<LoggedUserResponse> => {
   try {
-    console.log("triggrd")
     return await getRequest<LoggedUserResponse>("/user/me", {
       withCredentials: true,
       headers: {

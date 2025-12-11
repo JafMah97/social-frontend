@@ -18,10 +18,10 @@ import { useTranslation } from "@/providers/translation-provider";
 import { isRTL } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 
-export function LanguageSwitcher({lang}:{lang:Lang}) {
+export function LanguageSwitcher({ lang }: { lang: Lang }) {
   const pathname = usePathname();
   const [, startTransition] = useTransition();
-  const dict = useTranslation().navBar.switchers.langaugeSitchers
+  const dict = useTranslation().navBar.switchers.langaugeSitchers;
 
   const currentLang = pathname?.split("/")[1] || "en";
 
@@ -29,9 +29,15 @@ export function LanguageSwitcher({lang}:{lang:Lang}) {
     if (lang === currentLang) return;
     setCookie(LANG_COOKIE, lang);
 
-    const newPath = pathname.replace(`/${currentLang}`, `/${lang}`);
+    let newPath;
+    if (!pathname || pathname === "/") {
+      newPath = `/${lang}`;
+    } else {
+      newPath = pathname.replace(`/${currentLang}`, `/${lang}`);
+    }
+
     startTransition(() => {
-      window.location.href = (newPath)
+      window.location.href = newPath;
     });
   }
 

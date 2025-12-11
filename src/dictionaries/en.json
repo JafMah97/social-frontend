@@ -63,7 +63,9 @@
       "profile": "Profile",
       "settings": "Settings",
       "help": "Help",
-      "logout": "Logout"
+      "logout": "Logout",
+      "logoutSuccess":"Logged out successfully!",
+      "logoutError":"Logout failed. Please try again."
     }
   },
   "mainPage": {

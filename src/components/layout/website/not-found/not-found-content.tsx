@@ -3,12 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/providers/translation-provider";
 import { Lang } from "@/utils/translation/dictionary-utils";
+import { fmt } from "@/utils/translation/language-utils";
 import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function NotFoundContent({ lang }: { lang: Lang }) {
-  const dict = useTranslation().notFoundPage
+  const {notFoundPage:dict,siteName } = useTranslation()
   const router = useRouter();
 
   return (
@@ -71,7 +72,7 @@ export default function NotFoundContent({ lang }: { lang: Lang }) {
       {/* Simple Footer */}
       <footer className="p-4 border-t border-border text-center text-sm text-muted-foreground">
         <p>
-          © {new Date().getFullYear()} {dict.footer}
+          © {new Date().getFullYear()} {fmt(dict.footer,{siteName:siteName})}
         </p>
       </footer>
     </div>

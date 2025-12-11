@@ -1,1 +1,1 @@
-export const LANG_COOKIE = "LANG";
+export const LANG_COOKIE = "lang";

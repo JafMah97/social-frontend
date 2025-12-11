@@ -1,14 +1,29 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/providers/translation-provider";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import Link from "next/link";
 
-export default function AuthButtons({lang,isMobile=false}:{lang:Lang,isMobile?:boolean}) {
-  const dict =  useTranslation().navBar.authButtons
+interface AuthButtonsProps {
+  lang: Lang;
+  isMobile?: boolean;
+  onAction?: () => void; // ✅ optional callback
+}
+
+export default function AuthButtons({
+  lang,
+  isMobile = false,
+  onAction,
+}: AuthButtonsProps) {
+  const dict = useTranslation().navBar.authButtons;
+
   return (
-    <div className="flex flex-row gap-4 mx-4">
-      <Link href={`/${lang}/auth/login`} className="h-full flex items-center">
+    <div className="flex flex-col md:flex-row gap-4 mx-4">
+      <Link
+        href={`/${lang}/auth/login`}
+        className="h-full flex items-center"
+        onClick={onAction} // ✅ call if provided
+      >
         <Button
           variant="ghost"
           className={`h-9 px-4 cursor-pointer text-foreground/80 hover:text-foreground font-medium transition-all duration-200 hover:bg-accent rounded-lg bg-primary/10 ${
@@ -23,6 +38,7 @@ export default function AuthButtons({lang,isMobile=false}:{lang:Lang,isMobile?:b
       <Link
         href={`/${lang}/auth/register`}
         className="h-full flex items-center"
+        onClick={onAction} // ✅ call if provided
       >
         <Button
           className={`h-9 px-4 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
@@ -36,4 +52,3 @@ export default function AuthButtons({lang,isMobile=false}:{lang:Lang,isMobile?:b
     </div>
   );
 }
-

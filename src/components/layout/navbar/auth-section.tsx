@@ -5,16 +5,16 @@ import AuthButtons from "../header/auth-buttons";
 import UserMenu from "../header/user-menu";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 
-export default function AuthNavSection({lang}:{lang:Lang}) {
-  const { data: loggedUser } = useCurrentLoggedUser();
+export default function AuthNavSection({ lang }: { lang: Lang }) {
+  const { data } = useCurrentLoggedUser();
+  const isLogged = Boolean(data);
   return (
     <div className="flex items-center gap-4 h-full">
-      {!loggedUser? (
-
-          <AuthButtons lang={lang}/>
+      {isLogged ? (
+        <UserMenu lang={lang} isMobile={false} />
       ) : (
         <div>
-          <UserMenu lang={lang} isMobile={false} />
+          <AuthButtons lang={lang} />
         </div>
       )}
     </div>

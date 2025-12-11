@@ -30,6 +30,11 @@ export interface LoginResponse {
   username: string;
 }
 
+/// Logout types
+export interface LogoutResponse {
+  message: string;
+}
+
 // user types
 
 /// Logged user types
