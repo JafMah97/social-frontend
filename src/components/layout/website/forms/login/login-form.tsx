@@ -174,6 +174,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
                         />
                         <InputGroupAddon align={"inline-end"}>
                           <Button
+                          type="button"
                             variant={"ghost"}
                             onClick={(e) => {
                               e.preventDefault();

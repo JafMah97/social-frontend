@@ -12,7 +12,17 @@ export async function langMiddleware(request: NextRequest) {
     return res;
   }
 
-  // If cookie already exists → continue
+  // If cookie exists but path has no lang prefix → redirect
+  if (
+    langCookie &&
+    !url.pathname.startsWith("/en") &&
+    !url.pathname.startsWith("/ar")
+  ) {
+    url.pathname = `/${langCookie}`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  // If cookie exists and path already has prefix → continue
   if (langCookie) {
     return NextResponse.next();
   }
@@ -23,10 +33,9 @@ export async function langMiddleware(request: NextRequest) {
 
   let redirectLang = "en"; // default
   if (browserLang === "ar") redirectLang = "ar";
-  else if (browserLang === "en") redirectLang = "en";
 
-  // Redirect permanently (301)
-  url.pathname = `/${redirectLang}`;
+  // Redirect to detected language
+  url.pathname = `/${redirectLang}`;  
   const res = NextResponse.redirect(url, 307);
   res.cookies.set("lang", redirectLang, { path: "/" });
   return res;
