@@ -1,6 +1,10 @@
 import { postRequest } from "../axios";
 import { isAxiosError } from "axios";
-import { ApiErrorResponse, LoginData, LoginResponse } from "../api-types";
+import {
+  ApiErrorResponse,
+  LoginData,
+  LoginResponse,
+} from "../../types/api-types";
 
 export const loginApi = async (data: LoginData): Promise<LoginResponse> => {
   try {
@@ -14,13 +18,14 @@ export const loginApi = async (data: LoginData): Promise<LoginResponse> => {
     if (isAxiosError(err) && err.response?.data?.error) {
       throw err.response.data as ApiErrorResponse;
     }
-    if (isAxiosError(err) ) {
+    if (isAxiosError(err)) {
       throw {
-      success: false,
-      error: {
-        code: "unknownError",
-        message: err?.message as string || "An unknown error occurred",
-      },} as ApiErrorResponse;
+        success: false,
+        error: {
+          code: "unknownError",
+          message: (err?.message as string) || "An unknown error occurred",
+        },
+      } as ApiErrorResponse;
     }
     throw {
       success: false,

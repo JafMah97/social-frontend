@@ -1,7 +1,9 @@
 "use client";
-
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -9,35 +11,101 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
+import { fmt, isRTL } from "@/utils/translation/language-utils";
+import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
-import { Lang } from "@/utils/translation/dictionary-utils";
-import { isRTL } from "@/utils/translation/language-utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRegister } from "@/hooks/api-hooks/auth/useRegister";
+import { toast } from "sonner";
+import { useState } from "react";
+import z from "zod";
+import { FormInput } from "../form-input";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
 }
 
-export function RegisterForm({ className, children, lang, ...props }: Props) {
+export function RegisterForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().registerPage;
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const registerSchema = z
+    .object({
+      email: z
+        .string()
+        .email(dict.schemaErrors.email.invalid)
+        .min(5, fmt(dict.schemaErrors.email.min, { min: 5 }))
+        .max(32, fmt(dict.schemaErrors.email.max, { max: 32 })),
+      password: z
+        .string()
+        .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
+        .max(100, fmt(dict.schemaErrors.password.max, { max: 50 })),
+      confirmPassword: z
+        .string()
+        .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
+        .max(100, fmt(dict.schemaErrors.password.max, { max: 50 })),
+      fullName: z
+        .string()
+        .min(4, fmt(dict.schemaErrors.fullName.min, { min: 4 }))
+        .max(12, fmt(dict.schemaErrors.fullName.max, { max: 12 })),
+      username: z
+        .string()
+        .min(4, fmt(dict.schemaErrors.userName.min, { min: 4 }))
+        .max(12, fmt(dict.schemaErrors.userName.max, { max: 12 }))
+        .regex(/^[a-zA-Z0-9_]+$/, dict.schemaErrors.userName.invalid),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: dict.schemaErrors.confirmPassword,
+    });
+
+
+  const { mutate, isPending } = useRegister({
+    onSuccess: () => {
+      setError("");
+      toast.success(dict.toast.success);
+      router.push(`/${lang}/auth/verify-email/code`);
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(dict.toast.error);
+      setError(
+        err.error.message +
+          `${err.error.code ? " (Code:" + err.error.code + ")" : ""}`
+      );
+    },
+  });
+
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      username: "",
+      fullName: "",
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof registerSchema>) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { confirmPassword, ...payload } = data;
+    mutate(payload);
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
-        <Card className="px-0 md:p-6 py-4 md:py-10 relative z-20 overflow-hidden bg-primary/10">
+        <Card className="px-0 md:p-6 pt-4 md:pt-10 relative z-20 overflow-hidden bg-primary/10">
           <svg
-            className={`absolute top-0 ${
+            className={`absolute ${
               isRTL(lang)
-                ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 md:-top-6 lg:-top-18 xl:-top-24"
-                : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 md:-top-6 lg:-top-18 xl:-top-24"
+                ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 lg:-top-15 xl:-top-22"
+                : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 lg:-top-15 xl:-top-22"
             } z-10 ${
               isRTL(lang) ? "transform scale-x-[-1]" : "transform scale-x-[1]"
             }`}
@@ -52,7 +120,7 @@ export function RegisterForm({ className, children, lang, ...props }: Props) {
           </svg>
           <CardHeader className="flex flex-row w-full justify-between relative z-20">
             <div className="flex flex-col justify-start items-start gap-2 w-full">
-              {children /* Logo or any custom header content */}
+              {children}
               <CardTitle className="text-2xl md:text-4xl">
                 {dict.title}
               </CardTitle>
@@ -61,75 +129,74 @@ export function RegisterForm({ className, children, lang, ...props }: Props) {
               </CardDescription>
             </div>
           </CardHeader>
-          <CardContent className="w-full relative z-20 mt-5">
-            <form>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="email">
-                    {dict.fields.email.label}
-                  </FieldLabel>
-                  <Input
-                    className="bg-foreground/10"
-                    id="email"
-                    type="email"
-                    placeholder={dict.fields.email.placeholder}
-                    required
+          <CardContent className="w-full relative z-20 mt-8">
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FieldGroup className="gap-1">
+                {/* Email */}
+                <FormInput<z.infer<typeof registerSchema>>
+                  name="email"
+                  control={form.control}
+                  label={dict.fields.email.label}
+                  placeholder={dict.fields.email.placeholder}
+                  type="email"
+                />
+
+                <div className="flex flex-col md:flex-row md:gap-3">
+                  {/* Full Name */}
+                  <FormInput<z.infer<typeof registerSchema>>
+                    name="fullName"
+                    control={form.control}
+                    label={dict.fields.fullName.label}
+                    placeholder={dict.fields.fullName.placeholder}
+                    type="text"
                   />
-                </Field>
-                <Field className="grid sm:grid-cols-2 grid-cols-1 gap-4">
-                  <Field>
-                    <FieldLabel htmlFor="name">
-                      {dict.fields.fullName.label}
-                    </FieldLabel>
-                    <Input
-                      className="bg-foreground/10"
-                      id="name"
-                      type="text"
-                      placeholder={dict.fields.fullName.placeholder}
-                      required
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="userName">
-                      {dict.fields.userName.label}
-                    </FieldLabel>
-                    <Input
-                      className="bg-foreground/10"
-                      id="userName"
-                      type="text"
-                      placeholder={dict.fields.userName.placeholder}
-                      required
-                    />
-                  </Field>
-                </Field>
+
+                  {/* User Name */}
+                  <FormInput<z.infer<typeof registerSchema>>
+                    name="username"
+                    control={form.control}
+                    label={dict.fields.userName.label}
+                    placeholder={dict.fields.userName.placeholder}
+                    type="text"
+                  />
+                </div>
+
+                <div className="flex flex-col md:flex-row md:gap-3">
+                  {/* Password */}
+                  <FormInput<z.infer<typeof registerSchema>>
+                    name="password"
+                    control={form.control}
+                    label={dict.fields.password.label}
+                    placeholder={"********"}
+                    type="password"
+                  />
+
+                  {/* Confirm Password */}
+                  <FormInput<z.infer<typeof registerSchema>>
+                    name="confirmPassword"
+                    control={form.control}
+                    label={dict.fields.confirmPassword.label}
+                    placeholder={"********"}
+                    type="password"
+                  />
+                </div>
+
+                {/* Submit */}
                 <Field>
-                  <Field className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field>
-                      <FieldLabel htmlFor="password">
-                        {dict.fields.password.label}
-                      </FieldLabel>
-                      <Input
-                        className="bg-foreground/10"
-                        id="password"
-                        type="password"
-                        required
-                      />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="confirm-password">
-                        {dict.fields.confirmPassword.label}
-                      </FieldLabel>
-                      <Input
-                        className="bg-foreground/10"
-                        id="confirm-password"
-                        type="password"
-                        required
-                      />
-                    </Field>
-                  </Field>
-                </Field>
-                <Field>
-                  <Button type="submit">{dict.actions.submit}</Button>
+                  <div className="min-h-4">
+                    {error && (
+                      <p className="text-sm text-red-500 text-center">
+                        {error}
+                      </p>
+                    )}
+                  </div>
+                  <Button disabled={isPending} className="cursor-pointer">
+                    {isPending ? (
+                      <Spinner />
+                    ) : (
+                      <span>{dict.actions.submit}</span>
+                    )}
+                  </Button>
                   <FieldDescription className="text-center">
                     {dict.actions.alreadyHave}{" "}
                     <Link href={`/${lang}/auth/login`}>

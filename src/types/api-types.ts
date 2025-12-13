@@ -35,6 +35,25 @@ export interface LogoutResponse {
   message: string;
 }
 
+/// register types
+
+export interface RegisterData {
+  email: string;
+  password: string;
+  username: string;
+  fullName: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+  user: {
+    email: string;
+    username: string;
+    fullName: string;
+    emailVerified: boolean;
+  };
+}
+
 // user types
 
 /// Logged user types
@@ -83,7 +102,7 @@ export interface UserSettings {
 }
 
 export interface UserPreferences {
-  language: "EN" | "AR"
+  language: "EN" | "AR";
   themeMode: "LIGHT" | "DARK" | "SYSTEM";
   timezone: string | null;
   locale: string | null;

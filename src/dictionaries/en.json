@@ -172,7 +172,7 @@
       },
       "userName": {
         "label": "User Name",
-        "placeholder": "@John123"
+        "placeholder": "@John"
       },
       "password": {
         "label": "Password"
@@ -186,7 +186,32 @@
       "alreadyHave": "Already have an account?",
       "signIn": "Sign in"
     },
-    "terms": "By clicking continue, you agree to our Terms of Service and Privacy Policy."
+    "terms": "By clicking continue, you agree to our Terms of Service and Privacy Policy.",
+    "schemaErrors":{
+      "email": {
+        "invalid":"Invalid email address",
+        "min": "Email must be at least {{min}} characters long",
+        "max": "Password must be at most {max}} characters long"
+      },
+      "password": {
+        "min": "Password must be at least {{min}} characters long",
+        "max": "Password must be at most {{max}} characters long"
+      },
+      "userName": {
+        "min": "Username must be at least {{min}} characters long",
+        "max": "Username must be at most {{max}} characters long",
+        "invalid":"Username can only contain letters, numbers, and underscores"
+      },
+      "fullName": {
+        "min": "Full Name must be at least {{min}} characters long",
+        "max": "Full Name must be at most {{max}} characters long"
+      },
+      "confirmPassword":"passwords dosen't matches"
+    },
+    "toast":{
+      "success":"Register successful!",
+      "error":"Register failed. Please try again."
+    }
   },
   "loginPage": {
     "title": "Login into your account",
@@ -213,12 +238,12 @@
     "schemaErrors": {
       "email": {
         "invalid": "Invalid email address",
-        "min": "Email must be at least {min} characters long",
-        "max": "Email must be at most {max} characters long"
+        "min": "Email must be at least {{min}} characters long",
+        "max": "Email must be at most {{max}} characters long"
       },
       "password": {
-        "min": "Password must be at least {min} characters long",
-        "max": "Password must be at most {max} characters long"
+        "min": "Password must be at least {{min}} characters long",
+        "max": "Password must be at most {{max}} characters long"
       }
     }
   },

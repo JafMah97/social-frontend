@@ -1,10 +1,16 @@
-import { ApiErrorResponse, LoggedUserResponse } from "../../types/api-types";
-import { getRequest } from "../axios";
+import { postRequest } from "../axios";
 import { isAxiosError } from "axios";
+import {
+  ApiErrorResponse,
+  RegisterData,
+  RegisterResponse,
+} from "../../types/api-types";
 
-export const loggedUser = async (): Promise<LoggedUserResponse> => {
+export const registerApi = async (
+  data: RegisterData
+): Promise<RegisterResponse> => {
   try {
-    return await getRequest<LoggedUserResponse>("/user/me", {
+    return await postRequest<RegisterResponse, RegisterData>("/auth/register", data, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",

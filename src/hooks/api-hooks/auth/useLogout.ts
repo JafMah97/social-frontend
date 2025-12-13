@@ -1,5 +1,5 @@
 // src/hooks/useLogin.ts
-import { ApiErrorResponse, LogoutResponse } from "@/api/api-types";
+import { ApiErrorResponse, LogoutResponse } from "@/types/api-types";
 import { logoutApi } from "@/api/auth/logoutApi";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
