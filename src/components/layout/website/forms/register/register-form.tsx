@@ -32,6 +32,7 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().registerPage;
   const [error, setError] = useState("");
   const router = useRouter();
+  const [email, setEmail] = useState("");
 
   const registerSchema = z
     .object({
@@ -43,11 +44,11 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
       password: z
         .string()
         .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
-        .max(100, fmt(dict.schemaErrors.password.max, { max: 50 })),
+        .max(50, fmt(dict.schemaErrors.password.max, { max: 50 })),
       confirmPassword: z
         .string()
         .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
-        .max(100, fmt(dict.schemaErrors.password.max, { max: 50 })),
+        .max(50, fmt(dict.schemaErrors.password.max, { max: 50 })),
       fullName: z
         .string()
         .min(4, fmt(dict.schemaErrors.fullName.min, { min: 4 }))
@@ -63,12 +64,14 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
       message: dict.schemaErrors.confirmPassword,
     });
 
-
   const { mutate, isPending } = useRegister({
     onSuccess: () => {
       setError("");
       toast.success(dict.toast.success);
-      router.push(`/${lang}/auth/verify-email/code`);
+      if (email) {
+        router.push(`/${lang}/auth/verify-email/code?email=${email}`);
+      }
+      setEmail("");
     },
     onError: (err) => {
       console.log(err);
@@ -95,6 +98,7 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...payload } = data;
     mutate(payload);
+    setEmail(payload.email)
   }
 
   return (

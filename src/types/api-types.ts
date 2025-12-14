@@ -54,6 +54,20 @@ export interface RegisterResponse {
   };
 }
 
+/// verifyEmail with code 
+
+export interface VerifyCodeData {
+  code:string;
+  email:string
+}
+
+export interface VerifyCodeResponse {
+
+  success: boolean,
+  message: string
+
+}
+
 // user types
 
 /// Logged user types

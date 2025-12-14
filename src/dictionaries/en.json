@@ -268,13 +268,18 @@
     "fields": {
       "otp": {
         "label": "Verification code",
-        "hint": "Enter the 6-digit code sent to your email."
+        "hint": "Enter the 6-digit code sent to your email.",
+        "invalid":"Please enter the 6‑digit code"
       }
     },
     "actions": {
       "submit": "Verify",
       "resendPrompt": "Didn't receive the code?",
       "resend": "Resend"
+    },
+    "toast":{
+      "success":"Email verified successfully",
+      "error":"Email Not verified"
     }
   },
   "resetPasswordPage": {
