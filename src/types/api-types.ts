@@ -54,18 +54,27 @@ export interface RegisterResponse {
   };
 }
 
-/// verifyEmail with code 
+/// verifyEmail with code
 
 export interface VerifyCodeData {
-  code:string;
-  email:string
+  code: string;
+  email: string;
 }
 
 export interface VerifyCodeResponse {
+  success: boolean;
+  message: string;
+}
 
-  success: boolean,
-  message: string
+/// Resend Verify Code
 
+export interface ResendVerifyCodeData {
+  email: string;
+}
+
+export interface ResendVerifyCodeResponse {
+  success: boolean;
+  message: string;
 }
 
 // user types

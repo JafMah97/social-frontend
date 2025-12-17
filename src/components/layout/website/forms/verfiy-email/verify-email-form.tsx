@@ -28,6 +28,9 @@ import { useState } from "react";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { Spinner } from "@/components/ui/spinner";
 import ResendButton from "./resend-button";
+import { useResendVerifyCode } from "@/hooks/api-hooks/auth/useResendVerifyCode";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -48,11 +51,11 @@ export default function VerifyEmailCode({
   const router = useRouter();
   const [error, setError] = useState("");
   const lang = useCurrentLang();
-  const [data, setData] = useState<{ code: string; email: string }>({
-    code: "",
-    email,
-  });
-  const [success, setSuccess] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const queryClient = useQueryClient();
+
+  useCurrentLoggedUser(loggedIn);
+
   // Zod schema for OTP (exactly 6 digits)
   const otpSchema = z.object({
     code: z
@@ -68,10 +71,14 @@ export default function VerifyEmailCode({
   });
 
   const { mutate, isPending } = useVerifyEmailWithCode({
-    onSuccess: () => {
+    onSuccess: async () => {
+      setLoggedIn(true);
       setError("");
-      setSuccess(true);
       toast.success(dict.toast.success);
+      await queryClient.invalidateQueries({
+        queryKey: ["currentLoggedUser"],
+      });
+
       router.push(`/${lang}/feeds`);
     },
     onError: (err) => {
@@ -83,8 +90,21 @@ export default function VerifyEmailCode({
     },
   });
 
+  const { mutate: resendMutate } = useResendVerifyCode({
+    onSuccess: () => {
+      setError("");
+      toast.success(dict.toast.successResend);
+    },
+    onError: (err) => {
+      toast.error(dict.toast.errorResend);
+      setError(
+        err.error.message +
+          `${err.error.code ? " (Code:" + err.error.code + ")" : ""}`
+      );
+    },
+  });
+
   function onSubmit(data: z.infer<typeof otpSchema>) {
-    setData({ email: email, code: data.code });
     mutate({ code: data.code, email: email });
   }
 
@@ -179,22 +199,18 @@ export default function VerifyEmailCode({
                 {isPending ? <Spinner /> : <span>{dict.actions.submit}</span>}
               </Button>
 
-              <div className="h-5">
-                {success && (
-                  <FieldDescription className="text-center mt-3">
-                    {dict.actions.resendPrompt}{" "}
-                    <ResendButton
-                      label={dict.actions.resend}
-                      cooldownSeconds={60}
-                      className="text-primary underline disabled:opacity-50"
-                      onClick={() => {
-                        mutate(data);
-                        console.log("Resend clicked for:", email);
-                      }}
-                    />
-                  </FieldDescription>
-                )}
-              </div>
+              <FieldDescription className="text-center mt-3">
+                {dict.actions.resendPrompt}{" "}
+                <ResendButton
+                  label={dict.actions.resend}
+                  cooldownSeconds={60}
+                  className="text-primary underline disabled:opacity-50"
+                  onClick={() => {
+                    resendMutate({ email });
+                    console.log("Resend clicked for:", email);
+                  }}
+                />
+              </FieldDescription>
             </FieldGroup>
           </form>
         </CardContent>

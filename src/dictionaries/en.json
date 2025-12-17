@@ -279,7 +279,9 @@
     },
     "toast":{
       "success":"Email verified successfully",
-      "error":"Email Not verified"
+      "error":"Email Not verified",
+      "successResend":"Email verification resended",
+      "errorResend":"Email verification not resended, please try again later"
     }
   },
   "resetPasswordPage": {

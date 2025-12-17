@@ -3,13 +3,10 @@ import Link from "next/link";
 import {
   Heart,
   Mail,
-  Phone,
   MapPin,
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Logo from "../header/logo";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
@@ -19,14 +16,26 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 
-
-
 export default async function Footer({ lang }: { lang: Lang }) {
   const currentYear = new Date().getFullYear();
   const { footer: dict, siteName, logo: dictLogo } = await getDictionary(lang);
 
   return (
-    <footer className="bg-background border-t border-border ">
+    <footer className="bg-background ">
+      <svg
+        className="bg-primary/10"
+        id="wave"
+        style={{ transform: "rotate(180deg)", transition: "0.3s" }}
+        viewBox="0 0 1440 100"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          style={{ transform: "translate(0, 0px)", opacity: "1" }}
+          fill="url(#sw-gradient-0)"
+          d="M0,70L10,71.7C20,73,40,77,60,71.7C80,67,100,53,120,43.3C140,33,160,27,180,35C200,43,220,67,240,63.3C260,60,280,30,300,25C320,20,340,40,360,51.7C380,63,400,67,420,66.7C440,67,460,63,480,56.7C500,50,520,40,540,31.7C560,23,580,17,600,15C620,13,640,17,660,23.3C680,30,700,40,720,46.7C740,53,760,57,780,50C800,43,820,27,840,16.7C860,7,880,3,900,3.3C920,3,940,7,960,8.3C980,10,1000,10,1020,11.7C1040,13,1060,17,1080,25C1100,33,1120,47,1140,55C1160,63,1180,67,1200,63.3C1220,60,1240,50,1260,51.7C1280,53,1300,67,1320,75C1340,83,1360,87,1380,76.7C1400,67,1420,43,1430,31.7L1440,20L1440,100L1430,100C1420,100,1400,100,1380,100C1360,100,1340,100,1320,100C1300,100,1280,100,1260,100C1240,100,1220,100,1200,100C1180,100,1160,100,1140,100C1120,100,1100,100,1080,100C1060,100,1040,100,1020,100C1000,100,980,100,960,100C940,100,920,100,900,100C880,100,860,100,840,100C820,100,800,100,780,100C760,100,740,100,720,100C700,100,680,100,660,100C640,100,620,100,600,100C580,100,560,100,540,100C520,100,500,100,480,100C460,100,440,100,420,100C400,100,380,100,360,100C340,100,320,100,300,100C280,100,260,100,240,100C220,100,200,100,180,100C160,100,140,100,120,100C100,100,80,100,60,100C40,100,20,100,10,100L0,100Z"
+        ></path>
+      </svg>
       <div className="bg-primary/10">
         {/* Main Footer Content */}
         <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -51,14 +60,8 @@ export default async function Footer({ lang }: { lang: Lang }) {
                 <FooterLink lang={lang} href="/">
                   {dict.navigation.links.home}
                 </FooterLink>
-                <FooterLink lang={lang} href="/feeds">
-                  {dict.navigation.links.feeds}
-                </FooterLink>
                 <FooterLink lang={lang} href="/about">
                   {dict.navigation.links.about}
-                </FooterLink>
-                <FooterLink lang={lang} href="/blog">
-                  {dict.navigation.links.blog}
                 </FooterLink>
                 <FooterLink lang={lang} href="/contact">
                   {dict.navigation.links.contact}
@@ -67,8 +70,8 @@ export default async function Footer({ lang }: { lang: Lang }) {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-4 flex flex-col justify-start items-center">
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+            <div className="space-y-4 flex flex-col justify-start items-start">
+              <h3 className="text-lg font-semibold text-foreground mb-2 ">
                 {dict.contact.title}
               </h3>
               <div className="space-y-3">
@@ -78,12 +81,6 @@ export default async function Footer({ lang }: { lang: Lang }) {
                 >
                   {dict.contact.email}
                 </ContactItem>
-                <ContactItem
-                  icon={<Phone className="h-4 w-4" />}
-                  href="tel:+1234567890"
-                >
-                  {dict.contact.phone}
-                </ContactItem>
                 <ContactItem icon={<MapPin className="h-4 w-4" />}>
                   {dict.contact.address}
                 </ContactItem>
@@ -92,29 +89,6 @@ export default async function Footer({ lang }: { lang: Lang }) {
 
             {/* Newsletter & Social */}
             <div className="space-y-6 flex flex-col justify-start items-center">
-              <div className="space-y-3 flex flex-col justify-start items-center">
-                <h3 className="text-lg font-semibold text-foreground">
-                  {dict.newsletter.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {dict.newsletter.subtitle}
-                </p>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    type="email"
-                    placeholder={dict.newsletter.placeholder}
-                    className="bg-background border-border text-sm"
-                  />
-                  <Button size="sm" className="bg-primary hover:bg-primary/90">
-                    {isRTL(lang) ? (
-                      <ArrowLeft className="h-4 w-4" />
-                    ) : (
-                      <ArrowRight className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
               <div className="space-y-3 flex flex-col justify-start items-center">
                 <h3 className="text-lg font-semibold text-foreground">
                   {dict.social.title}
@@ -169,7 +143,12 @@ export default async function Footer({ lang }: { lang: Lang }) {
 
               <div className="hidden md:block text-muted-foreground/50">•</div>
               <div className="flex items-center gap-1">
-                <span>{fmt(dict.copyright,{year:currentYear,siteName:siteName})}</span>
+                <span>
+                  {fmt(dict.copyright, {
+                    year: currentYear,
+                    siteName: siteName,
+                  })}
+                </span>
                 <Heart className="h-3 w-3 text-red-500 ml-1" />
               </div>
             </div>
@@ -212,7 +191,7 @@ function FooterLink({
 }: {
   href: string;
   children: React.ReactNode;
-  lang:Lang
+  lang: Lang;
 }) {
   return (
     <Link

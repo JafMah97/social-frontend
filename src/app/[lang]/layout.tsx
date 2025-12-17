@@ -41,9 +41,8 @@ export default async function RootLayout({
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
       <body className={`${fontClass}`}>
         <TranslationsProvider translations={translations}>
-          <NextTopLoader color="var(--color-primary)" showSpinner={false} />
-
           <ReactQueryProvider>
+            <NextTopLoader color="var(--color-primary)" showSpinner={false} />
             <ThemeProvider
               attribute={"class"}
               defaultTheme="system"

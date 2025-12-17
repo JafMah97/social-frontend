@@ -52,11 +52,11 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
       fullName: z
         .string()
         .min(4, fmt(dict.schemaErrors.fullName.min, { min: 4 }))
-        .max(12, fmt(dict.schemaErrors.fullName.max, { max: 12 })),
+        .max(50, fmt(dict.schemaErrors.fullName.max, { max: 50 })),
       username: z
         .string()
         .min(4, fmt(dict.schemaErrors.userName.min, { min: 4 }))
-        .max(12, fmt(dict.schemaErrors.userName.max, { max: 12 }))
+        .max(50, fmt(dict.schemaErrors.userName.max, { max: 50 }))
         .regex(/^[a-zA-Z0-9_]+$/, dict.schemaErrors.userName.invalid),
     })
     .refine((data) => data.password === data.confirmPassword, {

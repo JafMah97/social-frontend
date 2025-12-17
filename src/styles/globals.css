@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "keen-slider/keen-slider.min.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -88,7 +89,7 @@
   --sidebar-accent: oklch(0.9 0.05 280);
   --sidebar-accent-foreground: oklch(0.25 0.02 280);
   --sidebar-border: oklch(0.92 0.01 280);
-  --sidebar-ring: oklch(0.55 0.25 280);
+  --sidebar-ring: oklch(54.99% 0.24965 280.183);
 }
 
 .dark {
@@ -173,5 +174,6 @@
 .height-custom-50 {
   height: calc((100vh - 96px) * 0.5 - 20px);
 }
+
 
 
