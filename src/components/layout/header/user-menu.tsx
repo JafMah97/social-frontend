@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/providers/translation-provider";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { isRTL } from "@/utils/translation/language-utils";
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
+import CustomAlertDialog from "../custom/alert-dialog";
 
 export default function UserMenu({
   lang,
@@ -105,20 +104,16 @@ export default function UserMenu({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button
-        className={`h-9 px-4 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
-          isMobile ? "w-full" : ""
-        } `}
-        aria-label="Logout"
-        onClick={logoutHandler}
-        disabled={logoutMutation.isPending}
-      >
-        {logoutMutation.isPending ? (
-          <Spinner />
-        ) : (
-          <span className="text-sm font-medium">{dict.logout}</span>
-        )}
-      </Button>
+      <CustomAlertDialog
+        isMobile={isMobile}
+        isPending={logoutMutation.isPending}
+        title={dict.title}
+        description={dict.description}
+        cancelText={dict.cancelText}
+        continueText={dict.logout}
+        triggerText={dict.logout}
+        onContinue={logoutHandler}
+      />
     </div>
   );
 }

@@ -65,7 +65,10 @@
       "help": "Help",
       "logout": "Logout",
       "logoutSuccess":"Logged out successfully!",
-      "logoutError":"Logout failed. Please try again."
+      "logoutError":"Logout failed. Please try again.",
+      "title":"Logging Out",
+      "description":"Do you want to logout ?",
+      "cancelText":"Cancel"
     }
   },
   "mainPage": {

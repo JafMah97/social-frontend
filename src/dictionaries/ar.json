@@ -64,7 +64,10 @@
       "help": "المساعدة",
       "logout": "تسجيل الخروج",
       "logoutSuccess": "تم تسجيل الخروج بنجاح!",
-      "logoutError": "فشل تسجيل الخروج. يرجى المحاولة مرة أخرى."
+      "logoutError": "فشل تسجيل الخروج. يرجى المحاولة مرة أخرى.",
+      "title": "تسجيل الخروج",
+      "description": "هل تريد تسجيل الخروج؟",
+      "cancelText": "إلغاء"
     }
   },
   "mainPage": {
@@ -173,7 +176,6 @@
       "userName": {
         "label": "اسم المستخدم",
         "placeholder": "@Mohammed"
-        
       },
       "password": {
         "label": "كلمة المرور"

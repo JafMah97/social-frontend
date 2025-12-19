@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
 import { FormInput } from "../form-input";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -32,13 +33,14 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().registerPage;
   const [error, setError] = useState("");
   const router = useRouter();
-  const [email, setEmail] = useState("");
+    const queryClient = useQueryClient();
+
 
   const registerSchema = z
     .object({
       email: z
-        .string()
-        .email(dict.schemaErrors.email.invalid)
+        .email
+        (dict.schemaErrors.email.invalid)
         .min(5, fmt(dict.schemaErrors.email.min, { min: 5 }))
         .max(32, fmt(dict.schemaErrors.email.max, { max: 32 })),
       password: z
@@ -65,16 +67,17 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
     });
 
   const { mutate, isPending } = useRegister({
-    onSuccess: () => {
+    onSuccess: async () => {
       setError("");
       toast.success(dict.toast.success);
-      if (email) {
-        router.push(`/${lang}/auth/verify-email/code?email=${email}`);
-      }
-      setEmail("");
+            await queryClient.invalidateQueries({
+              queryKey: ["currentLoggedUser"],
+            });
+
+        router.push(`/${lang}/feeds`);
+      
     },
     onError: (err) => {
-      console.log(err);
       toast.error(dict.toast.error);
       setError(
         err.error.message +
@@ -98,7 +101,6 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...payload } = data;
     mutate(payload);
-    setEmail(payload.email)
   }
 
   return (
