@@ -22,7 +22,7 @@ export default async function HomePage({
       <HeroCarousel
         images={["/images/hero1.jpg", "/images/hero2.jpg", "/images/hero3.jpg"]}
       >
-        <div className="container max-w-4xl text-center text-white space-y-8">
+        <div className="container max-w-4xl text-center text-white space-y-8 mx-2">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight drop-shadow-lg text-shadow-xs text-shadow-black">
             {dict.hero.headline.connect}, {dict.hero.headline.share},{" "}
             <span className="text-primary text-shadow-2xs text-shadow-white">
@@ -38,7 +38,7 @@ export default async function HomePage({
             <Button
               asChild
               size="lg"
-              className="px-6 py-3 text-lg font-semibold bg-white text-primary hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg"
+              className="px-6 py-3 text-lg font-semibold bg-background hover:bg-background/90 text-primary transition-transform transform hover:scale-105 shadow-lg"
             >
               <Link href={`/${lang}/auth/login`}>{dict.hero.cta.login}</Link>
             </Button>
@@ -53,7 +53,7 @@ export default async function HomePage({
             </Button>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 mt-10">
+          <div className="flex flex-wrap justify-center md:gap-8 mt-10">
             <StatItem
               value={dict.hero.stats.activeUsers.value}
               label={dict.hero.stats.activeUsers.label}
@@ -77,8 +77,8 @@ export default async function HomePage({
       {/* Features Section */}
       <div className="bg-background border-t-background border-b-background -my-2">
         <Wave up={true} className="bg-primary/10" />
-        <section className="px-6 md:px-12 bg-primary/10 py-10">
-          <div className="max-w-6xl mx-auto text-center">
+        <section className="px-6 md:px-12 bg-primary/10 py-20 relative">
+          <div className="max-w-6xl mx-auto text-center relative z-30">
             {/* Section Heading */}
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               {fmt(dict.hero.features.title, { siteName: siteName })}

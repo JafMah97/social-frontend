@@ -22,33 +22,31 @@ import { Spinner } from "@/components/ui/spinner";
 export default function UserMenu({
   lang,
   isMobile = false,
-  onAction
+  onAction,
 }: {
   lang: Lang;
   isMobile?: boolean;
-  onAction?:()=> void
+  onAction?: () => void;
 }) {
   const dict = useTranslation().navBar.userMenu;
   const rtl = isRTL(lang);
   const { data } = useCurrentLoggedUser();
   const queryClient = useQueryClient();
   const logoutMutation = useLogout();
- const logoutHandler = () => {
-  
-   logoutMutation.mutate(null, {
-     onSuccess: () => {
-      if (onAction) {
-        onAction();
-      }
-       queryClient.setQueryData(["currentLoggedUser"], null); // ✅ clear data
-       toast.success(dict.logoutSuccess);
-     },
-     onError: () => {
-       toast.error(dict.logoutError);
-     },
-   });
- };
-
+  const logoutHandler = () => {
+    logoutMutation.mutate(null, {
+      onSuccess: () => {
+        if (onAction) {
+          onAction();
+        }
+        queryClient.setQueryData(["currentLoggedUser"], null); // ✅ clear data
+        toast.success(dict.logoutSuccess);
+      },
+      onError: () => {
+        toast.error(dict.logoutError);
+      },
+    });
+  };
 
   return (
     <div
@@ -59,11 +57,13 @@ export default function UserMenu({
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild aria-label="User menu">
           <div className="flex flex-row gap-2">
-            <CustomAvatar
-              className="w-10 h-10"
-              src={data?.data.profileImage}
-              fallback={data?.data.username.slice(0, 2)}
-            />
+            {data?.data && (
+              <CustomAvatar
+                className="w-10 h-10"
+                src={data?.data.profileImage}
+                fallback={data?.data.username.slice(0, 2)}
+              />
+            )}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent

@@ -2,13 +2,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { loggedUser } from "@/api/user/logged-user-api";
 import { LoggedUserResponse, ApiErrorResponse } from "@/types/api-types";
-
-export function useCurrentLoggedUser(enabled: boolean = false) {
+export function useCurrentLoggedUser() {
   return useQuery<LoggedUserResponse, ApiErrorResponse>({
     queryKey: ["currentLoggedUser"],
     queryFn: loggedUser,
-    enabled,
     retry: false,
     refetchOnWindowFocus: false,
+    refetchInterval: false, // prevent polling
   });
 }
+

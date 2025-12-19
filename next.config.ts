@@ -12,7 +12,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline' https:;
   img-src 'self' data: blob: https:;
   font-src 'self' https: data:;
-  connect-src 'self' https: wss:;
+  connect-src 'self' https: wss: ${isDev ? "http://localhost:3001" : ""};
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';

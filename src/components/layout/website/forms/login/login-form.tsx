@@ -44,7 +44,6 @@ interface Props extends React.ComponentProps<"div"> {
 export function LoginForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().loginPage;
   const [error, setError] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -62,7 +61,6 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
   
   const { mutate, isPending } = useLogin({
     onSuccess: async () => {
-      setLoggedIn(true)
       setError("");
       toast.success(dict.toast.loginSuccess);
       await queryClient.invalidateQueries({ queryKey: ["currentLoggedUser"] });
@@ -78,7 +76,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
     },
   });
   
-  useCurrentLoggedUser(loggedIn);
+  useCurrentLoggedUser();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

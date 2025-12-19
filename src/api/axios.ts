@@ -1,8 +1,13 @@
 import axios from "axios";
 
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_PRODUCTION // or VITE_PRODUCTION
+    : process.env.NEXT_PUBLIC_DEVELOPMENT; // or VITE_DEVELOPMENT
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  timeout:60*1000,
+  baseURL,
+  timeout: 60 * 1000,
 });
 
 interface RequestOptions {

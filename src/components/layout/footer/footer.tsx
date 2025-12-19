@@ -52,7 +52,7 @@ export default async function Footer({ lang }: { lang: Lang }) {
             </div>
 
             {/* Quick Links */}
-            <div className="space-y-4 flex flex-col justify-center items-center">
+            <div className="space-y-4 flex flex-col justify-start items-start">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {dict.navigation.title}
               </h3>

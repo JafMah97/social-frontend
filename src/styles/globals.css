@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "keen-slider/keen-slider.min.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -174,6 +173,3 @@
 .height-custom-50 {
   height: calc((100vh - 96px) * 0.5 - 20px);
 }
-
-
-
