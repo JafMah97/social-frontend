@@ -303,5 +303,35 @@
       "noAccount": "Don't have an account?",
       "register": "Register"
     }
+  },
+  "uploadImagesPage":{
+    "title":"Upload Images",
+    "description":"Please upload your cover and profile images.",
+    "skip":"Skip",
+    "continue":"Continue",
+    "cover":{
+      "dropHere": "Drop your image here",
+      "fileTypes": "SVG, PNG, JPG or GIF (max. {{size}}MB)",
+      "selectImage": "Select image",
+      "removeImage": "Remove image",
+      "uploadAlt": "Uploaded image",
+      "errorPrefix": "Error",
+      "uploadImageFile": "Upload image file"
+    },
+    "avatar":{
+      "uploadImage": "Upload image",
+      "changeImage": "Change image",
+      "uploadedImage": "Uploaded image",
+      "removeImage": "Remove image",
+      "uploadImageFile": "Upload image file",
+      "selectImage":"Select image"
+    },
+    "hook":{
+      "fileTooLargeSingle": "File exceeds the maximum size of {{maxSize}}.",
+      "fileTooLargeNamed": "File \"{{name}}\" exceeds the maximum size of {{maxSize}}.",
+      "fileTooLargeMultiple": "Some files exceed the maximum size of {{maxSize}}.",
+      "invalidTypeNamed": "File \"{{name}}\" is not an accepted file type.",
+      "maxFilesExceeded": "You can only upload a maximum of {{maxFiles}} files."
+    }
   }
 }

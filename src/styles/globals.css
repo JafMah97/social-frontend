@@ -173,3 +173,29 @@
 .height-custom-50 {
   height: calc((100vh - 96px) * 0.5 - 20px);
 }
+
+@keyframes wave-bounce {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-1.5px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes wave-bounce-up {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-1.5px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes wave-bounce-down {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(1.5px); }
+  100% { transform: translateY(0); }
+}
+
+.wave-animate-up {
+  animation: wave-bounce-up 2s ease-in-out infinite;
+}
+
+.wave-animate-down {
+  animation: wave-bounce-down 2s ease-in-out infinite;
+}

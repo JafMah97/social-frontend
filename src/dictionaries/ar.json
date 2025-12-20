@@ -303,5 +303,35 @@
     "actions": {
       "submit": "إعادة التعيين"
     }
+  },
+  "uploadImagesPage": {
+    "title": "إختر صوراً",
+    "description": "الرجاء اختيار صورة الغلاف والصورة الشخصية.",
+    "skip": "تخطي",
+    "continue": "متابعة",
+    "cover": {
+      "dropHere": "أضف صورتك هنا",
+      "fileTypes": "SVG، PNG، JPG أو GIF (بحد أقصى {{size}} ميغابايت)",
+      "selectImage": "اختر صورة",
+      "removeImage": "إزالة الصورة",
+      "uploadAlt": "الصورة المرفوعة",
+      "errorPrefix": "خطأ",
+      "uploadImageFile": "رفع ملف صورة"
+    },
+    "avatar": {
+      "uploadImage": "رفع صورة",
+      "changeImage": "تغيير الصورة",
+      "uploadedImage": "الصورة المرفوعة",
+      "removeImage": "إزالة الصورة",
+      "uploadImageFile": "رفع ملف صورة",
+      "selectImage":"اختر صورة"
+    },
+    "hook":{
+      "fileTooLargeSingle": "الملف يتجاوز الحجم الأقصى {{maxSize}}.",
+      "fileTooLargeNamed": "الملف \"{{name}}\" يتجاوز الحجم الأقصى {{maxSize}}.",
+      "fileTooLargeMultiple": "بعض الملفات تتجاوز الحجم الأقصى {{maxSize}}.",
+      "invalidTypeNamed": "الملف \"{{name}}\" ليس من نوع مقبول.",
+      "maxFilesExceeded": "يمكنك رفع حد أقصى {{maxFiles}} ملفات."
+    }
   }
 }

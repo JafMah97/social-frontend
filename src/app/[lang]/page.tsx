@@ -75,8 +75,10 @@ export default async function HomePage({
       </HeroCarousel>
 
       {/* Features Section */}
-      <div className="bg-background border-t-background border-b-background -my-2">
-        <Wave up={true} className="bg-primary/10" />
+      <div className="bg-background border-t-background border-b-background -my-1">
+        <div className="relative w-full overflow-hidden leading-none bg-primary/10">
+          <Wave up className="w-full h-auto " />
+        </div>
         <section className="px-6 md:px-12 bg-primary/10 py-20 relative">
           <div className="max-w-6xl mx-auto text-center relative z-30">
             {/* Section Heading */}
@@ -107,7 +109,9 @@ export default async function HomePage({
             </div>
           </div>
         </section>
-        <Wave className="bg-primary/10" />
+        <div className="relative w-full overflow-hidden leading-none bg-primary/10">
+          <Wave className="w-full h-auto " />
+        </div>
       </div>
     </div>
   );

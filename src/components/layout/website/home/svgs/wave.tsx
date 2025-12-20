@@ -11,6 +11,7 @@ export default function Wave({ className, up = false }: WaveProps) {
       role="img"
       aria-hidden="true"
       className={cn(
+        up ? "wave-animate-down" : "wave-animate-up",
         className,
         up && "rotate-180 transition-transform duration-300"
       )}

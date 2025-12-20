@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Wave from "../svgs/wave";
 
 interface HeroCarouselProps {
   images: string[];
@@ -46,7 +45,7 @@ export default function HeroCarousel({
       ))}
 
       {/* Ball indicators */}
-      <Wave className="absolute z-30 bottom-0"/>
+
       <div className="absolute z-30 bottom-6 left-1/2 -translate-x-1/2 flex gap-2 items-center justify-center">
         {images.map((_, idx) => (
           <button

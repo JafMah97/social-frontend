@@ -1,0 +1,24 @@
+import Logo from "@/components/layout/header/logo";
+import UploadImagesCard from "@/components/layout/website/user/upload-images/upload-images-card";
+import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ lang: Lang }>;
+}) {
+  const lang = (await params).lang;
+  const dict = (await getDictionary(lang)).logo;
+
+  return (
+    <div className="home-image custom-height">
+      <div className="bg-background/40 backdrop-blur-md w-full h-full flex justify-center items-center">
+        <div className="flex mx-2 w-full sm:w-3/4 flex-col gap-6 bg-background rounded-xl">
+          <UploadImagesCard>
+            <Logo dict={dict} lang={lang} />
+          </UploadImagesCard>
+        </div>
+      </div>
+    </div>
+  );
+}
