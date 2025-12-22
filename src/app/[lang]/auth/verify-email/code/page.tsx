@@ -1,17 +1,17 @@
 import Logo from "@/components/layout/header/logo";
-import VerifyEmailCode from "@/components/layout/website/forms/verfiy-email/verify-email-form";
+import VerifyEmailCode from "@/components/layout/website/auth/verfiy-email/verify-email-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 export default async function Page({
   params,
-  searchParams
+  searchParams,
 }: {
   params: Promise<{ lang: Lang }>;
-  searchParams:Promise<{email:string}>
-})  {
+  searchParams: Promise<{ email: string }>;
+}) {
   const lang = (await params).lang;
-  const dict =  (await getDictionary(lang)).logo
-  const email = (await searchParams).email
-  return(
+  const dict = (await getDictionary(lang)).logo;
+  const email = (await searchParams).email;
+  return (
     <div className="home-image h-fit">
       <div className="bg-background/40 backdrop-blur-md h-fit">
         <div className=" flex flex-col items-center justify-start gap-6 py-2">
@@ -25,7 +25,6 @@ export default async function Page({
     </div>
   );
 }
-
 
 import { Button } from "@/components/ui/button";
 import {
@@ -85,4 +84,3 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
     </Card>
   );
 }
-

@@ -92,7 +92,7 @@ export default function UploadCover({
           />
 
           {previewUrl ? (
-            <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="absolute inset-0 flex items-center justify-center p-4 w-full">
               <Image
                 width={1000}
                 height={1000}
@@ -100,7 +100,7 @@ export default function UploadCover({
                   (files[0]?.file instanceof File && files[0].file.name) ||
                   dict.uploadAlt
                 }
-                className="mx-auto max-h-full rounded object-contain"
+                className="w-full max-h-full rounded object-cover object-center"
                 src={previewUrl}
               />
             </div>

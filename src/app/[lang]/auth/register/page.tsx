@@ -1,15 +1,14 @@
 import Logo from "@/components/layout/header/logo";
-import { RegisterForm } from "@/components/layout/website/forms/register/register-form";
+import { RegisterForm } from "@/components/layout/website/auth/register/register-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
-
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ lang: Lang }>;
-})  {
+}) {
   const lang = (await params).lang;
-  const dict =  (await getDictionary(lang)).logo
+  const dict = (await getDictionary(lang)).logo;
   return (
     <div className="home-image">
       <div className="bg-background/40 backdrop-blur-md">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -90,11 +90,13 @@ export default function UploadImagesCard({
 
     await uploadCover(coverFile);
     await uploadAvatar(avatarFile);
-
-    if (success.avatar && success.cover) {
-      router.push(`${lang}/feeds`);
-    }
   };
+
+  useEffect(() => {
+    if (success.avatar && success.cover) {
+      router.push(`/${lang}/user/complete-profile`);
+    }
+  }, [success.cover, success.avatar, lang, router]);
 
   return (
     <Card className="bg-primary/10 relative overflow-hidden z-50 py-15 w-full gap-0">
@@ -120,7 +122,7 @@ export default function UploadImagesCard({
         </div>
         <div>
           <Button variant="outline" className="cursor-pointer mx-2" asChild>
-            <Link href="/user/complete-profile">{dict.skip}</Link>
+            <Link href={`/${lang}/user/complete-profile`}>{dict.skip}</Link>
           </Button>
 
           <Button

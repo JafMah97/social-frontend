@@ -1,14 +1,14 @@
 import Logo from "@/components/layout/header/logo";
-import ForgotPasswordForm from "@/components/layout/website/forms/forgot-password/forgot-password-form";
+import ForgotPasswordForm from "@/components/layout/website/auth/forgot-password/forgot-password-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ lang: Lang }>;
-})  {
+}) {
   const lang = (await params).lang;
-  const dict =  (await getDictionary(lang)).logo
+  const dict = (await getDictionary(lang)).logo;
   return (
     <div className="home-image h-fit">
       <div className="bg-background/40 backdrop-blur-md h-fit">

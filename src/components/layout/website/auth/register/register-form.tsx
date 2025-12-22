@@ -21,7 +21,7 @@ import { useRegister } from "@/hooks/api-hooks/auth/useRegister";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
-import { FormInput } from "../form-input";
+import { FormInput } from "../../../custom/form-input";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface Props extends React.ComponentProps<"div"> {
@@ -72,7 +72,7 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
         queryKey: ["currentLoggedUser"],
       });
 
-      router.push(`/${lang}/user/images`);
+      router.push(`/${lang}/user/upload-images`);
     },
     onError: (err) => {
       toast.error(dict.toast.error);
@@ -141,7 +141,6 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
                   control={form.control}
                   label={dict.fields.email.label}
                   placeholder={dict.fields.email.placeholder}
-                  type="email"
                 />
 
                 <div className="flex flex-col md:flex-row md:gap-3">

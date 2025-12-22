@@ -1,5 +1,5 @@
 import Logo from "@/components/layout/header/logo";
-import { LoginForm } from "@/components/layout/website/forms/login/login-form";
+import { LoginForm } from "@/components/layout/website/auth/login/login-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 
 export default async function Page({
