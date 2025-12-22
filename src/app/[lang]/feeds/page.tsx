@@ -2,7 +2,7 @@ import { OverlayDiv } from "@/components/layout/custom/custom-divs";
 import CreatePost from "@/components/layout/website/feeds/create-post/create-post";
 import PostCard from "@/components/layout/website/feeds/posts/post-card";
 
-export default function Page() {
+export default function FeedsPage() {
   return (
     <div className="container max-w-5xl mx-auto">
       <OverlayDiv

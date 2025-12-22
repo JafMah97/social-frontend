@@ -2,7 +2,7 @@ import Logo from "@/components/layout/header/logo";
 import ForgotPasswordForm from "@/components/layout/website/auth/forgot-password/forgot-password-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 
-export default async function Page({
+export default async function ForgetPasswordPage({
   params,
 }: {
   params: Promise<{ lang: Lang }>;

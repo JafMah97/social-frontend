@@ -1,7 +1,7 @@
 import Logo from "@/components/layout/header/logo";
 import VerifyEmailCode from "@/components/layout/website/auth/verfiy-email/verify-email-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
-export default async function Page({
+export default async function VerifyEmailWithCodePage({
   params,
   searchParams,
 }: {

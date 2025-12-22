@@ -50,7 +50,7 @@ export default async function DesktopNavbar({lang}:{lang:Lang}) {
         </nav>
 
         {/* Theme + Language */}
-        <div className="flex items-center gap-1 border-l border-border/30 h-full mr-3">
+        <div className="flex items-center gap-1 border-l border-border/30 h-full ">
           <div className="p-2 rounded-lg transition-all duration-200 hover:bg-accent">
             <ThemeSwitcher lang={lang} />
           </div>

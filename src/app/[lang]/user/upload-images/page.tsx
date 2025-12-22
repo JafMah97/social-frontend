@@ -2,7 +2,7 @@ import Logo from "@/components/layout/header/logo";
 import UploadImagesCard from "@/components/layout/website/user/upload-images/upload-images-card";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 
-export default async function Page({
+export default async function UploadImagesPage({
   params,
 }: {
   params: Promise<{ lang: Lang }>;

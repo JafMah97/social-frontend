@@ -75,7 +75,7 @@ export function FormInput<T extends FieldValues>({
             />
           )}
 
-          <div className="min-h-5">
+          <div className="min-h-4">
             {fieldState.invalid && (
               <FieldError className="text-xs" errors={[fieldState.error]} />
             )}

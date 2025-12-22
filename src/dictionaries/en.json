@@ -343,5 +343,65 @@
       "invalidTypeNamed": "File \"{{name}}\" is not an accepted file type.",
       "maxFilesExceeded": "You can only upload a maximum of {{maxFiles}} files."
     }
+  },
+  
+  "completeProfilePage": {
+    "title": "Complete Your Profile",
+    "description": "Tell us a bit more about yourself to personalize your experience",
+    "fields": {
+      "bio": {
+        "label": "Bio",
+        "placeholder": "Tell us about yourself..."
+      },
+      "website": {
+        "label": "Website",
+        "placeholder": "https://example.com"
+      },
+      "location": {
+        "label": "Location",
+        "placeholder": "City, Country"
+      },
+      "gender": {
+        "label": "Gender",
+        "placeholder": "Select your gender",
+        "options": {
+          "male": "Male",
+          "female": "Female",
+          "other": "Other",
+          "preferNotToSay": "Prefer not to say"
+        }
+      },
+      "dateOfBirth": {
+        "label": "Date of Birth",
+        "placeholder": "Select your date of birth"
+      }
+    },
+    "schemaErrors": {
+      "bio": {
+        "max": "Bio must be at most {max} characters"
+      },
+      "website": {
+        "invalid": "Please enter a valid URL",
+        "max": "Website must be at most {max} characters"
+      },
+      "location": {
+        "max": "Location must be at most {max} characters"
+      },
+      "gender": {
+        "invalid": "Please select a valid gender"
+      },
+      "dateOfBirth": {
+        "future": "Date of birth cannot be in the future"
+      }
+    },
+    "actions": {
+      "submit": "Complete Profile",
+      "skip": "Want to skip for now?",
+      "skipLink": "Go to dashboard"
+    },
+    "toast": {
+      "success": "Profile completed successfully!"
+    }
   }
+
 }

@@ -2,7 +2,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Controller, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -14,12 +14,9 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
-  FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { fmt, isRTL } from "@/utils/translation/language-utils";
+import { fmt } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
@@ -28,14 +25,10 @@ import { useLogin } from "@/hooks/api-hooks/auth/useLogin";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { Eye, EyeClosed } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
+import BiggerWave from "../../home/svgs/bigger-wave";
+import { FormInput } from "@/components/layout/custom/form-input";
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
@@ -44,7 +37,6 @@ interface Props extends React.ComponentProps<"div"> {
 export function LoginForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().loginPage;
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
   
@@ -93,23 +85,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
         <Card className="px-0 md:p-6 py-4 md:py-10 relative z-20 overflow-hidden bg-primary/10">
-          <svg
-            className={`absolute ${
-              isRTL(lang)
-                ? "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] right-0 top-0 lg:-top-15 xl:-top-22"
-                : "w-[800px] md:w-[1000px] lg:w-[1200px] xl:w-[1400px] left-0 top-0 lg:-top-15 xl:-top-22"
-            } z-10 ${
-              !isRTL(lang) ? "transform scale-x-[1]" : "transform scale-x-[-1]"
-            }`}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 320"
-          >
-            <path
-              fill="#614afc"
-              fillOpacity="1"
-              d="M0,288L60,293.3C120,299,240,309,360,277.3C480,245,600,171,720,160C840,149,960,203,1080,197.3C1200,192,1320,128,1380,96L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
-            ></path>
-          </svg>
+          <BiggerWave lang={lang} />
           <CardHeader className="flex flex-row w-full justify-between relative z-20 ">
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
@@ -125,87 +101,21 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FieldGroup className="gap-1">
                 {/* Email */}
-                <Controller
+                <FormInput
                   name="email"
                   control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="email">
-                        {dict.fields.email.label}
-                      </FieldLabel>
-                      <Input
-                        {...field}
-                        id="email"
-                        type="email"
-                        placeholder={dict.fields.email.placeholder}
-                        className="bg-foreground/10"
-                        aria-invalid={fieldState.invalid}
-                      />
-                      <div className="min-h-5">
-                        {fieldState.invalid && (
-                          <FieldError
-                            className="text-xs"
-                            errors={[fieldState.error]}
-                          />
-                        )}
-                      </div>
-                    </Field>
-                  )}
+                  label={dict.fields.email.label}
+                  placeholder={dict.fields.email.placeholder}
+                  type="email"
                 />
 
                 {/* Password */}
-                <Controller
+                <FormInput
                   name="password"
                   control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="password">
-                        {dict.fields.password.label}
-                      </FieldLabel>
-                      <InputGroup>
-                        <InputGroupInput
-                          {...field}
-                          id="password"
-                          type={showPassword ? "text" : "password"}
-                          className="bg-foreground/10"
-                          aria-invalid={fieldState.invalid}
-                        />
-                        <InputGroupAddon align={"inline-end"}>
-                          <Button
-                          type="button"
-                            variant={"ghost"}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setShowPassword(!showPassword);
-                            }}
-                          >
-                            {showPassword ? (
-                              <Eye className="w-5 h-5" />
-                            ) : (
-                              <EyeClosed className="w-5 h-5" />
-                            )}
-                          </Button>
-                        </InputGroupAddon>
-                      </InputGroup>
-
-                      <div className="w-full flex flex-row justify-between">
-                        <div className="min-h-5">
-                          {fieldState.invalid && (
-                            <FieldError
-                              className="text-xs"
-                              errors={[fieldState.error]}
-                            />
-                          )}
-                        </div>
-                        <Link
-                          href={`/${lang}/auth/forgot-password`}
-                          className="hover:text-primary underline text-xs text-end text-muted-foreground"
-                        >
-                          {dict.actions.forgotPassword}
-                        </Link>
-                      </div>
-                    </Field>
-                  )}
+                  label={dict.fields.password.label}
+                  placeholder={"********"}
+                  type="password"
                 />
 
                 {/* Submit */}

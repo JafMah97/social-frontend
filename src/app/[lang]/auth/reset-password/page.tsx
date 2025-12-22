@@ -2,7 +2,7 @@ import Logo from "@/components/layout/header/logo";
 import { ResetPasswordForm } from "@/components/layout/website/auth/reset-password/reset-password-form";
 import { getDictionary, Lang } from "@/utils/translation/dictionary-utils";
 
-export default async function Page({
+export default async function ResetPasswordPage({
   params,
 }: {
   params: Promise<{ lang: Lang }>;
