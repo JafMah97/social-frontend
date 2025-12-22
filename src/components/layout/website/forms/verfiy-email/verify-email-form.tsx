@@ -51,10 +51,9 @@ export default function VerifyEmailCode({
   const router = useRouter();
   const [error, setError] = useState("");
   const lang = useCurrentLang();
-  const [loggedIn, setLoggedIn] = useState(false);
   const queryClient = useQueryClient();
 
-  useCurrentLoggedUser(loggedIn);
+  useCurrentLoggedUser();
 
   // Zod schema for OTP (exactly 6 digits)
   const otpSchema = z.object({
@@ -72,7 +71,6 @@ export default function VerifyEmailCode({
 
   const { mutate, isPending } = useVerifyEmailWithCode({
     onSuccess: async () => {
-      setLoggedIn(true);
       setError("");
       toast.success(dict.toast.success);
       await queryClient.invalidateQueries({

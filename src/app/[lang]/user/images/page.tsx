@@ -13,8 +13,8 @@ export default async function Page({
   return (
     <div className="home-image custom-height">
       <div className="bg-background/40 backdrop-blur-md w-full h-full flex justify-center items-center">
-        <div className="flex mx-2 w-full sm:w-3/4 flex-col gap-6 bg-background rounded-xl">
-          <UploadImagesCard>
+        <div className="flex mx-2 w-full sm:w-3/4 flex-col justify-center items-center bg-background rounded-xl">
+          <UploadImagesCard lang={lang}>
             <Logo dict={dict} lang={lang} />
           </UploadImagesCard>
         </div>

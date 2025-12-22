@@ -316,7 +316,12 @@
       "removeImage": "إزالة الصورة",
       "uploadAlt": "الصورة المرفوعة",
       "errorPrefix": "خطأ",
-      "uploadImageFile": "رفع ملف صورة"
+      "uploadImageFile": "رفع ملف صورة",
+      "toast": {
+        "successCover": "تم رفع صورة الغلاف بنجاح.",
+        "errorCover": "تعذّر رفع صورة الغلاف. يرجى المحاولة مرة أخرى.",
+        "noFileCover": "لم يتم اختيار صورة غلاف"
+      }
     },
     "avatar": {
       "uploadImage": "رفع صورة",
@@ -324,14 +329,25 @@
       "uploadedImage": "الصورة المرفوعة",
       "removeImage": "إزالة الصورة",
       "uploadImageFile": "رفع ملف صورة",
-      "selectImage":"اختر صورة"
+      "selectImage": "اختر صورة",
+      "toast": {
+        "successAvatar": "تم رفع صورة الملف الشخصي بنجاح.",
+        "errorAvatar": "تعذّر رفع صورة الملف الشخصي. يرجى المحاولة مرة أخرى.",
+        "noFileAvatar": "لم يتم اختيار صورة للملف الشخصي"
+      }
     },
-    "hook":{
+    "hook": {
       "fileTooLargeSingle": "الملف يتجاوز الحجم الأقصى {{maxSize}}.",
       "fileTooLargeNamed": "الملف \"{{name}}\" يتجاوز الحجم الأقصى {{maxSize}}.",
       "fileTooLargeMultiple": "بعض الملفات تتجاوز الحجم الأقصى {{maxSize}}.",
       "invalidTypeNamed": "الملف \"{{name}}\" ليس من نوع مقبول.",
       "maxFilesExceeded": "يمكنك رفع حد أقصى {{maxFiles}} ملفات."
+    },
+    "toast": {
+      "successAvatar": "تم رفع صورتك الشخصية بنجاح.",
+      "errorAvatar": "لم نتمكن من رفع صورتك الشخصية. يرجى المحاولة مرة أخرى.",
+      "successCover": "تم رفع صورة الغلاف الخاصة بك بنجاح.",
+      "errorCover": "لم نتمكن من رفع صورة الغلاف الخاصة بك. يرجى المحاولة مرة أخرى."
     }
   }
 }

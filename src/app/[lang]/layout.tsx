@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import "@/styles/globals.css";
+import type { Metadata } from "next";
 import { enFont, arFont } from "@/lib/fonts";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Navbar from "@/components/layout/navbar/navbar";
@@ -35,6 +35,7 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const { lang } = (await params) as { lang: Lang };
   const translations = await getDictionary(lang);
+
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (

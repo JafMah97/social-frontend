@@ -3,8 +3,8 @@ import { Cairo, Roboto } from "next/font/google";
 export const enFont = Roboto({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-en",
-  style: ["normal", "italic"],
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -14,3 +14,4 @@ export const arFont = Cairo({
   variable: "--font-ar",
   display: "swap",
 });
+

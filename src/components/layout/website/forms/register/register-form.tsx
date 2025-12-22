@@ -33,14 +33,12 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
   const dict = useTranslation().registerPage;
   const [error, setError] = useState("");
   const router = useRouter();
-    const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient();
 
   const registerSchema = z
     .object({
       email: z
-        .email
-        (dict.schemaErrors.email.invalid)
+        .email(dict.schemaErrors.email.invalid)
         .min(5, fmt(dict.schemaErrors.email.min, { min: 5 }))
         .max(32, fmt(dict.schemaErrors.email.max, { max: 32 })),
       password: z
@@ -70,12 +68,11 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
     onSuccess: async () => {
       setError("");
       toast.success(dict.toast.success);
-            await queryClient.invalidateQueries({
-              queryKey: ["currentLoggedUser"],
-            });
+      await queryClient.invalidateQueries({
+        queryKey: ["currentLoggedUser"],
+      });
 
-        router.push(`/${lang}/feeds`);
-      
+      router.push(`/${lang}/user/images`);
     },
     onError: (err) => {
       toast.error(dict.toast.error);

@@ -316,7 +316,12 @@
       "removeImage": "Remove image",
       "uploadAlt": "Uploaded image",
       "errorPrefix": "Error",
-      "uploadImageFile": "Upload image file"
+      "uploadImageFile": "Upload image file",
+      "toast":{
+        "successCover":"Your cover photo has been uploaded successfully.",
+        "errorCover":"We couldn’t upload your cover photo. Please try again.",
+        "noFileCover":"No Cover File Selected"
+      }
     },
     "avatar":{
       "uploadImage": "Upload image",
@@ -324,7 +329,12 @@
       "uploadedImage": "Uploaded image",
       "removeImage": "Remove image",
       "uploadImageFile": "Upload image file",
-      "selectImage":"Select image"
+      "selectImage": "Select image",
+      "toast": {
+        "successAvatar": "Your profile picture has been uploaded successfully.",
+        "errorAvatar": "We couldn’t upload your profile picture. Please try again.",
+        "noFileAvatar":"No Avatar File Selected"
+      }
     },
     "hook":{
       "fileTooLargeSingle": "File exceeds the maximum size of {{maxSize}}.",

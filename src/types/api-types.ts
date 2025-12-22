@@ -142,3 +142,22 @@ export interface UserCount {
   following: number;
   Post: number;
 }
+
+
+/// upload profile type
+export interface UserUploadProfilePictureResponse {
+  success: boolean;
+  message: string;
+  data: {
+    profileImageUrl: string;
+  };
+}
+
+/// upload cover type 
+export interface UserUploadCoverPictureResponse {
+  success: boolean;
+  message: string;
+  data: {
+    coverImageUrl: string;
+  };
+}
