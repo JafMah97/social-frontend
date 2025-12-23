@@ -397,10 +397,11 @@
     "actions": {
       "submit": "Complete Profile",
       "skip": "Want to skip for now?",
-      "skipLink": "Go to dashboard"
+      "skipLink": "Go to Feeds"
     },
     "toast": {
-      "success": "Profile completed successfully!"
+      "success": "Profile completed successfully!",
+      "error": "Failed to complete profile. Please try again."
     }
   }
 

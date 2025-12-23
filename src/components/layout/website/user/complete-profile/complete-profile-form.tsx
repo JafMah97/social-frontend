@@ -25,6 +25,8 @@ import { FormTextarea } from "@/components/layout/custom/form-textarea";
 import BiggerWave from "../../home/svgs/bigger-wave";
 import { FormSelect } from "@/components/layout/custom/form-select";
 import { FormDatePicker } from "@/components/layout/custom/form-data-picker";
+import { useCompleteYourProfile } from "@/hooks/api-hooks/user/useCompleteProfile";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -40,6 +42,17 @@ export default function CompleteProfileForm({
   const dict = useTranslation().completeProfilePage;
   const [error, setError] = useState("");
   const router = useRouter();
+
+  const { mutate, isPending } = useCompleteYourProfile({
+    onSuccess: () => {
+      toast.success(dict.toast.success);
+      router.push(`/${lang}/feeds`);
+    },
+    onError: (err) => {
+      toast.error(dict.toast.error);
+      setError(err?.error?.message ?? dict.toast.error);
+    },
+  });
 
   const completeProfileSchema = z.object({
     bio: z
@@ -99,12 +112,8 @@ export default function CompleteProfileForm({
   });
 
   function onSubmit(data: z.infer<typeof completeProfileSchema>) {
-    console.log("Complete Profile Data:", data);
-    // TODO: Add API call here
-    toast.success(dict.toast.success);
-    router.push(`/${lang}/`);
+    mutate(data);
   }
-  const date = new Date();
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
@@ -140,7 +149,6 @@ export default function CompleteProfileForm({
                     control={form.control}
                     label={dict.fields.website.label}
                     placeholder={dict.fields.website.placeholder}
-                    type="url"
                   />
 
                   {/* Location */}
@@ -194,12 +202,20 @@ export default function CompleteProfileForm({
                       </p>
                     )}
                   </div>
-                  <Button type="submit" className="cursor-pointer">
-                    <span>{dict.actions.submit}</span>
+                  <Button
+                    type="submit"
+                    className="cursor-pointer"
+                    disabled={isPending}
+                  >
+                    {isPending ? (
+                      <Spinner />
+                    ) : (
+                      <span>{dict.actions.submit}</span>
+                    )}
                   </Button>
                   <FieldDescription className="text-center">
                     {dict.actions.skip}{" "}
-                    <Link href={`/${lang}/`}>{dict.actions.skipLink}</Link>
+                    <Link href={`/${lang}/feeds`}>{dict.actions.skipLink}</Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>

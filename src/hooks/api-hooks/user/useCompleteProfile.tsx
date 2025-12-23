@@ -6,7 +6,7 @@ import {
 } from "@/types/api-types";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
-export function useRegister(
+export function useCompleteYourProfile(
   options?: UseMutationOptions<CompleteYourProfileResponse, ApiErrorResponse, CompleteYourProfileData>
 ) {
   return useMutation<CompleteYourProfileResponse, ApiErrorResponse, CompleteYourProfileData>({
