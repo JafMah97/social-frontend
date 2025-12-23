@@ -199,3 +199,12 @@
 .wave-animate-down {
   animation: wave-bounce-down 2s ease-in-out infinite;
 }
+
+
+
+
+@layer base {
+  [data-scroll-locked] {
+    @apply overflow-auto mr-0;
+  }
+}

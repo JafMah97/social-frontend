@@ -1,5 +1,4 @@
 "use client";
-import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
@@ -20,24 +19,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+
 import { FormInput } from "@/components/layout/custom/form-input";
 import { FormTextarea } from "@/components/layout/custom/form-textarea";
 import BiggerWave from "../../home/svgs/bigger-wave";
+import { FormSelect } from "@/components/layout/custom/form-select";
+import { FormDatePicker } from "@/components/layout/custom/form-data-picker";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -53,38 +40,51 @@ export default function CompleteProfileForm({
   const dict = useTranslation().completeProfilePage;
   const [error, setError] = useState("");
   const router = useRouter();
-  type Gender = z.infer<typeof completeProfileSchema>["gender"];
 
   const completeProfileSchema = z.object({
     bio: z
       .string()
       .max(500, fmt(dict.schemaErrors.bio.max, { max: 500 }))
       .optional(),
+
     website: z
-      .string()
       .url(dict.schemaErrors.website.invalid)
       .max(100, fmt(dict.schemaErrors.website.max, { max: 100 }))
       .optional()
       .or(z.literal("")),
+
     location: z
       .string()
       .max(100, fmt(dict.schemaErrors.location.max, { max: 100 }))
       .optional(),
+
     gender: z
-      .enum(["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"])
-      .refine(
-        (val) => ["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"].includes(val),
-        {
-          message: dict.schemaErrors.gender.invalid,
-        }
-      )
+      .enum(["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"], {
+        message: dict.schemaErrors.gender.invalid,
+      })
       .optional(),
 
-    dateOfBirth: z
-      .date()
-      .max(new Date(), dict.schemaErrors.dateOfBirth.future)
+    dateOfBirth: z.iso
+      .datetime()
       .optional()
-      .nullable(),
+      .nullable()
+      .refine(
+        (val) => {
+          if (!val) return true;
+          const dob = new Date(val);
+          if (isNaN(dob.getTime())) return false;
+
+          const now = new Date();
+          const ageDiffMs = now.getTime() - dob.getTime();
+          const ageDate = new Date(ageDiffMs);
+          const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+          return age >= 18 && age <= 100;
+        },
+        {
+          message: dict.schemaErrors.dateOfBirth.invalid,
+        }
+      ),
   });
 
   const form = useForm<z.infer<typeof completeProfileSchema>>({
@@ -94,7 +94,7 @@ export default function CompleteProfileForm({
       website: "",
       location: "",
       gender: undefined,
-      dateOfBirth: null,
+      dateOfBirth: undefined,
     },
   });
 
@@ -104,13 +104,12 @@ export default function CompleteProfileForm({
     toast.success(dict.toast.success);
     router.push(`/${lang}/`);
   }
-
+  const date = new Date();
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
         <Card className="px-0 md:p-6 py-4 md:py-5 relative z-20 overflow-hidden bg-primary/10">
           <BiggerWave lang={lang} />
-
           <CardHeader className="flex flex-row w-full justify-between relative z-20 ">
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}
@@ -126,25 +125,14 @@ export default function CompleteProfileForm({
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FieldGroup className="gap-1">
                 {/* Bio */}
-                <Field>
-                  <label
-                    htmlFor="bio"
-                    className="text-sm font-medium mb-1 block"
-                  >
-                    {dict.fields.bio.label}
-                  </label>
-                  <FormTextarea
-                    name="bio"
-                    control={form.control}
-                    placeholder={dict.fields.bio.placeholder}
-                    className="min-h-[60px]"
-                  />
-                  {form.formState.errors.bio && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.bio.message}
-                    </p>
-                  )}
-                </Field>
+                <FormTextarea
+                  name="bio"
+                  control={form.control}
+                  label={dict.fields.bio.label}
+                  placeholder={dict.fields.bio.placeholder}
+                  className="min-h-[60px]"
+                />
+
                 <div className="flex flex-row gap-2">
                   {/* Website */}
                   <FormInput
@@ -166,95 +154,37 @@ export default function CompleteProfileForm({
                 </div>
                 <div className="flex flex-row gap-2">
                   {/* Gender */}
-                  <Field>
-                    <label
-                      htmlFor="gender"
-                      className="text-sm font-medium mb-1 block"
-                    >
-                      {dict.fields.gender.label}
-                    </label>
-                    <Select
-                      value={form.watch("gender") || ""}
-                      onValueChange={(value) =>
-                        form.setValue("gender", value as Gender)
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue
-                          placeholder={dict.fields.gender.placeholder}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MALE">
-                          {dict.fields.gender.options.male}
-                        </SelectItem>
-                        <SelectItem value="FEMALE">
-                          {dict.fields.gender.options.female}
-                        </SelectItem>
-                        <SelectItem value="OTHER">
-                          {dict.fields.gender.options.other}
-                        </SelectItem>
-                        <SelectItem value="PREFER_NOT_TO_SAY">
-                          {dict.fields.gender.options.preferNotToSay}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {form.formState.errors.gender && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {form.formState.errors.gender.message}
-                      </p>
-                    )}
-                  </Field>
+                  <FormSelect
+                    name="gender"
+                    control={form.control}
+                    label={dict.fields.gender.label}
+                    placeholder={dict.fields.gender.placeholder}
+                    lang={lang}
+                    options={[
+                      { value: "MALE", label: dict.fields.gender.options.male },
+                      {
+                        value: "FEMALE",
+                        label: dict.fields.gender.options.female,
+                      },
+                      {
+                        value: "OTHER",
+                        label: dict.fields.gender.options.other,
+                      },
+                      {
+                        value: "PREFER_NOT_TO_SAY",
+                        label: dict.fields.gender.options.preferNotToSay,
+                      },
+                    ]}
+                  />
 
                   {/* Date of Birth */}
-                  <Field>
-                    <label
-                      htmlFor="dateOfBirth"
-                      className="text-sm font-medium mb-1 block"
-                    >
-                      {dict.fields.dateOfBirth.label}
-                    </label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !form.watch("dateOfBirth") &&
-                              "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {form.watch("dateOfBirth") ? (
-                            format(form.watch("dateOfBirth")!, "PPP")
-                          ) : (
-                            <span>{dict.fields.dateOfBirth.placeholder}</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={form.watch("dateOfBirth") || undefined}
-                          onSelect={(date) =>
-                            form.setValue("dateOfBirth", date || null)
-                          }
-                          disabled={(date) => date > new Date()}
-                          autoFocus
-                          captionLayout="dropdown"
-                          startMonth={new Date(1900, 0)}
-                          endMonth={new Date(2025, 0)}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {form.formState.errors.dateOfBirth && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {form.formState.errors.dateOfBirth.message}
-                      </p>
-                    )}
-                  </Field>
+                  <FormDatePicker
+                    name="dateOfBirth"
+                    control={form.control}
+                    label={dict.fields.dateOfBirth.label}
+                    placeholder={dict.fields.dateOfBirth.placeholder}
+                  />
                 </div>
-
                 {/* Submit */}
                 <Field>
                   <div className="min-h-4">

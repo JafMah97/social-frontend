@@ -391,7 +391,7 @@
         "invalid": "Please select a valid gender"
       },
       "dateOfBirth": {
-        "future": "Date of birth cannot be in the future"
+        "invalid": "Must be at least 18 years old and not older than 100 years"
       }
     },
     "actions": {

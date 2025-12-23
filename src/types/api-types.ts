@@ -161,3 +161,28 @@ export interface UserUploadCoverPictureResponse {
     coverImageUrl: string;
   };
 }
+
+
+/// complete profile for user 
+
+export interface CompleteYourProfileData {
+  bio?: string; // optional, max 500 chars
+  website?: string; // optional, valid URL or empty string
+  location?: string; // optional, max 100 chars
+  gender?: "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY"; // optional enum
+  dateOfBirth?: string | null; // ISO date string, nullable
+};
+
+export interface CompleteYourProfileResponse {
+  success: boolean;
+  message: string;
+  data: {
+    userId: string;
+    bio?: string;
+    website?: string;
+    location?: string;
+    gender?: "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY";
+    dateOfBirth?: string | null; // ISO date string
+  };
+}
+
