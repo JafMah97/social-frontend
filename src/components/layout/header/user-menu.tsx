@@ -6,8 +6,6 @@ import { isRTL } from "@/utils/translation/language-utils";
 import { Edit, HelpCircle, Settings } from "lucide-react";
 import Link from "next/link";
 import CustomAvatar from "../custom/custom-avatar";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
-import { useLogout } from "@/hooks/api-hooks/auth/useLogout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +15,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import CustomAlertDialog from "../custom/alert-dialog";
+import { useLogout } from "@/hooks/api-hooks/auth/auth-hooks";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/user-hooks";
 
 export default function UserMenu({
   lang,

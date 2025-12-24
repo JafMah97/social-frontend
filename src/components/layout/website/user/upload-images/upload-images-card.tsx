@@ -15,12 +15,11 @@ import UploadAvatar from "@/components/layout/website/user/upload-images/upload-
 import UploadCover from "@/components/layout/website/user/upload-images/upload-cover";
 import Link from "next/link";
 import { useTranslation } from "@/providers/translation-provider";
-import { useUploadCover } from "@/hooks/api-hooks/user/useUploadCover";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import { useUploadAvatar } from "@/hooks/api-hooks/user/useUploadAvatar";
 import { useRouter } from "next/navigation";
 import { Lang } from "@/utils/translation/dictionary-utils";
+import { useUploadAvatar, useUploadCover } from "@/hooks/api-hooks/user/user-hooks";
 
 export default function UploadImagesCard({
   children,

@@ -25,8 +25,8 @@ import {
 import UserMenu from "../header/user-menu";
 import AuthButtons from "../header/auth-buttons";
 import { useTranslation } from "@/providers/translation-provider";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 import { useState } from "react";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/user-hooks";
 
 export default function MobileNavbar({ lang }: { lang: Lang }) {
   const { data } = useCurrentLoggedUser();

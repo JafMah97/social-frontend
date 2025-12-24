@@ -7,7 +7,7 @@ import Link from "next/link";
 interface AuthButtonsProps {
   lang: Lang;
   isMobile?: boolean;
-  onAction?: () => void; // ✅ optional callback
+  onAction?: () => void;
 }
 
 export default function AuthButtons({

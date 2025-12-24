@@ -21,16 +21,15 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { useVerifyEmailWithCode } from "@/hooks/api-hooks/auth/useVerifyEmailWithCode";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { Spinner } from "@/components/ui/spinner";
 import ResendButton from "./resend-button";
-import { useResendVerifyCode } from "@/hooks/api-hooks/auth/useResendVerifyCode";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
+import { useResendVerifyCode, useVerifyEmailWithCode } from "@/hooks/api-hooks/auth/auth-hooks";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;

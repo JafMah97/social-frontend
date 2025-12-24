@@ -143,7 +143,6 @@ export interface UserCount {
   Post: number;
 }
 
-
 /// upload profile type
 export interface UserUploadProfilePictureResponse {
   success: boolean;
@@ -153,7 +152,7 @@ export interface UserUploadProfilePictureResponse {
   };
 }
 
-/// upload cover type 
+/// upload cover type
 export interface UserUploadCoverPictureResponse {
   success: boolean;
   message: string;
@@ -162,8 +161,7 @@ export interface UserUploadCoverPictureResponse {
   };
 }
 
-
-/// complete profile for user 
+/// complete profile for user
 
 export interface CompleteYourProfileData {
   bio?: string; // optional, max 500 chars
@@ -171,7 +169,7 @@ export interface CompleteYourProfileData {
   location?: string; // optional, max 100 chars
   gender?: "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY"; // optional enum
   dateOfBirth?: string | null; // ISO date string, nullable
-};
+}
 
 export interface CompleteYourProfileResponse {
   success: boolean;
@@ -185,4 +183,160 @@ export interface CompleteYourProfileResponse {
     dateOfBirth?: string | null; // ISO date string
   };
 }
+
+// feeds types
+
+export interface PostData {
+  title?: string | null;
+  content?: string | null;
+  image?: string | File | null; 
+  format?: "TEXT" | "IMAGE" | "VIDEO" | string; 
+  postType?: "STANDARD" | "SPONSORED" | string;
+  visibility?: "PUBLIC" | "FOLLOWERS_ONLY" | "PRIVATE" | string;
+  startsAt?: string | null;
+  endsAt?: string | null;
+}
+
+export interface PostAuthorDTO {
+  id: string;
+  username: string;
+  fullName: string;
+  profileImage: string;
+  isPrivate: boolean;
+}
+
+export interface PostDTO {
+  id: string;
+  author: PostAuthorDTO;
+  title: string | null;
+  content: string | null;
+  image: string | null;
+  format: "TEXT" | "IMAGE" | "VIDEO" | string; // match your Prisma enum
+  postType: "STANDARD" | "SPONSORED" | string; // match your Prisma enum
+  visibility: "PUBLIC" | "FOLLOWERS_ONLY" | "PRIVATE" | string;
+  tags: string[];
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  likesCount: number;
+  commentsCount: number;
+  viewsCount: number;
+  isLiked: boolean;
+  isSaved: boolean;
+  isSponsored: boolean;
+}
+
+/// create post 
+export interface CreatePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+/// delete post
+export interface DeletePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    postId: string;
+  };
+}
+
+///get post by id 
+
+export interface GetPostByIdResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+///like post 
+
+export interface LikePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+/// list posts
+export interface ListPostsResponse {
+  success: boolean;
+  data: {
+    posts: PostDTO[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      pages: number;
+    };
+  };
+}
+
+/// save post 
+
+export interface SavePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+///saved posts
+
+export interface SavedPostItem {
+  id: string;
+  savedAt: string;
+  post: PostDTO;
+}
+
+export interface SavedPostsResponse {
+  success: boolean;
+  data: {
+    savedPosts: SavedPostItem[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      pages: number;
+    };
+  };
+}
+
+
+///unlike post
+export interface UnlikePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+/// unsave post 
+export interface UnsavePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+/// update post 
+
+export interface UpdatePostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    post: PostDTO;
+  };
+}
+
+
+
 

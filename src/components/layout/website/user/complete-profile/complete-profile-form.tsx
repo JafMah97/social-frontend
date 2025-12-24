@@ -25,8 +25,8 @@ import { FormTextarea } from "@/components/layout/custom/form-textarea";
 import BiggerWave from "../../home/svgs/bigger-wave";
 import { FormSelect } from "@/components/layout/custom/form-select";
 import { FormDatePicker } from "@/components/layout/custom/form-data-picker";
-import { useCompleteYourProfile } from "@/hooks/api-hooks/user/useCompleteProfile";
 import { Spinner } from "@/components/ui/spinner";
+import { useCompleteYourProfile } from "@/hooks/api-hooks/user/user-hooks";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;

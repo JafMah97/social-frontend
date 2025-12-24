@@ -1,5 +1,13 @@
 {
   "siteName": "konekta",
+  "errors":{
+    "unknownError": "An unknown error occurred",
+    "networkError": "Network error, please try again",
+    "unauthorized": "You are not authorized to perform this action",
+    "validationError": "Validation failed. Please check your input",
+    "timeoutError": "The request timed out. Please try again later",
+    "serverError": "Internal server error. Please try again later"
+  },
   "logo": {
     "mainChar": "K",
     "restChars": "onekta"

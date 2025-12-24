@@ -21,7 +21,6 @@ import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "@/hooks/api-hooks/auth/useLogin";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
@@ -29,6 +28,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 import BiggerWave from "../../home/svgs/bigger-wave";
 import { FormInput } from "@/components/layout/custom/form-input";
+import { useLogin } from "@/hooks/api-hooks/auth/auth-hooks";
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;

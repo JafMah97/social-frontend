@@ -17,13 +17,13 @@ import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRegister } from "@/hooks/api-hooks/auth/useRegister";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
 import { FormInput } from "../../../custom/form-input";
 import { useQueryClient } from "@tanstack/react-query";
 import BiggerWave from "../../home/svgs/bigger-wave";
+import { useRegister } from "@/hooks/api-hooks/auth/auth-hooks";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
