@@ -4,33 +4,6 @@
     "mainChar": "K",
     "restChars": "onekta"
   },
-  "notFoundPage": {
-    "title": "Page Not Found",
-    "description": "The page you're looking for doesn't exist or has been moved.",
-    "goHome": "Go Home",
-    "goback": "Go Back",
-    "footer": " {{siteName}} • Page Not Found"
-  },
-  "loadingPage": {
-    "title": "Loading",
-    "subtitle": "Please wait while we prepare your experience",
-    "status": "Preparing your experience"
-  },
-  "errorPage": {
-    "title": "Something went wrong",
-    "errorLabel": "Error",
-    "unknownError": "Unknown error",
-    "subtitle": "We apologize for the inconvenience. Our team has been notified and is working to fix the issue.",
-    "errorId": "Error ID",
-    "tryAgain": "Try Again",
-    "goHome": "Go Home",
-    "goBack": "Go Back",
-    "supportPrompt": "Still experiencing issues?",
-    "contactSupport": "Contact Support",
-    "footerNote": "© {{year}}, Error Page, {{siteName}} ",
-    "systemStatus": "System Status: Error Detected"
-  },
-
   "navBar": {
     "menu": "Menu",
     "quickActions": "Quick actions",
@@ -64,12 +37,80 @@
       "settings": "Settings",
       "help": "Help",
       "logout": "Logout",
-      "logoutSuccess":"Logged out successfully!",
-      "logoutError":"Logout failed. Please try again.",
-      "title":"Logging Out",
-      "description":"Do you want to logout ?",
-      "cancelText":"Cancel"
+      "logoutSuccess": "Logged out successfully!",
+      "logoutError": "Logout failed. Please try again.",
+      "title": "Logging Out",
+      "description": "Do you want to logout ?",
+      "cancelText": "Cancel"
     }
+  },
+  "footer": {
+    "brand": {
+      "description": "Building amazing experiences for everyone. Join our community and be part of something extraordinary."
+    },
+    "navigation": {
+      "title": "Navigation",
+      "links": {
+        "home": "Home",
+        "feeds": "Feeds",
+        "about": "About Us",
+        "blog": "Blog",
+        "contact": "Contact"
+      }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "email": "hello@konekta.com",
+      "phone": "+1 (234) 567-890",
+      "address": "123 Innovation Street\nTech City, TC 12345"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "subtitle": "Subscribe to our newsletter for the latest updates.",
+      "placeholder": "Your email"
+    },
+    "social": {
+      "title": "Follow Us",
+      "links": {
+        "twitter": "Twitter",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "website": "Website"
+      }
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "status": "All systems operational",
+    "copyright": "© {{year}} {{siteName}}"
+  },
+  "notFoundPage": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go Home",
+    "goback": "Go Back",
+    "footer": " {{siteName}} • Page Not Found"
+  },
+  "loadingPage": {
+    "title": "Loading",
+    "subtitle": "Please wait while we prepare your experience",
+    "status": "Preparing your experience"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "errorLabel": "Error",
+    "unknownError": "Unknown error",
+    "subtitle": "We apologize for the inconvenience. Our team has been notified and is working to fix the issue.",
+    "errorId": "Error ID",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home",
+    "goBack": "Go Back",
+    "supportPrompt": "Still experiencing issues?",
+    "contactSupport": "Contact Support",
+    "footerNote": "© {{year}}, Error Page, {{siteName}} ",
+    "systemStatus": "System Status: Error Detected"
   },
   "mainPage": {
     "hero": {
@@ -119,48 +160,6 @@
       }
     }
   },
-  "footer": {
-    "brand": {
-      "description": "Building amazing experiences for everyone. Join our community and be part of something extraordinary."
-    },
-    "navigation": {
-      "title": "Navigation",
-      "links": {
-        "home": "Home",
-        "feeds": "Feeds",
-        "about": "About Us",
-        "blog": "Blog",
-        "contact": "Contact"
-      }
-    },
-    "contact": {
-      "title": "Contact Us",
-      "email": "hello@konekta.com",
-      "phone": "+1 (234) 567-890",
-      "address": "123 Innovation Street\nTech City, TC 12345"
-    },
-    "newsletter": {
-      "title": "Stay Updated",
-      "subtitle": "Subscribe to our newsletter for the latest updates.",
-      "placeholder": "Your email"
-    },
-    "social": {
-      "title": "Follow Us",
-      "links": {
-        "twitter": "Twitter",
-        "github": "GitHub",
-        "linkedin": "LinkedIn",
-        "website": "Website"
-      }
-    },
-    "legal": {
-      "privacy": "Privacy Policy",
-      "terms": "Terms of Service",
-      "cookies": "Cookie Policy"
-    },
-    "status": "All systems operational",
-    "copyright": "© {{year}} {{siteName}}"
-  },
   "registerPage": {
     "title": "Create your account",
     "description": "Enter your email below to create your account",
@@ -190,9 +189,9 @@
       "signIn": "Sign in"
     },
     "terms": "By clicking continue, you agree to our Terms of Service and Privacy Policy.",
-    "schemaErrors":{
+    "schemaErrors": {
       "email": {
-        "invalid":"Invalid email address",
+        "invalid": "Invalid email address",
         "min": "Email must be at least {{min}} characters long",
         "max": "Password must be at most {max}} characters long"
       },
@@ -203,17 +202,17 @@
       "userName": {
         "min": "Username must be at least {{min}} characters long",
         "max": "Username must be at most {{max}} characters long",
-        "invalid":"Username can only contain letters, numbers, and underscores"
+        "invalid": "Username can only contain letters, numbers, and underscores"
       },
       "fullName": {
         "min": "Full Name must be at least {{min}} characters long",
         "max": "Full Name must be at most {{max}} characters long"
       },
-      "confirmPassword":"passwords dosen't matches"
+      "confirmPassword": "passwords dosen't matches"
     },
-    "toast":{
-      "success":"Register successful!",
-      "error":"Register failed. Please try again."
+    "toast": {
+      "success": "Register successful!",
+      "error": "Register failed. Please try again."
     }
   },
   "loginPage": {
@@ -234,9 +233,9 @@
       "noAccount": "Don't have an account?",
       "register": "Register"
     },
-    "toast":{
-      "loginSuccess":"Login successful!",
-      "loginError":"Login failed. Please try again."
+    "toast": {
+      "loginSuccess": "Login successful!",
+      "loginError": "Login failed. Please try again."
     },
     "schemaErrors": {
       "email": {
@@ -272,7 +271,7 @@
       "otp": {
         "label": "Verification code",
         "hint": "Enter the 6-digit code sent to your email.",
-        "invalid":"Please enter the 6‑digit code"
+        "invalid": "Please enter the 6‑digit code"
       }
     },
     "actions": {
@@ -280,11 +279,11 @@
       "resendPrompt": "Didn't receive the code?",
       "resend": "Resend"
     },
-    "toast":{
-      "success":"Email verified successfully",
-      "error":"Email Not verified",
-      "successResend":"Email verification resended",
-      "errorResend":"Email verification not resended, please try again later"
+    "toast": {
+      "success": "Email verified successfully",
+      "error": "Email Not verified",
+      "successResend": "Email verification resended",
+      "errorResend": "Email verification not resended, please try again later"
     }
   },
   "resetPasswordPage": {
@@ -304,12 +303,12 @@
       "register": "Register"
     }
   },
-  "uploadImagesPage":{
-    "title":"Upload Images",
-    "description":"Please upload your cover and profile images.",
-    "skip":"Skip",
-    "continue":"Continue",
-    "cover":{
+  "uploadImagesPage": {
+    "title": "Upload Images",
+    "description": "Please upload your cover and profile images.",
+    "skip": "Skip",
+    "continue": "Continue",
+    "cover": {
       "dropHere": "Drop your image here",
       "fileTypes": "SVG, PNG, JPG or GIF (max. {{size}}MB)",
       "selectImage": "Select image",
@@ -317,13 +316,13 @@
       "uploadAlt": "Uploaded image",
       "errorPrefix": "Error",
       "uploadImageFile": "Upload image file",
-      "toast":{
-        "successCover":"Your cover photo has been uploaded successfully.",
-        "errorCover":"We couldn’t upload your cover photo. Please try again.",
-        "noFileCover":"No Cover File Selected"
+      "toast": {
+        "successCover": "Your cover photo has been uploaded successfully.",
+        "errorCover": "We couldn’t upload your cover photo. Please try again.",
+        "noFileCover": "No Cover File Selected"
       }
     },
-    "avatar":{
+    "avatar": {
       "uploadImage": "Upload image",
       "changeImage": "Change image",
       "uploadedImage": "Uploaded image",
@@ -333,10 +332,10 @@
       "toast": {
         "successAvatar": "Your profile picture has been uploaded successfully.",
         "errorAvatar": "We couldn’t upload your profile picture. Please try again.",
-        "noFileAvatar":"No Avatar File Selected"
+        "noFileAvatar": "No Avatar File Selected"
       }
     },
-    "hook":{
+    "hook": {
       "fileTooLargeSingle": "File exceeds the maximum size of {{maxSize}}.",
       "fileTooLargeNamed": "File \"{{name}}\" exceeds the maximum size of {{maxSize}}.",
       "fileTooLargeMultiple": "Some files exceed the maximum size of {{maxSize}}.",
@@ -344,7 +343,6 @@
       "maxFilesExceeded": "You can only upload a maximum of {{maxFiles}} files."
     }
   },
-  
   "completeProfilePage": {
     "title": "Complete Your Profile",
     "description": "Tell us a bit more about yourself to personalize your experience",
@@ -403,6 +401,18 @@
       "success": "Profile completed successfully!",
       "error": "Failed to complete profile. Please try again."
     }
+  },
+  "createPost": {
+    "placeholder": "What's on your mind?",
+    "privacyIndicator": "Everyone can reply",
+    "actions": {
+      "addPhoto": "Add Photo",
+      "addLocation": "Add Location",
+      "videoComingSoon": "Video (Coming Soon)",
+      "addEmoji": "Add Emoji",
+      "clear": "Clear",
+      "post": "Post",
+      "sharePost": "Share your post"
+    }
   }
-
 }

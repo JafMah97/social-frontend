@@ -4,32 +4,6 @@
     "mainChar": "كـ",
     "restChars": "ونكتا"
   },
-  "notFoundPage": {
-    "title": "الصفحة غير موجودة",
-    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
-    "goHome": "العودة إلى الصفحة الرئيسية",
-    "goback": "الرجوع",
-    "footer": " {{siteName}} • لم يتم العثور على الصفحة  "
-  },
-  "loadingPage": {
-    "title": "جارٍ التحميل",
-    "subtitle": "يرجى الانتظار بينما نجهز تجربتك",
-    "status": "نقوم بتحضير تجربتك"
-  },
-  "errorPage": {
-    "title": "حدث خطأ ما",
-    "errorLabel": "خطأ",
-    "unknownError": "خطأ غير معروف",
-    "subtitle": "نعتذر عن الإزعاج. لقد تم إخطار فريقنا ويعمل على إصلاح المشكلة.",
-    "errorId": "معرّف الخطأ",
-    "tryAgain": "حاول مرة أخرى",
-    "goHome": "العودة إلى الصفحة الرئيسية",
-    "goBack": "رجوع",
-    "supportPrompt": "هل ما زلت تواجه مشاكل؟",
-    "contactSupport": "اتصل بالدعم",
-    "footerNote": "© {{year}}, صفحة الخطأ, {{siteName}} ",
-    "systemStatus": "حالة النظام: تم اكتشاف خطأ"
-  },
   "navBar": {
     "menu": "القائمة",
     "quickActions": "إجراءات سريعة",
@@ -69,6 +43,74 @@
       "description": "هل تريد تسجيل الخروج؟",
       "cancelText": "إلغاء"
     }
+  },
+  "footer": {
+    "brand": {
+      "description": "نبني تجارب مذهلة للجميع. انضم إلى مجتمعنا وكن جزءًا من شيء استثنائي."
+    },
+    "navigation": {
+      "title": "التنقل",
+      "links": {
+        "home": "الرئيسية",
+        "feeds": "الخلاصات",
+        "about": "من نحن",
+        "blog": "المدونة",
+        "contact": "اتصل بنا"
+      }
+    },
+    "contact": {
+      "title": "تواصل معنا",
+      "email": "hello@konekta.com",
+      "phone": "+1 (234) 567-890",
+      "address": "123 شارع الابتكار\nمدينة التقنية، TC 12345"
+    },
+    "newsletter": {
+      "title": "ابقَ على اطلاع",
+      "subtitle": "اشترك في نشرتنا للحصول على أحدث التحديثات.",
+      "placeholder": "بريدك الإلكتروني"
+    },
+    "social": {
+      "title": "تابعنا",
+      "links": {
+        "twitter": "تويتر",
+        "github": "جيت هب",
+        "linkedin": "لينكد إن",
+        "website": "الموقع"
+      }
+    },
+    "legal": {
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "cookies": "سياسة ملفات تعريف الارتباط"
+    },
+    "status": "جميع الأنظمة تعمل",
+    "copyright": "© {{year}} {{siteName}}"
+  },
+  "notFoundPage": {
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goHome": "العودة إلى الصفحة الرئيسية",
+    "goback": "الرجوع",
+    "footer": " {{siteName}} • لم يتم العثور على الصفحة  "
+  },
+  "loadingPage": {
+    "title": "جارٍ التحميل",
+    "subtitle": "يرجى الانتظار بينما نجهز تجربتك",
+    "status": "نقوم بتحضير تجربتك"
+  },
+  "errorPage": {
+    "title": "حدث خطأ ما",
+    "errorLabel": "خطأ",
+    "unknownError": "خطأ غير معروف",
+    "subtitle": "نعتذر عن الإزعاج. لقد تم إخطار فريقنا ويعمل على إصلاح المشكلة.",
+    "errorId": "معرّف الخطأ",
+    "tryAgain": "حاول مرة أخرى",
+    "goHome": "العودة إلى الصفحة الرئيسية",
+    "goBack": "رجوع",
+    "supportPrompt": "هل ما زلت تواجه مشاكل؟",
+    "contactSupport": "اتصل بالدعم",
+    "footerNote": "© {{year}}, صفحة الخطأ, {{siteName}} ",
+    "systemStatus": "حالة النظام: تم اكتشاف خطأ"
   },
   "mainPage": {
     "hero": {
@@ -118,49 +160,6 @@
       }
     }
   },
-  "footer": {
-    "brand": {
-      "description": "نبني تجارب مذهلة للجميع. انضم إلى مجتمعنا وكن جزءًا من شيء استثنائي."
-    },
-    "navigation": {
-      "title": "التنقل",
-      "links": {
-        "home": "الرئيسية",
-        "feeds": "الخلاصات",
-        "about": "من نحن",
-        "blog": "المدونة",
-        "contact": "اتصل بنا"
-      }
-    },
-    "contact": {
-      "title": "تواصل معنا",
-      "email": "hello@konekta.com",
-      "phone": "+1 (234) 567-890",
-      "address": "123 شارع الابتكار\nمدينة التقنية، TC 12345"
-    },
-    "newsletter": {
-      "title": "ابقَ على اطلاع",
-      "subtitle": "اشترك في نشرتنا للحصول على أحدث التحديثات.",
-      "placeholder": "بريدك الإلكتروني"
-    },
-    "social": {
-      "title": "تابعنا",
-      "links": {
-        "twitter": "تويتر",
-        "github": "جيت هب",
-        "linkedin": "لينكد إن",
-        "website": "الموقع"
-      }
-    },
-    "legal": {
-      "privacy": "سياسة الخصوصية",
-      "terms": "شروط الخدمة",
-      "cookies": "سياسة ملفات تعريف الارتباط"
-    },
-    "status": "جميع الأنظمة تعمل",
-    "copyright": "© {{year}} {{siteName}}"
-  },
-
   "registerPage": {
     "title": "أنشئ حسابك",
     "description": "أدخل بريدك الإلكتروني أدناه لإنشاء حسابك",
@@ -408,5 +407,20 @@
       "success": "تم إكمال الملف الشخصي بنجاح!",
       "error": "فشل في إكمال الملف الشخصي. يرجى المحاولة مرة أخرى."
     }
+  },
+  "createPost": {
+    "placeholder": "بماذا تفكر؟",
+    "privacyIndicator": "يمكن للجميع الرد",
+    "actions": {
+      "addPhoto": "إضافة صورة",
+      "addLocation": "إضافة موقع",
+      "videoComingSoon": "فيديو (قريباً)",
+      "addEmoji": "إضافة رمز تعبيري",
+      "clear": "مسح",
+      "post": "نشر",
+      "sharePost": "شارك منشورك"
+    }
   }
+
+
 }

@@ -29,11 +29,9 @@ export default async function HomePage({
               {dict.hero.headline.inspire}
             </span>
           </h1>
-
           <p className="text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed text-gray-200 text-shadow-xs text-shadow-black">
             {fmt(dict.hero.subtitle, { siteName })}
           </p>
-
           <div className="flex flex-wrap justify-center gap-6">
             <Button
               asChild
@@ -52,7 +50,6 @@ export default async function HomePage({
               </Link>
             </Button>
           </div>
-
           <div className="flex flex-wrap justify-center md:gap-8 mt-10">
             <StatItem
               value={dict.hero.stats.activeUsers.value}

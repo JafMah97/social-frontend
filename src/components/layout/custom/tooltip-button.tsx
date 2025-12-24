@@ -2,18 +2,20 @@ import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils"; // utility to merge classNames
+import { cn } from "@/lib/utils";
 
 interface TooltipButtonProps {
-  button: React.ReactNode; // label or icon
-  toolTipMessage: React.ReactNode; // tooltip text
-  variant?: "default" | "outline" | "ghost" | "link"; // match your Button variants
-  size?: "default" | "sm" | "lg" | "icon"; // match your Button sizes
-  buttonClassName?: string; // extra classes for Button
-  toolTipClassName?: string; // extra classes for TooltipContent
-  onClick?: () => void; // optional click handler
+  button: React.ReactNode;
+  toolTipMessage: React.ReactNode;
+  variant?: "default" | "outline" | "ghost" | "link" | "destructive";
+  size?: "default" | "sm" | "lg" | "icon";
+  buttonClassName?: string;
+  toolTipClassName?: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 export default function TooltipButton({
@@ -24,22 +26,36 @@ export default function TooltipButton({
   buttonClassName,
   toolTipClassName,
   onClick,
+  disabled = false,
 }: TooltipButtonProps) {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant={variant}
-          size={size}
-          onClick={onClick}
-          className={cn(buttonClassName)}
+    <TooltipProvider>
+      <Tooltip delayDuration={300}>
+        <TooltipTrigger asChild>
+          <Button
+            variant={variant}
+            size={size}
+            onClick={onClick}
+            disabled={disabled}
+            className={cn(
+              "transition-all duration-200 cursor-pointer",
+              disabled && "opacity-50 cursor-not-allowed",
+              buttonClassName
+            )}
+          >
+            {button}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent
+          className={cn(
+            "px-3 py-1.5 text-xs font-medium bg-popover shadow-lg text-foreground",
+            toolTipClassName
+          )}
+          side="bottom"
         >
-          {button}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent className={cn(toolTipClassName)}>
-        {toolTipMessage}
-      </TooltipContent>
-    </Tooltip>
+          {toolTipMessage}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

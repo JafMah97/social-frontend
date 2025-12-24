@@ -70,7 +70,7 @@ export default function PostCard() {
   const saveHandler = () => setSaved((prev) => !prev);
 
   return (
-    <Card className="bg-transparent gap-0 shadow-none border-none p-0">
+    <Card className="bg-background gap-0 border-none p-4">
       {/* Header */}
       <CardHeader className="flex justify-between items-center gap-4 px-2">
         <div className="flex items-center gap-4">
@@ -154,7 +154,7 @@ export default function PostCard() {
           </div>
 
           {/* Action bar */}
-          <div className="mt-2 py-2 flex border-b border-t border-foreground flex-row justify-evenly">
+          <div className="mt-2 py-2 flex  border-t border-foreground/20 flex-row justify-evenly">
             <Button
               className={`text-foreground cursor-pointer ${
                 liked ? "text-red-600" : ""
