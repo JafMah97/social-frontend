@@ -1,10 +1,10 @@
-import { apiRequest } from "../api-request";
+import { apiRequest } from "./api-request";
 import {
   CompleteYourProfileData,
   CompleteYourProfileResponse,
   LoggedUserResponse,
   UserUploadCoverPictureResponse,
-} from "../../types/api-types";
+} from "../types/api-types";
 import { Lang } from "@/utils/translation/dictionary-utils";
 
 /**

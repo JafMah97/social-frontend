@@ -1,4 +1,4 @@
-import { apiRequest } from "../api-request";
+import { apiRequest } from "./api-request";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import {
   LoginResponse,

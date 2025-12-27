@@ -11,7 +11,7 @@ import {
   SavedPostsResponse,
   UpdatePostResponse,
 } from "@/types/api-types";
-import { apiRequest } from "../api-request";
+import { apiRequest } from "./api-request";
 import { Lang } from "@/utils/translation/dictionary-utils";
 
 /**

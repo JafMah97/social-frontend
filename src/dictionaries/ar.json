@@ -417,7 +417,15 @@
     }
   },
   "createPost": {
-    "placeholder": "بماذا تفكر؟",
+    "toast": {
+      "success": "تم نشر منشورك بنجاح",
+      "error": "حدث خطأ أثناء إنشاء المنشور"
+    },
+    "placeholder": {
+      "text": "بماذا تفكر؟",
+      "title": "العنوان",
+      "content": "النص"
+    },
     "privacyIndicator": "يمكن للجميع الرد",
     "actions": {
       "addPhoto": "إضافة صورة",
@@ -427,8 +435,14 @@
       "clear": "مسح",
       "post": "نشر",
       "sharePost": "شارك منشورك"
+    },
+    "upload": {
+      "uploadedFile": "الملف المرفوع",
+      "replace": "استبدال",
+      "dropHere": "أسقط صورتك هنا",
+      "formats": "SVG، PNG، JPG أو GIF (الحد الأقصى {{maxSizeMB}} ميغابايت)",
+      "selectImage": "اختر صورة",
+      "errorPrefix": "خطأ"
     }
   }
-
-
 }

@@ -26,12 +26,12 @@ import UserMenu from "../header/user-menu";
 import AuthButtons from "../header/auth-buttons";
 import { useTranslation } from "@/providers/translation-provider";
 import { useState } from "react";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/user-hooks";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 
 export default function MobileNavbar({ lang }: { lang: Lang }) {
   const { data } = useCurrentLoggedUser();
   const dict = useTranslation().navBar;
-  const [isOpend,setIsOpend] = useState(false)
+  const [isOpend, setIsOpend] = useState(false);
 
   // ✅ Extracted logic into functions
   const isLogged = () => Boolean(data);
@@ -69,7 +69,9 @@ export default function MobileNavbar({ lang }: { lang: Lang }) {
         />
       );
     }
-    return <AuthButtons lang={lang} isMobile onAction={()=>setIsOpend(false)}/>;
+    return (
+      <AuthButtons lang={lang} isMobile onAction={() => setIsOpend(false)} />
+    );
   };
 
   return (

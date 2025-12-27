@@ -15,8 +15,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import CustomAlertDialog from "../custom/alert-dialog";
-import { useLogout } from "@/hooks/api-hooks/auth/auth-hooks";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/user-hooks";
+import { useLogout } from "@/hooks/api-hooks/auth-hooks";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 
 export default function UserMenu({
   lang,

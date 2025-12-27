@@ -1,4 +1,7 @@
 "use client";
+
+import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,74 +12,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Bookmark, EllipsisVertical, Heart, MessageCircle } from "lucide-react";
-import Image from "next/image";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-import CommentSection from "./comment-section";
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
+import CommentSection from "./comment-section";
+import { PostDTO } from "@/types/api-types";
 
-// Dummy post type
-interface DummyPost {
-  id: number;
-  title: string;
-  content: string;
-  image?: string;
-  created_at: string;
-  author: {
-    username: string;
-    profile_image?: string;
-  };
-  likes: {
-    userId: number;
-    user: { username: string; profile_image?: string };
-  }[];
-  likes_count: number;
-  comments_count: number;
-  liked?: boolean;
-  saved?: boolean;
+interface PostCardProps {
+  post: PostDTO;
 }
 
-export default function PostCard() {
-  // Dummy post data
-  const post: DummyPost = {
-    id: 1,
-    title: "My First Post",
-    content: "This is a dummy post content for testing the UI.",
-    image: "/images/cover-placeholder.jpg",
-    created_at: new Date().toISOString(),
-    author: {
-      username: "jafar_dev",
-      profile_image: "/images/profile-placeholder.jpg",
-    },
-    likes: [
-      { userId: 1, user: { username: "alice", profile_image: "" } },
-      { userId: 2, user: { username: "bob", profile_image: "" } },
-    ],
-    likes_count: 2,
-    comments_count: 3,
-    liked: false,
-    saved: false,
-  };
-
+export default function PostCard({ post }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
-  const [liked, setLiked] = useState(post.liked);
-  const [saved, setSaved] = useState(post.saved);
-
-  const likeHandler = () => setLiked((prev) => !prev);
-  const saveHandler = () => setSaved((prev) => !prev);
+  const [liked, setLiked] = useState(post.isLiked);
+  const [saved, setSaved] = useState(post.isSaved);
 
   return (
-    <Card className="bg-background gap-0 border-none p-4">
+    <Card className="bg-background gap-0 border-none p-4 my-4">
       {/* Header */}
       <CardHeader className="flex justify-between items-center gap-4 px-2">
         <div className="flex items-center gap-4">
           <CustomAvatar
-            src="/images/profile-placeholder.jpg"
-            fallback={"CN"}
+            src={post.author.profileImage}
+            fallback={post.author.username}
             className="md:w-15 md:h-15 w-10 h-10"
           />
           <div>
@@ -85,14 +46,15 @@ export default function PostCard() {
             </CardTitle>
             <CardDescription className="flex flex-col">
               <span className="text-xs text-muted-foreground">
-                {new Date(post.created_at).toLocaleString()}
+                {new Date(post.createdAt).toLocaleString()}
               </span>
             </CardDescription>
           </div>
         </div>
+
         <Popover>
           <PopoverTrigger className="text-xs cursor-pointer">
-            <EllipsisVertical size={20} className="cursor-pointer" />
+            <EllipsisVertical size={20} />
           </PopoverTrigger>
           <PopoverContent className="text-xs w-32 p-2">
             <div className="flex flex-col gap-2">
@@ -114,13 +76,14 @@ export default function PostCard() {
             <Image
               src={post.image}
               alt="Post image"
-              width={600}
-              height={300}
-              className="object-cover w-full max-h-96 rounded-md"
+              width={1000}
+              height={1000}
+              className="object-contain w-full max-h-96 rounded-md"
             />
           </div>
         )}
-        <p className=" mt-4 text-wrap wrap-break-word">{post.content}</p>
+
+        <p className="mt-4 text-wrap wrap-break-word">{post.content}</p>
       </CardContent>
 
       {/* Footer */}
@@ -129,45 +92,27 @@ export default function PostCard() {
           {/* Likes & comments counter */}
           <div className="px-2 flex flex-row justify-between items-center w-full">
             <div className="flex -space-x-2 min-h-8 items-center">
-              {post.likes.slice(0, 3).map((like) => (
-                <CustomAvatar
-                src="/images/profile-placeholder.jpg"
-                  key={like.userId}
-                  fallback={like.user.username}
-                  className="w-7 h-7"
-                />
-              ))}
-              {post.likes.length > 3 && (
-                <span className="ml-1 text-lg font-bold text-muted-foreground">
-                  ...
-                </span>
-              )}
+              {/* You can map real likes here if you add them */}
             </div>
+
             <div className="flex gap-3">
-              <span className="text-muted-foreground">
-                {post.comments_count} Comments
-              </span>
-              <span className="text-muted-foreground">
-                {post.likes_count} Likes
-              </span>
+              <span>{post.commentsCount} Comments</span>
+              <span>{post.likesCount} Likes</span>
             </div>
           </div>
 
           {/* Action bar */}
-          <div className="mt-2 py-2 flex  border-t border-foreground/20 flex-row justify-evenly">
+          <div className="mt-2 py-2 flex border-t border-foreground/20 flex-row justify-evenly">
             <Button
-              className={`text-foreground cursor-pointer ${
-                liked ? "text-red-600" : ""
-              }`}
               variant="ghost"
-              onClick={likeHandler}
+              className={liked ? "text-red-600" : ""}
+              onClick={() => setLiked((prev) => !prev)}
             >
               <Heart className={liked ? "text-red-600" : ""} />
               <span>{liked ? "Liked" : "Like"}</span>
             </Button>
 
             <Button
-              className="text-foreground  cursor-pointer"
               variant="ghost"
               onClick={() => setShowComments((prev) => !prev)}
             >
@@ -175,18 +120,15 @@ export default function PostCard() {
             </Button>
 
             <Button
-              className={`text-foreground cursor-pointer ${
-                saved ? "text-blue-600" : ""
-              }`}
               variant="ghost"
-              onClick={saveHandler}
+              className={saved ? "text-blue-600" : ""}
+              onClick={() => setSaved((prev) => !prev)}
             >
               <Bookmark />
               <span>{saved ? "Saved" : "Save"}</span>
             </Button>
           </div>
 
-          {/* Comment section */}
           {showComments && <CommentSection />}
         </div>
       </CardFooter>

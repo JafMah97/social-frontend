@@ -1,132 +1,127 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
-import TooltipButton from "@/components/layout/custom/tooltip-button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  ImageIcon,
-  LocationEditIcon,
-  VideoIcon,
-  SmileIcon,
-  Globe,
-} from "lucide-react";
-import { maxChars } from "@/constants";
 import { useTranslation } from "@/providers/translation-provider";
+import { useFileUpload } from "@/hooks/use-file-upload";
+
+import { maxChars, maxSizeMB } from "@/constants";
+import PostTextarea from "./components/post-textarea";
+import PostImagePreview from "./components/post-image-preview";
+import PostPrivacyIndicator from "./components/post-privacy-indicator";
+import PostActionBar from "./components/post-action-bar";
+import { PostData } from "@/types/api-types";
+import { useCreatePost, useListPosts } from "@/hooks/api-hooks/post-hooks";
+import { toast } from "sonner";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 
 export default function CreatePost() {
   const [postContent, setPostContent] = useState("");
   const [shake, setShake] = useState(false);
+  const [error, setError] = useState("");
+  const textareaRef = useRef(null);
+
+  const dict = useTranslation().createPost;
+
+  const [{ files, errors }, { openFileDialog, removeFile, getInputProps }] =
+    useFileUpload({
+      accept: "image/*",
+      maxFiles: 1,
+      maxSize: maxSizeMB * 1024 * 1024,
+      multiple: false,
+    });
+
+  const posts = useListPosts(1, 10);
+  const user = useCurrentLoggedUser();
+
+  const { mutate, isPending } = useCreatePost({
+    onSuccess: () => {
+      setError("");
+      setPostContent("")
+      toast.success(dict.toast.success);
+      posts.refetch();
+    },
+    onError: (error) => {
+      setError(error.error.message);
+      console.log(error);
+      toast.error(dict.toast.error);
+    },
+  });
+
+  const handlePost = () => {
+    const data: PostData = {
+      title: null,
+      content: postContent,
+      image: (files[0]?.file as File) || null,
+      postType: "STANDARD",
+      visibility: "PUBLIC",
+      startsAt: new Date().toISOString(),
+      endsAt: null,
+      format: "TEXT",
+    };
+    mutate(data);
+  };
+
   const charactersRemaining = maxChars - postContent.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    if (value.length <= maxChars) {
-      setPostContent(value);
-    } else {
-      // trigger shake when user tries to exceed limit
+    if (value.length <= maxChars) setPostContent(value);
+    else {
       setShake(true);
-      setTimeout(() => setShake(false), 500); // reset after animation
+      setTimeout(() => setShake(false), 500);
     }
   };
 
-  const dict = useTranslation().createPost
+  const clearAll = () => {
+    setPostContent("");
+    files.forEach((f) => removeFile(f.id));
+  };
+
+  // ❗ Correct conditional rendering
+  if (!user.data?.success) {
+    return <></>;
+  }
 
   return (
     <div className="rounded-xl bg-background p-4 md:p-6 shadow-sm">
-      <div className="flex gap-3 md:gap-4 ">
+      <div className="flex gap-3 md:gap-4">
         {/* Avatar */}
-        <div className="shrink-0">
+        {user.data?.data.profileImage && (
           <CustomAvatar
-            src="/images/profile-placeholder.jpg"
-            fallback={"CN"}
-            className="w-11 h-11 md:w-14 md:h-14 ring-2 ring-offset-2 ring-offset-background ring-primary/20"
+            src={user.data.data.profileImage}
+            fallback={user.data.data.username.slice(0, 2)}
           />
-        </div>
+        )}
 
-        {/* Content Area */}
-        <div className="flex-1 space-y-4 ">
-          {/* Post Input */}
-          <div className="space-y-3">
-            <Textarea
-              value={postContent}
-              onChange={handleChange}
-              placeholder={dict.placeholder}
-              className="min-h-24 md:min-h-28 border-0 p-4 text-lg resize-none bg-transparent placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:outline-none text-wrap break-all"
-            />
+        {/* Post editor */}
+        <div className="flex-1 space-y-4">
+          <PostTextarea
+            value={postContent}
+            onChange={handleChange}
+            textareaRef={textareaRef}
+            shake={shake}
+            charactersRemaining={charactersRemaining}
+            maxChars={maxChars}
+          />
 
-            {/* Privacy Indicator */}
-            <div className="flex items-center justify-between">
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/15 transition-colors">
-                <Globe className="w-4 h-4" />
-                <span>{dict.privacyIndicator}</span>
-              </button>
+          <input {...getInputProps()} className="hidden" aria-hidden />
 
-              <div
-                className={`text-sm transition-colors ${
-                  charactersRemaining <= 0
-                    ? "text-destructive"
-                    : "text-muted-foreground"
-                } ${shake ? "animate-shake" : ""}`}
-              >
-                {charactersRemaining} / {maxChars}
-              </div>
-            </div>
-          </div>
+          <PostImagePreview files={files} removeFile={removeFile} />
 
-          {/* Divider */}
+          <PostPrivacyIndicator label={dict.privacyIndicator} />
+
           <div className="border-t" />
 
-          {/* Action Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            {/* Media Actions */}
-            <div className="flex items-center gap-1">
-              <TooltipButton
-                variant="ghost"
-                toolTipMessage={dict.actions.addPhoto}
-                buttonClassName="rounded-full hover:bg-accent p-2.5"
-                button={<ImageIcon className="w-5 h-5 text-primary" />}
-              />
-              <TooltipButton
-                variant="ghost"
-                toolTipMessage={dict.actions.addLocation}
-                buttonClassName="rounded-full hover:bg-accent p-2.5"
-                button={<LocationEditIcon className="w-5 h-5 text-primary" />}
-              />
-              <TooltipButton
-                variant="ghost"
-                toolTipMessage={dict.actions.videoComingSoon}
-                buttonClassName="rounded-full hover:bg-accent p-2.5"
-                button={<VideoIcon className="w-5 h-5 text-muted-foreground" />}
-              />
-              <TooltipButton
-                variant="ghost"
-                toolTipMessage={dict.actions.addEmoji}
-                buttonClassName="rounded-full hover:bg-accent p-2.5"
-                button={<SmileIcon className="w-5 h-5 text-primary" />}
-              />
-            </div>
-
-            {/* Post Button */}
-            <div className="flex items-center gap-3">
-              {postContent && (
-                <button
-                  onClick={() => setPostContent("")}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {dict.actions.clear}
-                </button>
-              )}
-              <TooltipButton
-                toolTipMessage="Share your post"
-                buttonClassName="px-5 rounded-full font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm transition-all hover:scale-105"
-                button={
-                  <span className="flex items-center gap-2">
-                    <span>{dict.actions.post}</span>
-                  </span>
-                }
-                disabled={!postContent.trim()}
-              />
-            </div>
+          <PostActionBar
+            openFileDialog={openFileDialog}
+            onClear={clearAll}
+            canClear={postContent ? true : files.length > 0}
+            canPost={postContent.trim() ? true : files.length > 0}
+            handlePost={handlePost}
+            isPending={isPending}
+          />
+          <div className="h-5 text-red-500">
+            {errors} {error}
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -11,11 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { fmt } from "@/utils/translation/language-utils";
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { useTranslation } from "@/providers/translation-provider";
@@ -25,10 +21,10 @@ import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 import BiggerWave from "../../home/svgs/bigger-wave";
 import { FormInput } from "@/components/layout/custom/form-input";
-import { useLogin } from "@/hooks/api-hooks/auth/auth-hooks";
+import { useLogin } from "@/hooks/api-hooks/auth-hooks";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
   children?: React.ReactNode;
@@ -39,7 +35,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
   const [error, setError] = useState("");
   const router = useRouter();
   const queryClient = useQueryClient();
-  
+
   const loginSchema = z.object({
     email: z
       .email(dict.schemaErrors.email.invalid)
@@ -50,13 +46,13 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       .min(8, fmt(dict.schemaErrors.password.min, { min: 8 }))
       .max(100, fmt(dict.schemaErrors.password.max, { max: 100 })),
   });
-  
+
   const { mutate, isPending } = useLogin({
     onSuccess: async () => {
       setError("");
       toast.success(dict.toast.loginSuccess);
       await queryClient.invalidateQueries({ queryKey: ["currentLoggedUser"] });
-      router.push(`/${lang}/`);
+      router.push(`/${lang}/feeds`);
     },
     onError: (err) => {
       console.log(err);
@@ -67,7 +63,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       );
     },
   });
-  
+
   useCurrentLoggedUser();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -76,7 +72,7 @@ export function LoginForm({ children, className, lang, ...props }: Props) {
       password: "",
     },
   });
-  
+
   function onSubmit(data: z.infer<typeof loginSchema>) {
     mutate(data);
   }

@@ -23,7 +23,7 @@ import z from "zod";
 import { FormInput } from "../../../custom/form-input";
 import { useQueryClient } from "@tanstack/react-query";
 import BiggerWave from "../../home/svgs/bigger-wave";
-import { useRegister } from "@/hooks/api-hooks/auth/auth-hooks";
+import { useRegister } from "@/hooks/api-hooks/auth-hooks";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
@@ -105,7 +105,7 @@ export function RegisterForm({ children, className, lang, ...props }: Props) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="bg-background m-2 rounded-2xl">
         <Card className="px-0 md:p-6 pt-4 md:pt-10 relative z-20 overflow-hidden bg-primary/10">
-          <BiggerWave lang={lang}/>
+          <BiggerWave lang={lang} />
           <CardHeader className="flex flex-row w-full justify-between relative z-20">
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               {children}

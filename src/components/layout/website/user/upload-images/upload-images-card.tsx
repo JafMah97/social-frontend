@@ -19,7 +19,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Lang } from "@/utils/translation/dictionary-utils";
-import { useUploadAvatar, useUploadCover } from "@/hooks/api-hooks/user/user-hooks";
+import { useUploadAvatar, useUploadCover } from "@/hooks/api-hooks/user-hooks";
 
 export default function UploadImagesCard({
   children,

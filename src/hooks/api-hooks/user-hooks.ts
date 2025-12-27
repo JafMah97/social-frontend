@@ -1,5 +1,5 @@
 import { uploadAvatarApi } from "@/api/api-request";
-import { completeYourProfileApi, loggedUserApi, uploadCoverApi } from "@/api/user/user";
+import { completeYourProfileApi, loggedUserApi, uploadCoverApi } from "@/api/user-api";
 import {
   ApiErrorResponse,
   CompleteYourProfileData,

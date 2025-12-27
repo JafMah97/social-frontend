@@ -1,5 +1,5 @@
 
-import { loginApi, logoutApi, registerApi, resendVerifyCodeApi, verifyCodeApi } from "@/api/auth/auth";
+import { loginApi, logoutApi, registerApi, resendVerifyCodeApi, verifyCodeApi } from "@/api/auth-api";
 import { ApiErrorResponse, LoginData, LoginResponse, LogoutResponse, RegisterData, RegisterResponse, ResendVerifyCodeData, ResendVerifyCodeResponse, VerifyCodeData, VerifyCodeResponse } from "@/types/api-types";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 

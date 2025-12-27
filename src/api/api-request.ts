@@ -16,8 +16,8 @@ type HttpMethod = "get" | "post" | "put" | "patch" | "delete";
 export interface ApiOptions {
   withCredentials?: boolean;
   headers?: Record<string, string>;
-  lang?: Lang; // optional override
-  params?: Record<string, string | number | boolean | undefined>; // <-- added for pagination/query params
+  lang?: Lang;
+  params?: Record<string, string | number | boolean | undefined>;
 }
 
 export async function apiRequest<Response, Data = unknown>(

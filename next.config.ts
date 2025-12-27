@@ -39,7 +39,7 @@ const securityHeaders = [
   {
     key: "Permissions-Policy",
     // Explicitly disable powerful features by default. Adjust if you need them.
-    value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+    value: "camera=(self), microphone=(), geolocation=(self), interest-cohort=()",
   },
 ];
 
@@ -56,11 +56,14 @@ const nextConfig: NextConfig = {
   // Image optimizations: prefer AVIF/WebP and set sensible defaults.
   images: {
     formats: ["image/avif", "image/webp"],
-    // Add remotePatterns entries if you load images from external hosts.
     remotePatterns: [
       {
         protocol: "https",
         hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
       },
     ],
   },

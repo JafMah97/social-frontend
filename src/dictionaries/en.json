@@ -1,6 +1,6 @@
 {
   "siteName": "konekta",
-  "errors":{
+  "errors": {
     "unknownError": "An unknown error occurred",
     "networkError": "Network error, please try again",
     "unauthorized": "You are not authorized to perform this action",
@@ -411,7 +411,15 @@
     }
   },
   "createPost": {
-    "placeholder": "What's on your mind?",
+    "toast": {
+      "success": "Your post has been published successfully",
+      "error": "Something went wrong while creating your post"
+    },
+    "placeholder": {
+      "text": "What's on your mind?",
+      "title": "Title",
+      "content": "Content"
+    },
     "privacyIndicator": "Everyone can reply",
     "actions": {
       "addPhoto": "Add Photo",
@@ -421,6 +429,14 @@
       "clear": "Clear",
       "post": "Post",
       "sharePost": "Share your post"
+    },
+    "upload": {
+      "uploadedFile": "Uploaded File",
+      "replace": "Replace",
+      "dropHere": "Drop your image here",
+      "formats": "SVG, PNG, JPG or GIF (max. {{maxSizeMB}}MB)",
+      "selectImage": "Select image",
+      "errorPrefix": "Error"
     }
   }
 }
