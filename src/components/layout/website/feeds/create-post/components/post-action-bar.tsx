@@ -1,13 +1,11 @@
 "use client";
+
 import TooltipButton from "@/components/layout/custom/tooltip-button";
 import { Spinner } from "@/components/ui/spinner";
 import { useTranslation } from "@/providers/translation-provider";
-import {
-  ImageIcon,
-  LocationEditIcon,
-  VideoIcon,
-  SmileIcon,
-} from "lucide-react";
+import { ImageIcon, LocationEditIcon, VideoIcon } from "lucide-react";
+import EmojiesPicker from "./emojies-picker";
+import PostPrivacyIndicator from "./post-privacy-indicator";
 
 interface PostActionBarProps {
   canClear: boolean;
@@ -16,6 +14,7 @@ interface PostActionBarProps {
   openFileDialog: () => void;
   onClear: () => void;
   handlePost: () => void;
+  setPostContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function PostActionBar({
@@ -25,25 +24,22 @@ export default function PostActionBar({
   canPost,
   handlePost,
   isPending,
+  setPostContent,
 }: PostActionBarProps) {
   const dict = useTranslation().createPost;
+
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-1">
         <TooltipButton
           toolTipMessage={dict.actions.addPhoto}
-          button={<ImageIcon className="w-5 h-5 " />}
-          disabled={false} // ← force it
-          onClick={() => {
-            console.log("dkdkdk");
-            openFileDialog();
-          }}
+          button={<ImageIcon className="w-5 h-5" />}
+          onClick={openFileDialog}
         />
 
         <TooltipButton
           toolTipMessage={dict.actions.addLocation}
           button={<LocationEditIcon className="w-5 h-5" />}
-          buttonClassName=""
         />
 
         <TooltipButton
@@ -51,10 +47,8 @@ export default function PostActionBar({
           button={<VideoIcon className="w-5 h-5" />}
         />
 
-        <TooltipButton
-          toolTipMessage={dict.actions.addEmoji}
-          button={<SmileIcon className="w-5 h-5" />}
-        />
+        {/* Emoji Picker */}
+        <EmojiesPicker setPostContent={setPostContent} />
       </div>
 
       <div className="flex items-center gap-3">
@@ -66,6 +60,7 @@ export default function PostActionBar({
             {dict.actions.clear}
           </button>
         )}
+        <PostPrivacyIndicator label={dict.privacyIndicator} />
 
         <TooltipButton
           toolTipMessage={dict.actions.sharePost}

@@ -20,6 +20,9 @@ import {
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
 import CommentSection from "./comment-section";
 import { PostDTO } from "@/types/api-types";
+import { useDeletePost, useListPosts } from "@/hooks/api-hooks/post-hooks";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface PostCardProps {
   post: PostDTO;
@@ -30,6 +33,21 @@ export default function PostCard({ post }: PostCardProps) {
   const [liked, setLiked] = useState(post.isLiked);
   const [saved, setSaved] = useState(post.isSaved);
 
+  const {} = useListPosts(1,10)
+
+  const {mutate,isPending} =useDeletePost({
+    onSuccess:()=>{
+      toast.success("Post Deleted Successfuly")
+    },
+    onError:(error)=>{
+      console.log(error)
+      toast.error("Post Did not deleted")
+    }
+  })
+
+  const handleDelete = () =>{
+    mutate(post.id)
+  }
   return (
     <Card className="bg-background gap-0 border-none p-4 my-4">
       {/* Header */}
@@ -58,8 +76,8 @@ export default function PostCard({ post }: PostCardProps) {
           </PopoverTrigger>
           <PopoverContent className="text-xs w-32 p-2">
             <div className="flex flex-col gap-2">
-              <Button variant="destructive" size="sm">
-                Delete
+              <Button variant="destructive" size="sm" onClick={handleDelete} disabled={isPending}>
+                {isPending ?(<Spinner/>):"Delete"}
               </Button>
               <Button variant="outline" size="sm">
                 Edit

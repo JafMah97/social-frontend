@@ -14,6 +14,7 @@ import { getDirection } from "@/utils/translation/language-utils";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 import ReactQueryProvider from "@/providers/react-query-provider";
+import { EmojiPickerProvider } from "@/providers/emoji-picker-provider";
 
 export const metadata: Metadata = {
   title: "Konekta Social",
@@ -50,19 +51,21 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <Navbar lang={lang} />
-              {children}
-              <Toaster
-                position="top-center"
-                toastOptions={{
-                  className: `antialiased ${fontClass}`,
-                  style: {
-                    backgroundColor: "var(--color-background)",
-                    color: "var(--color-foreground",
-                  },
-                }}
-              />
-              <Footer lang={lang} />
+              <EmojiPickerProvider>
+                <Navbar lang={lang} />
+                {children}
+                <Toaster
+                  position="top-center"
+                  toastOptions={{
+                    className: `antialiased ${fontClass}`,
+                    style: {
+                      backgroundColor: "var(--color-background)",
+                      color: "var(--color-foreground",
+                    },
+                  }}
+                />
+                <Footer lang={lang} />
+              </EmojiPickerProvider>
             </ThemeProvider>
           </ReactQueryProvider>
         </TranslationsProvider>

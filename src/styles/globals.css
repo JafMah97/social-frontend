@@ -175,21 +175,39 @@
 }
 
 @keyframes wave-bounce {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-1.5px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes wave-bounce-up {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-1.5px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes wave-bounce-down {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(1.5px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(1.5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .wave-animate-up {
@@ -200,15 +218,26 @@
   animation: wave-bounce-down 2s ease-in-out infinite;
 }
 
-
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-4px); }
-  40% { transform: translateX(4px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
 }
 
 .animate-shake {
   animation: shake 0.4s;
 }
+

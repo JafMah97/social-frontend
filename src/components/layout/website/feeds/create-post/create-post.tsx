@@ -7,7 +7,6 @@ import { useFileUpload } from "@/hooks/use-file-upload";
 import { maxChars, maxSizeMB } from "@/constants";
 import PostTextarea from "./components/post-textarea";
 import PostImagePreview from "./components/post-image-preview";
-import PostPrivacyIndicator from "./components/post-privacy-indicator";
 import PostActionBar from "./components/post-action-bar";
 import { PostData } from "@/types/api-types";
 import { useCreatePost, useListPosts } from "@/hooks/api-hooks/post-hooks";
@@ -36,8 +35,9 @@ export default function CreatePost() {
   const { mutate, isPending } = useCreatePost({
     onSuccess: () => {
       setError("");
-      setPostContent("")
+      setPostContent("");
       toast.success(dict.toast.success);
+      removeFile(files[0].id);
       posts.refetch();
     },
     onError: (error) => {
@@ -105,10 +105,9 @@ export default function CreatePost() {
           />
 
           <input {...getInputProps()} className="hidden" aria-hidden />
-
-          <PostImagePreview files={files} removeFile={removeFile} />
-
-          <PostPrivacyIndicator label={dict.privacyIndicator} />
+          <div className="h-5 text-red-500">
+            {errors} {error}
+          </div>
 
           <div className="border-t" />
 
@@ -119,10 +118,10 @@ export default function CreatePost() {
             canPost={postContent.trim() ? true : files.length > 0}
             handlePost={handlePost}
             isPending={isPending}
+            setPostContent={setPostContent}
           />
-          <div className="h-5 text-red-500">
-            {errors} {error}
-          </div>
+
+          <PostImagePreview files={files} removeFile={removeFile} />
         </div>
       </div>
     </div>
