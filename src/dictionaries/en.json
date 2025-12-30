@@ -438,5 +438,48 @@
       "selectImage": "Select image",
       "errorPrefix": "Error"
     }
+  },
+  "feedsPage": {
+    "toast": {
+      "likeError": "Failed to like post",
+      "unlikeError": "Failed to unlike post",
+      "saveError": "Failed to save post",
+      "unsaveError": "Failed to unsave post",
+      "deleteSuccess": "Post deleted",
+      "deleteError": "Failed to delete post"
+    },
+    "post": {
+      "delete": "Delete",
+      "edit": "Edit",
+      "report": "Report Post",
+      "hide": "Hide Post",
+      "share": "Share",
+      "comments": "Comments",
+      "likes": "Likes",
+      "like": "Like",
+      "liked": "Liked",
+      "comment": "Comment",
+      "save": "Save",
+      "saved": "Saved",
+      "deleteTitle": "Delete Post",
+      "deleteDescription": "Are you sure you want to delete this post? This action cannot be undone.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel"
+    },
+    "timeAgo": {
+      "justNow": "just now",
+      "minutes": "{{n}} minutes ago",
+      "minute": "{{n}} minute ago",
+      "hours": "{{n}} hours ago",
+      "hour": "{{n}} hour ago",
+      "days": "{{n}} days ago",
+      "day": "{{n}} day ago",
+      "weeks": "{{n}} weeks ago",
+      "week": "{{n}} week ago",
+      "months": "{{n}} months ago",
+      "month": "{{n}} month ago",
+      "years": "{{n}} years ago",
+      "year": "{{n}} year ago"
+    }
   }
 }

@@ -98,7 +98,7 @@ export default function UploadImagesCard({
   }, [success.cover, success.avatar, lang, router]);
 
   return (
-    <Card className="bg-primary/10 relative overflow-hidden z-50 py-15 w-full gap-0">
+    <Card className="bg-primary/10 relative overflow-hidden z-50 py-15 w-full gap-0 max-w-3xl" >
       <Wave up className="absolute top-0 w-[1000px] z-10" />
 
       <CardHeader className="flex flex-col gap-2 items-start justify-center relative z-50">

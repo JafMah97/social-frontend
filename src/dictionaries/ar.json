@@ -444,5 +444,48 @@
       "selectImage": "اختر صورة",
       "errorPrefix": "خطأ"
     }
+  },
+  "feedsPage": {
+    "toast": {
+      "likeError": "فشل في تسجيل الإعجاب بالمنشور",
+      "unlikeError": "فشل في إزالة الإعجاب",
+      "saveError": "فشل في حفظ المنشور",
+      "unsaveError": "فشل في إزالة الحفظ",
+      "deleteSuccess": "تم حذف المنشور",
+      "deleteError": "فشل في حذف المنشور"
+    },
+    "post": {
+      "delete": "حذف",
+      "edit": "تعديل",
+      "report": "الإبلاغ عن المنشور",
+      "hide": "إخفاء المنشور",
+      "share": "مشاركة",
+      "comments": "تعليقات",
+      "likes": "إعجابات",
+      "like": "إعجاب",
+      "liked": "تم الإعجاب",
+      "comment": "تعليق",
+      "save": "حفظ",
+      "saved": "تم الحفظ",
+      "deleteTitle": "حذف المنشور",
+      "deleteDescription": "هل أنت متأكد أنك تريد حذف هذا المنشور؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteConfirm": "حذف",
+      "deleteCancel": "إلغاء"
+    },
+    "timeAgo": {
+      "justNow": "الآن",
+      "minutes": "منذ {{n}} دقيقة",
+      "minute": "منذ {{n}} دقيقة",
+      "hours": "منذ {{n}} ساعة",
+      "hour": "منذ {{n}} ساعة",
+      "days": "منذ {{n}} يوم",
+      "day": "منذ {{n}} يوم",
+      "weeks": "منذ {{n}} أسبوع",
+      "week": "منذ {{n}} أسبوع",
+      "months": "منذ {{n}} شهر",
+      "month": "منذ {{n}} شهر",
+      "years": "منذ {{n}} سنة",
+      "year": "منذ {{n}} سنة"
+    }
   }
 }
