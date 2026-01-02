@@ -449,6 +449,8 @@
       "deleteError": "Failed to delete post"
     },
     "post": {
+      "noPosts":"No Posts Yet ",
+      "newPostsAppear":"When new posts appear, they’ll show up here.",
       "delete": "Delete",
       "edit": "Edit",
       "report": "Report Post",

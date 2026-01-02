@@ -9,47 +9,30 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 
 interface CustomAlertDialogProps {
-  triggerText: string;
+  trigger: React.ReactNode; // parent provides the button
   title: string;
   description: string;
   cancelText?: string;
   continueText?: string;
   onContinue: () => void;
-  isMobile: boolean;
   isPending: boolean;
 }
 
 export default function CustomAlertDialog({
-  triggerText,
+  trigger,
   title,
   description,
   cancelText = "Cancel",
   continueText = "Continue",
   onContinue,
-  isMobile,
   isPending,
 }: CustomAlertDialogProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button
-          className={`h-9 px-4 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
-            isMobile ? "w-full" : ""
-          } `}
-          aria-label={triggerText}
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Spinner />
-          ) : (
-            <span className="text-sm font-medium">{triggerText}</span>
-          )}
-        </Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-start">{title}</AlertDialogTitle>
@@ -57,11 +40,17 @@ export default function CustomAlertDialog({
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter>
           <AlertDialogCancel className="cursor-pointer">
             {cancelText}
           </AlertDialogCancel>
-          <AlertDialogAction className="cursor-pointer" onClick={onContinue}>
+
+          <AlertDialogAction
+            className="cursor-pointer"
+            onClick={onContinue}
+            disabled={isPending}
+          >
             {continueText}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -1,5 +1,5 @@
 export const LANG_COOKIE = "lang";
-export const maxSizeMB = 5;
+export const maxSizeMB = 2;
 export const maxChars = 1000;
 
 // constants/error-codes.ts

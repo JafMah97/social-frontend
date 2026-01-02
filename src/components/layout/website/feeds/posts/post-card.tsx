@@ -25,6 +25,11 @@ import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 import CustomAlertDialog from "@/components/layout/custom/alert-dialog";
 import { useTranslation } from "@/providers/translation-provider";
 import { useTimeAgo } from "@/hooks/use-time-ago";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  useComments,
+  useCreateComment,
+} from "@/hooks/api-hooks/comments-hooks";
 
 interface PostCardProps {
   post: PostDTO;
@@ -32,6 +37,7 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
+
   const { data } = useCurrentLoggedUser();
   const dictPost = useTranslation().feedsPage.post;
 
@@ -48,8 +54,22 @@ export default function PostCard({ post }: PostCardProps) {
     isSaving,
     isDeleting,
   } = usePostActions(post);
+
   const timeAgo = useTimeAgo(p.createdAt);
 
+  const {
+    data: commentsData,
+    isLoading: isCommentsLoading,
+    refetch: refetchComments,
+  } = useComments(p.id, {
+    enabled: showComments,
+  });
+
+  const createCommentMutation = useCreateComment({
+    onSuccess: () => {
+      refetchComments();
+    },
+  });
 
   return (
     <Card className="bg-background gap-0 border-none p-4 my-4">
@@ -66,9 +86,7 @@ export default function PostCard({ post }: PostCardProps) {
               @{p.author.username}
             </CardTitle>
             <CardDescription className="flex flex-col">
-              <span className="text-xs text-muted-foreground">
-                {timeAgo}
-              </span>
+              <span className="text-xs text-muted-foreground">{timeAgo}</span>
             </CardDescription>
           </div>
         </div>
@@ -80,25 +98,26 @@ export default function PostCard({ post }: PostCardProps) {
 
           <PopoverContent className="text-xs w-40 p-2">
             {data?.data?.id === p.author.id ? (
-              // ⭐ AUTHOR ACTIONS
               <div className="flex flex-col gap-2">
                 <CustomAlertDialog
-                  triggerText={dictPost.delete}
+                  trigger={
+                    <Button variant="ghost" disabled={isDeleting}>
+                      {isDeleting ? <Spinner /> : dictPost.delete}
+                    </Button>
+                  }
                   title={dictPost.deleteTitle}
                   description={dictPost.deleteDescription}
                   continueText={dictPost.deleteConfirm}
                   cancelText={dictPost.deleteCancel}
                   onContinue={deletePost}
-                  isMobile={false}
                   isPending={isDeleting}
                 />
 
-                <Button variant="outline" size="sm">
+                <Button variant="ghost" size="sm">
                   {dictPost.edit}
                 </Button>
               </div>
             ) : (
-              // ⭐ NON-AUTHOR ACTIONS
               <div className="flex flex-col gap-2">
                 <Button variant="ghost" size="sm">
                   {dictPost.report}
@@ -137,26 +156,25 @@ export default function PostCard({ post }: PostCardProps) {
       {/* Footer */}
       <CardFooter className="px-0 pt-4 flex justify-between text-sm text-muted-foreground">
         <div className="flex flex-col w-full">
-          {/* Likes & comments counter */}
           <div className="px-2 flex flex-row justify-between items-center w-full">
             <div className="flex -space-x-2 min-h-8 items-center"></div>
 
             <div className="flex gap-3">
               <span>
-                {p.commentsCount} {dictPost.comments}
+                <span className="text-primary mx-1">{p.commentsCount}</span>
+                {dictPost.comments}
               </span>
               <span>
-                {p.likesCount} {dictPost.likes}
+                <span className="text-primary mx-1">{p.likesCount}</span>
+                {dictPost.likes}
               </span>
             </div>
           </div>
 
-          {/* Action bar */}
           <div className="mt-2 py-2 flex border-t border-foreground/20 flex-row justify-evenly">
-            {/* LIKE */}
             <Button
               variant="ghost"
-              className={liked ? "text-red-600" : ""}
+              className={`cursor-pointer ${liked ? "text-red-600" : ""}`}
               onClick={() => (liked ? unlike() : like())}
               disabled={isLiking}
             >
@@ -164,18 +182,17 @@ export default function PostCard({ post }: PostCardProps) {
               <span>{liked ? dictPost.liked : dictPost.like}</span>
             </Button>
 
-            {/* COMMENTS */}
             <Button
+              className="cursor-pointer"
               variant="ghost"
               onClick={() => setShowComments((prev) => !prev)}
             >
               <MessageCircle /> {dictPost.comment}
             </Button>
 
-            {/* SAVE */}
             <Button
               variant="ghost"
-              className={saved ? "text-blue-600" : ""}
+              className={`cursor-pointer${saved ? "text-blue-600" : ""}`}
               onClick={() => (saved ? unsave() : save())}
               disabled={isSaving}
             >
@@ -184,7 +201,18 @@ export default function PostCard({ post }: PostCardProps) {
             </Button>
           </div>
 
-          {showComments && <CommentSection />}
+          {showComments && (
+            <CommentSection
+              comments={commentsData?.data.comments}
+              isLoading={isCommentsLoading}
+              onCreateComment={(content) => {
+                createCommentMutation.mutate({
+                  postId: p.id,
+                  content,
+                });
+              }}
+            />
+          )}
         </div>
       </CardFooter>
     </Card>

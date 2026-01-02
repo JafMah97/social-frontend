@@ -189,8 +189,8 @@ export interface CompleteYourProfileResponse {
 export interface PostData {
   title?: string | null;
   content?: string | null;
-  image?: string | File | null; 
-  format?: "TEXT" | "IMAGE" | "VIDEO" | string; 
+  image?: string | File | null;
+  format?: "TEXT" | "IMAGE" | "VIDEO" | string;
   postType?: "STANDARD" | "SPONSORED" | string;
   visibility?: "PUBLIC" | "FOLLOWERS_ONLY" | "PRIVATE" | string;
   startsAt?: string | null;
@@ -225,7 +225,7 @@ export interface PostDTO {
   isSponsored: boolean;
 }
 
-/// create post 
+/// create post
 export interface CreatePostResponse {
   success: boolean;
   message: string;
@@ -243,7 +243,7 @@ export interface DeletePostResponse {
   };
 }
 
-///get post by id 
+///get post by id
 
 export interface GetPostByIdResponse {
   success: boolean;
@@ -253,7 +253,7 @@ export interface GetPostByIdResponse {
   };
 }
 
-///like post 
+///like post
 
 export interface LikePostResponse {
   success: boolean;
@@ -277,7 +277,7 @@ export interface ListPostsResponse {
   };
 }
 
-/// save post 
+/// save post
 
 export interface SavePostResponse {
   success: boolean;
@@ -308,7 +308,6 @@ export interface SavedPostsResponse {
   };
 }
 
-
 ///unlike post
 export interface UnlikePostResponse {
   success: boolean;
@@ -318,7 +317,7 @@ export interface UnlikePostResponse {
   };
 }
 
-/// unsave post 
+/// unsave post
 export interface UnsavePostResponse {
   success: boolean;
   message: string;
@@ -327,7 +326,7 @@ export interface UnsavePostResponse {
   };
 }
 
-/// update post 
+/// update post
 
 export interface UpdatePostResponse {
   success: boolean;
@@ -337,6 +336,127 @@ export interface UpdatePostResponse {
   };
 }
 
+// comments type
+export interface CreateCommentData {
+  postId: string;
+  content: string;
+}
+
+export interface CreateCommentResponse {
+  success: boolean;
+  message: string;
+  data: CommentData;
+}
+
+export interface CommentData {
+  commentId: string;
+  postId: string;
+  content: string;
+  userId: string;
+  username: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  likes: number;
+}
+
+/// delete comment
+export interface DeleteCommentResponse {
+  success: boolean;
+  message: string;
+  data: DeleteCommentData;
+}
+
+export interface DeleteCommentData {
+  commentId: string;
+  postId: string;
+  deletedAt: string; // ISO timestamp
+}
+
+/// update comment
+
+export interface UpdateCommentData {
+  postId: string;
+  content: string;
+}
+
+export interface UpdateCommentResponse {
+  success: boolean;
+  message: string;
+  data: UpdatedCommentData;
+}
+
+export interface UpdatedCommentData {
+  commentId: string;
+  postId: string;
+  content: string;
+  userId: string;
+  updatedAt: string; // ISO timestamp
+  createdAt: string; // ISO timestamp
+}
+
+export interface likeCommentData {
+  commentId: string;
+}
+
+export interface LikeCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    commentId: string;
+    likesCount: number;
+    isLiked: boolean;
+  };
+}
+
+export interface  UnlikeCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    commentId: string;
+    likesCount: number;
+  };
+}
+
+export interface UnlikeCommentData {
+  commentId: string;
+}
 
 
+export interface ListCommentsResponse {
+  success: boolean;
+  data: {
+    comments: CommentItem[];
+    pagination: PaginationInfo;
+  };
+}
 
+export interface CommentItem {
+  id: string;
+  postId: string;
+  authorId: string;
+  content: string;
+  authorUsername: string;
+  authorImage: string;
+  isFlagged: boolean;
+  isDeleted: boolean;
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
+  author: CommentAuthor;
+  likesCount: number;
+  isLiked: boolean;
+}
+
+export interface CommentAuthor {
+  id: string;
+  username: string;
+  profileImage: string;
+  fullName: string;
+}
+
+export interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}

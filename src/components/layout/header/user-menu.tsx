@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import CustomAlertDialog from "../custom/alert-dialog";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function UserMenu({
   lang,
@@ -105,14 +107,24 @@ export default function UserMenu({
       </DropdownMenu>
 
       <CustomAlertDialog
-        isMobile={isMobile}
-        isPending={logoutMutation.isPending}
+        trigger={
+          <Button
+            variant="ghost"
+            className={`h-9 px-2 md:px-3 cursor-pointer bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-200 shadow-sm rounded-lg ${
+              isMobile ? "w-full" : ""
+            }`}
+            aria-label="logout"
+            disabled={logoutMutation.isPending}
+          >
+            {logoutMutation.isPending ? <Spinner /> : dict.logout}
+          </Button>
+        }
         title={dict.title}
         description={dict.description}
         cancelText={dict.cancelText}
         continueText={dict.logout}
-        triggerText={dict.logout}
         onContinue={logoutHandler}
+        isPending={logoutMutation.isPending}
       />
     </div>
   );

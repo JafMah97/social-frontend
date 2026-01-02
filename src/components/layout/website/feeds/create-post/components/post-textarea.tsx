@@ -29,7 +29,7 @@ export default function PostTextarea({
         value={value}
         onChange={onChange}
         placeholder={dict.text}
-        className={`min-h-24 md:min-h-28 border-0 p-4 text-lg resize-none bg-transparent 
+        className={`min-h-18 md:min-h-20 border-0 p-4 text-lg resize-none bg-transparent 
           placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:outline-none break-all
           ${shake ? "animate-shake" : ""}
         `}

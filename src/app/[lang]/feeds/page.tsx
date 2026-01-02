@@ -3,7 +3,7 @@ import Posts from "@/components/layout/website/feeds/posts/posts";
 
 export default async function FeedsPage() {
   return (
-    <div className="home-image">
+    <div className="home-image bg-fixed">
       <div className="backdrop-blur-xl bg-background/40">
         <div className="container max-w-5xl mx-auto">
           <div className=" min-h-screen overflow-visible py-4 m-4 mt-0 mb-0">

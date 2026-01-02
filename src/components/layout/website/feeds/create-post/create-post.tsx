@@ -37,12 +37,11 @@ export default function CreatePost() {
       setError("");
       setPostContent("");
       toast.success(dict.toast.success);
-      removeFile(files[0].id);
+      if (files[0]) removeFile(files[0].id);
       posts.refetch();
     },
     onError: (error) => {
       setError(error.error.message);
-      console.log(error);
       toast.error(dict.toast.error);
     },
   });
@@ -77,15 +76,13 @@ export default function CreatePost() {
     files.forEach((f) => removeFile(f.id));
   };
 
-  // ❗ Correct conditional rendering
-  if (!user.data?.success) {
-    return <></>;
-  }
+  if (!user.data?.success) return null;
+
+  const fileErrors = Array.isArray(errors) ? errors : [];
 
   return (
     <div className="rounded-xl bg-background p-4 md:p-6 shadow-sm">
       <div className="flex gap-3 md:gap-4">
-        {/* Avatar */}
         {user.data?.data.profileImage && (
           <CustomAvatar
             src={user.data.data.profileImage}
@@ -93,8 +90,7 @@ export default function CreatePost() {
           />
         )}
 
-        {/* Post editor */}
-        <div className="flex-1 space-y-4">
+        <div className="flex-1">
           <PostTextarea
             value={postContent}
             onChange={handleChange}
@@ -105,17 +101,23 @@ export default function CreatePost() {
           />
 
           <input {...getInputProps()} className="hidden" aria-hidden />
-          <div className="h-5 text-red-500">
-            {errors} {error}
-          </div>
 
-          <div className="border-t" />
+          <div className="text-red-500 text-sm my-2 h-4">
+          {(fileErrors.length > 0 || error) && (
+            <>
+              {fileErrors.map((err, i) => (
+                <div key={i}>{err}</div>
+              ))}
+              {error && <div>{error}</div>}
+              </>
+            )}
+            </div>
 
           <PostActionBar
             openFileDialog={openFileDialog}
             onClear={clearAll}
-            canClear={postContent ? true : files.length > 0}
-            canPost={postContent.trim() ? true : files.length > 0}
+            canClear={postContent.length > 0 || files.length > 0}
+            canPost={postContent.trim().length > 0 || files.length > 0}
             handlePost={handlePost}
             isPending={isPending}
             setPostContent={setPostContent}

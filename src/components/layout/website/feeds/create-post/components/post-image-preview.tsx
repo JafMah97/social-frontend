@@ -28,12 +28,12 @@ export default function PostImagePreview({
         {files.map((file) => (
           <div
             key={file.id}
-            className="relative aspect-video rounded-md bg-accent overflow-hidden"
+            className="relative rounded-md flex justify-center items-center bg-accent overflow-hidden"
           >
             <Link
               href={file.preview || ""}
               target="_blank"
-              className="block w-full h-full"
+              className="block w-[150px] h-[200px]"
             >
               <Image
                 alt={file.file.name}
