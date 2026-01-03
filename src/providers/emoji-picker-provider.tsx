@@ -14,14 +14,13 @@ import { Spinner } from "@/components/ui/spinner";
 import { useTheme } from "next-themes";
 import { XIcon } from "lucide-react";
 
-// Lazy-load the emoji picker so it loads ONLY when opened
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
   ssr: false,
 });
-const  previewConfig = {
-  
-  showPreview: false
-}
+
+const previewConfig = {
+  showPreview: false,
+};
 
 type EmojiCallback = (emoji: string) => void;
 
@@ -34,7 +33,7 @@ const EmojiPickerContext = createContext<EmojiPickerContextType | null>(null);
 export function EmojiPickerProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [callback, setCallback] = useState<EmojiCallback | null>(null);
-  const {resolvedTheme} = useTheme()
+  const { resolvedTheme } = useTheme();
 
   const openEmojiPicker = useCallback((cb: EmojiCallback) => {
     setCallback(() => cb);
@@ -48,7 +47,7 @@ export function EmojiPickerProvider({ children }: { children: ReactNode }) {
   const handleSelect = useCallback(
     (emojiData: EmojiClickData) => {
       callback?.(emojiData.emoji);
-      // ❗ DO NOT CLOSE — user must close manually
+      // Keep open until user closes manually
     },
     [callback]
   );
@@ -63,19 +62,30 @@ export function EmojiPickerProvider({ children }: { children: ReactNode }) {
           onClick={closeEmojiPicker}
         >
           <div
-            className="bg-background p-3 rounded-xl shadow-xl relative"
+            className="bg-background rounded-xl shadow-xl relative p-4 sm:p-5"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
-            <button
-              onClick={closeEmojiPicker}
-              className="absolute top-0 w-full right-2 text-muted-foreground hover:text-foreground"
-            >
-              <XIcon   className="p-2 w-10 h-10"/>
-            </button>
+            {/* Header row */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                Pick an emoji
+              </span>
+              <button
+                onClick={closeEmojiPicker}
+                className="flex items-center justify-center rounded-full hover:bg-foreground/10 transition p-1"
+              >
+                <XIcon className="w-5 h-5" />
+              </button>
+            </div>
 
-            <Suspense fallback={<Spinner />}>
-              <div className="rounded-xl p-2">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center p-8">
+                  <Spinner />
+                </div>
+              }
+            >
+              <div className="rounded-xl">
                 <EmojiPicker
                   searchDisabled
                   onEmojiClick={handleSelect}

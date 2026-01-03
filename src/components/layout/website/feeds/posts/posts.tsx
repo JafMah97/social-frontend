@@ -1,14 +1,14 @@
 "use client";
 
 import { useListPosts } from "@/hooks/api-hooks/post-hooks";
-import PostCard from "./post-card";
+import PostCard from "./components/post-card";
 import { Spinner } from "@/components/ui/spinner";
 import { Inbox } from "lucide-react";
 import { useTranslation } from "@/providers/translation-provider";
 
 export default function Posts() {
   const { data: posts, isPending } = useListPosts(1, 10);
-  const dict = useTranslation().feedsPage.post
+  const dict = useTranslation().feedsPage.post;
 
   if (isPending) {
     return (
@@ -23,10 +23,10 @@ export default function Posts() {
         <div className="bg-primary p-4 rounded-full mb-4">
           <Inbox className="h-10 w-10 text-background" />
         </div>
-        <h2 className="text-xl font-semibold text-foreground">{dict.noPosts}</h2>
-        <p className="text-muted-foreground mt-1">
-          {dict.newPostsAppear}
-        </p>
+        <h2 className="text-xl font-semibold text-foreground">
+          {dict.noPosts}
+        </h2>
+        <p className="text-muted-foreground mt-1">{dict.newPostsAppear}</p>
       </div>
     );
   }

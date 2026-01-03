@@ -460,3 +460,9 @@ export interface PaginationInfo {
   hasNext: boolean;
   hasPrev: boolean;
 }
+
+export interface UseCommentsParams {
+  postId: string;
+  page: number;
+  limit?: number;
+}

@@ -11,6 +11,7 @@ import {
   ListCommentsResponse,
   ApiErrorResponse,
   CreateCommentData,
+  UseCommentsParams,
 } from "@/types/api-types";
 
 import {
@@ -48,8 +49,6 @@ export function useCreateComment(
     ...options,
   });
 }
-
-
 
 /**
  * Hook for deleting a comment.
@@ -127,19 +126,20 @@ export function useUnlikeComment(
   });
 }
 
-/**
- * Hook for retrieving comments for a post.
- */
 export function useComments(
-  postId: string,
+  { postId, page, limit = 10 }: UseCommentsParams,
   options?: Omit<
     UseQueryOptions<ListCommentsResponse, ApiErrorResponse>,
     "queryKey" | "queryFn"
   >
 ) {
   return useQuery<ListCommentsResponse, ApiErrorResponse>({
-    queryKey: ["comments", postId],
-    queryFn: () => getComments(postId),
+    queryKey: ["comments", postId, page, limit],
+    queryFn: () => getComments(postId, page, limit),
+
+    enabled: !!postId, 
+
+    placeholderData: (prev) => prev,
     ...options,
   });
 }

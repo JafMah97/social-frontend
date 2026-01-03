@@ -482,6 +482,20 @@
       "month": "{{n}} month ago",
       "years": "{{n}} years ago",
       "year": "{{n}} year ago"
+    },
+    "comments":{
+      "noComments":"No comments yet",
+      "commentInput":{
+        "placeholder": "Write a comment...",
+        "toast":{
+          "success":"Your comment was posted successfully.",
+          "error":"Something went wrong. Please try again."
+        }
+      },
+      "commentMenu":{
+        "edit": "Edit",
+        "delete": "Delete"
+      }
     }
   }
 }

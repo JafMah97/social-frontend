@@ -17,7 +17,7 @@ import { apiRequest } from "./api-request";
 export const createComment = (data: CreateCommentData, lang?: Lang) =>
   apiRequest<CreateCommentResponse, CreateCommentData>(
     "post",
-    `/comment/create`,
+    `/comments/create`,
     data,
     {
       withCredentials: true,
@@ -28,7 +28,7 @@ export const createComment = (data: CreateCommentData, lang?: Lang) =>
 export const deleteComment = (data: DeleteCommentData, lang?: Lang) =>
   apiRequest<DeleteCommentResponse, DeleteCommentData>(
     "delete",
-    `/comment/delete`,
+    `/comments/delete`,
     data,
     {
       withCredentials: true,
@@ -39,7 +39,7 @@ export const deleteComment = (data: DeleteCommentData, lang?: Lang) =>
 export const updateComment = (data: UpdateCommentData, lang?: Lang) =>
   apiRequest<UpdateCommentResponse, UpdateCommentData>(
     "put",
-    `/comment/edit`,
+    `/comments/edit`,
     data,
     {
       withCredentials: true,
@@ -50,7 +50,7 @@ export const updateComment = (data: UpdateCommentData, lang?: Lang) =>
 export const LikeComment = (data: likeCommentData, lang?: Lang) =>
   apiRequest<LikeCommentResponse, likeCommentData>(
     "post",
-    `/comment/like`,
+    `/comments/like`,
     data,
     {
       withCredentials: true,
@@ -61,7 +61,7 @@ export const LikeComment = (data: likeCommentData, lang?: Lang) =>
 export const unlikeComment = (data: UnlikeCommentData, lang?: Lang) =>
   apiRequest<UnlikeCommentResponse, UnlikeCommentData>(
     "post",
-    `/comment/unlike`,
+    `/comments/unlike`,
     data,
     {
       withCredentials: true,

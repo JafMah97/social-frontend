@@ -488,6 +488,20 @@
       "month": "منذ {{n}} شهر",
       "years": "منذ {{n}} سنة",
       "year": "منذ {{n}} سنة"
+    },
+    "comments": {
+      "noComments": "لا يوجد تعليقات",
+      "commentInput": {
+        "placeholder": "اكتب تعليقًا...",
+        "toast": {
+          "success": "تم نشر تعليقك بنجاح.",
+          "error": "حدث خطأ ما. حاول مرة أخرى."
+        }
+      },
+      "commentMenu": {
+        "edit": "تعديل",
+        "delete": "حذف"
+      }
     }
   }
 }

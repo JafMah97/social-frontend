@@ -11,25 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Bookmark, EllipsisVertical, Heart, MessageCircle } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Bookmark, Heart, MessageCircle } from "lucide-react";
+
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
-import CommentSection from "./comment-section";
+import CommentSection from "../../comments/comment-section";
 import { PostDTO } from "@/types/api-types";
 import { usePostActions } from "@/hooks/api-hooks/use-post-actions";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
-import CustomAlertDialog from "@/components/layout/custom/alert-dialog";
 import { useTranslation } from "@/providers/translation-provider";
 import { useTimeAgo } from "@/hooks/use-time-ago";
-import { Spinner } from "@/components/ui/spinner";
-import {
-  useComments,
-  useCreateComment,
-} from "@/hooks/api-hooks/comments-hooks";
+import PostActionsMenu from "./post-action-menu";
+import { useCommentsPagination } from "@/hooks/api-hooks/use-comments-pagination";
 
 interface PostCardProps {
   post: PostDTO;
@@ -40,6 +32,10 @@ export default function PostCard({ post }: PostCardProps) {
 
   const { data } = useCurrentLoggedUser();
   const dictPost = useTranslation().feedsPage.post;
+
+  // Prevent undefined postId from triggering the query
+  const { comments, isLoading, isFetchingMore, loadMore, hasMore } =
+    useCommentsPagination(post.id,showComments);
 
   const {
     post: p,
@@ -56,20 +52,6 @@ export default function PostCard({ post }: PostCardProps) {
   } = usePostActions(post);
 
   const timeAgo = useTimeAgo(p.createdAt);
-
-  const {
-    data: commentsData,
-    isLoading: isCommentsLoading,
-    refetch: refetchComments,
-  } = useComments(p.id, {
-    enabled: showComments,
-  });
-
-  const createCommentMutation = useCreateComment({
-    onSuccess: () => {
-      refetchComments();
-    },
-  });
 
   return (
     <Card className="bg-background gap-0 border-none p-4 my-4">
@@ -91,49 +73,11 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </div>
 
-        <Popover>
-          <PopoverTrigger className="text-xs cursor-pointer">
-            <EllipsisVertical size={20} />
-          </PopoverTrigger>
-
-          <PopoverContent className="text-xs w-40 p-2">
-            {data?.data?.id === p.author.id ? (
-              <div className="flex flex-col gap-2">
-                <CustomAlertDialog
-                  trigger={
-                    <Button variant="ghost" disabled={isDeleting}>
-                      {isDeleting ? <Spinner /> : dictPost.delete}
-                    </Button>
-                  }
-                  title={dictPost.deleteTitle}
-                  description={dictPost.deleteDescription}
-                  continueText={dictPost.deleteConfirm}
-                  cancelText={dictPost.deleteCancel}
-                  onContinue={deletePost}
-                  isPending={isDeleting}
-                />
-
-                <Button variant="ghost" size="sm">
-                  {dictPost.edit}
-                </Button>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Button variant="ghost" size="sm">
-                  {dictPost.report}
-                </Button>
-
-                <Button variant="ghost" size="sm">
-                  {dictPost.hide}
-                </Button>
-
-                <Button variant="ghost" size="sm">
-                  {dictPost.share}
-                </Button>
-              </div>
-            )}
-          </PopoverContent>
-        </Popover>
+        <PostActionsMenu
+          isAuthor={data?.data?.id === p.author.id}
+          deletePost={deletePost}
+          isDeleting={isDeleting}
+        />
       </CardHeader>
 
       {/* Content */}
@@ -171,7 +115,7 @@ export default function PostCard({ post }: PostCardProps) {
             </div>
           </div>
 
-          <div className="mt-2 py-2 flex border-t border-foreground/20 flex-row justify-evenly">
+          <div className="mt-2 py-2 flex border-t border-b border-foreground/20 flex-row justify-evenly">
             <Button
               variant="ghost"
               className={`cursor-pointer ${liked ? "text-red-600" : ""}`}
@@ -203,14 +147,12 @@ export default function PostCard({ post }: PostCardProps) {
 
           {showComments && (
             <CommentSection
-              comments={commentsData?.data.comments}
-              isLoading={isCommentsLoading}
-              onCreateComment={(content) => {
-                createCommentMutation.mutate({
-                  postId: p.id,
-                  content,
-                });
-              }}
+              comments={comments}
+              isLoading={isLoading}
+              postId={post.id}
+              fetchNextPage={loadMore}
+              hasNextPage={hasMore}
+              isFetchingNextPage={isFetchingMore}
             />
           )}
         </div>
