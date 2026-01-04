@@ -121,16 +121,25 @@ export function useUnsavePost(
 /**
  * Hook for listing posts with pagination and optional filters.
  */
-export function useListPosts(
-  page: number,
-  limit: number,
-  authorId?: string,
-  format?: string,
-  options?: UseQueryOptions<ListPostsResponse, ApiErrorResponse>
+export function usePosts(
+  {
+    page,
+    limit,
+    authorId,
+    format,
+  }: { page: number; limit?: number; authorId?: string; format?: string },
+  options?: Omit<
+    UseQueryOptions<ListPostsResponse, ApiErrorResponse>,
+    "queryKey" | "queryFn"
+  >
 ) {
   return useQuery<ListPostsResponse, ApiErrorResponse>({
     queryKey: ["posts", page, limit, authorId, format],
-    queryFn: () => listPostsApi(page, limit, authorId, format),
+    queryFn: () => listPostsApi(page, limit as number, authorId, format),
+
+    enabled: page > 0, // same idea as !!postId
+
+    placeholderData: (prev) => prev,
     ...options,
   });
 }

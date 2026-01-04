@@ -1,23 +1,47 @@
 "use client";
 
-import { useListPosts } from "@/hooks/api-hooks/post-hooks";
+import { useRef, useEffect } from "react";
 import PostCard from "./components/post-card";
 import { Spinner } from "@/components/ui/spinner";
 import { Inbox } from "lucide-react";
 import { useTranslation } from "@/providers/translation-provider";
+import { usePostsPagination } from "@/hooks/api-hooks/use-posts-pagination";
 
 export default function Posts() {
-  const { data: posts, isPending } = useListPosts(1, 10);
+  const { posts, isLoading, isFetchingMore, loadMore, hasMore } =
+    usePostsPagination(true,4); // showFeed → true for now
+
   const dict = useTranslation().feedsPage.post;
 
-  if (isPending) {
+  // Sentinel div for infinite scroll
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    console.log("triggerd")
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    });
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
+
+  if (isLoading) {
     return (
       <div className="flex justify-center py-10">
         <Spinner className="w-10 h-10" />
       </div>
     );
   }
-  if (!isPending && posts?.data.posts.length === 0) {
+
+  if (!isLoading && posts?.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center text-gray-600">
         <div className="bg-primary p-4 rounded-full mb-4">
@@ -30,13 +54,24 @@ export default function Posts() {
       </div>
     );
   }
+
   return (
     <div>
-      {posts?.data.posts.map((post) => (
+      {posts?.map((post) => (
         <div key={post.id}>
           <PostCard post={post} />
         </div>
       ))}
+
+      {/* Infinite scroll sentinel */}
+      <div ref={loadMoreRef} className="h-10" />
+
+      {/* Loading spinner for next pages */}
+      {isFetchingMore && (
+        <div className="flex justify-center py-6">
+          <Spinner className="w-8 h-8" />
+        </div>
+      )}
     </div>
   );
 }

@@ -5,17 +5,17 @@ import {
   useSavePost,
   useUnsavePost,
   useDeletePost,
-  useListPosts,
 } from "@/hooks/api-hooks/post-hooks";
 import { PostDTO } from "@/types/api-types";
 import { toast } from "sonner";
 import { useTranslation } from "@/providers/translation-provider";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function usePostActions(post: PostDTO) {
-  const dictToast = useTranslation().feedsPage.toast
+  const dictToast = useTranslation().feedsPage.toast;
   const [localPost, setLocalPost] = useState(post);
 
-  const posts = useListPosts(1, 10);
+  const queryClient = useQueryClient();
 
   const likeMutation = useLikePost({
     onMutate: async () => {
@@ -112,7 +112,9 @@ export function usePostActions(post: PostDTO) {
   const deleteMutation = useDeletePost({
     onSuccess: () => {
       toast.success(dictToast.deleteSuccess);
-      posts.refetch();
+
+      // ⭐ Refresh all posts lists (infinite feed, profile feed, etc.)
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: () => toast.error(dictToast.deleteError),
   });

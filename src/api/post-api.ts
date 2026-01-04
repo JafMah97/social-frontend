@@ -131,8 +131,8 @@ export const listPostsApi = (
     withCredentials: true,
     lang: lang || "en",
     params: {
-      page,
-      limit,
+      page: page,
+      limit: limit,
       ...(authorId ? { authorId } : {}),
       ...(format ? { format } : {}),
     },

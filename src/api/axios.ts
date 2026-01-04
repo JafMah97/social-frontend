@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ApiOptions } from "./api-request";
 
 const baseURL =
   process.env.NODE_ENV === "production"
@@ -15,15 +16,17 @@ interface RequestOptions {
   headers?: Record<string, string>;
 }
 
-// GET
+//GET
 export async function getRequest<T>(
   endPoint: string,
-  options?: RequestOptions
+  options?: ApiOptions
 ): Promise<T> {
   const response = await api.get<T>(endPoint, {
     withCredentials: options?.withCredentials ?? false,
     headers: {
-      ...options?.headers},
+      ...options?.headers,
+    },
+    params: options?.params, // <-- pass query params through
   });
   return response.data;
 }

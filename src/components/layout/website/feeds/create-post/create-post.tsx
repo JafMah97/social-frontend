@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useRef } from "react";
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
 import { useTranslation } from "@/providers/translation-provider";
@@ -9,9 +10,10 @@ import PostTextarea from "./components/post-textarea";
 import PostImagePreview from "./components/post-image-preview";
 import PostActionBar from "./components/post-action-bar";
 import { PostData } from "@/types/api-types";
-import { useCreatePost, useListPosts } from "@/hooks/api-hooks/post-hooks";
+import { useCreatePost } from "@/hooks/api-hooks/post-hooks";
 import { toast } from "sonner";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePost() {
   const [postContent, setPostContent] = useState("");
@@ -29,16 +31,19 @@ export default function CreatePost() {
       multiple: false,
     });
 
-  const posts = useListPosts(1, 10);
   const user = useCurrentLoggedUser();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useCreatePost({
     onSuccess: () => {
       setError("");
       setPostContent("");
       toast.success(dict.toast.success);
+
       if (files[0]) removeFile(files[0].id);
-      posts.refetch();
+
+      // ⭐ Refetch posts everywhere in the app
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: (error) => {
       setError(error.error.message);
@@ -103,15 +108,15 @@ export default function CreatePost() {
           <input {...getInputProps()} className="hidden" aria-hidden />
 
           <div className="text-red-500 text-sm my-2 h-4">
-          {(fileErrors.length > 0 || error) && (
-            <>
-              {fileErrors.map((err, i) => (
-                <div key={i}>{err}</div>
-              ))}
-              {error && <div>{error}</div>}
+            {(fileErrors.length > 0 || error) && (
+              <>
+                {fileErrors.map((err, i) => (
+                  <div key={i}>{err}</div>
+                ))}
+                {error && <div>{error}</div>}
               </>
             )}
-            </div>
+          </div>
 
           <PostActionBar
             openFileDialog={openFileDialog}
