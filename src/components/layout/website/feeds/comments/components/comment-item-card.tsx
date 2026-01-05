@@ -22,13 +22,9 @@ export default function CommentItemCard({
   onEdit,
   onDelete,
 }: CommentItemCardProps) {
-
-
   const timeAgo = useTimeAgo(comment.createdAt);
+  const { data } = useCurrentLoggedUser();
 
-  const {data} = useCurrentLoggedUser();
-
-  // Show more / less
   const [expanded, setExpanded] = useState(false);
   const MAX_LENGTH = 160;
   const isLong = comment.content.length > MAX_LENGTH;
@@ -38,7 +34,7 @@ export default function CommentItemCard({
     : comment.content.slice(0, MAX_LENGTH);
 
   return (
-    <div className="flex items-start gap-3 bg-primary/10 p-3 rounded-2xl w-full">
+    <div className="flex gap-3 bg-primary/10 p-3 rounded-2xl w-full">
       {/* Avatar */}
       <Avatar className="w-10 h-10">
         <AvatarImage src={comment.authorImage || ""} />
@@ -47,16 +43,26 @@ export default function CommentItemCard({
         </AvatarFallback>
       </Avatar>
 
-      {/* Middle content */}
+      {/* Content */}
       <div className="flex flex-col flex-1">
-        <div className="flex items-center gap-2">
-          <span className="text-md font-semibold">
-            @{comment.author.username}
-          </span>
-          <span className="text-[10px] text-muted-foreground">{timeAgo}</span>
+        {/* ✅ Header row: username + time + actions menu */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-md font-semibold">
+              @{comment.author.username}
+            </span>
+            <span className="text-[10px] text-muted-foreground">{timeAgo}</span>
+          </div>
+
+          <CommentActionsMenu
+            isAuthor={comment.authorId === data?.data.id}
+            onEdit={() => onEdit?.(comment)}
+            onDelete={() => onDelete?.(comment.id)}
+          />
         </div>
 
-        <span className="text-md wrap-break-word whitespace-pre-wrap">
+        {/* ✅ Body text now always starts below header */}
+        <span className="text-md break-all">
           {displayedText}
           {isLong && !expanded && "..."}
         </span>
@@ -69,32 +75,28 @@ export default function CommentItemCard({
             {expanded ? "Show less" : "Show more"}
           </button>
         )}
-      </div>
 
-      {/* Right column */}
-      <div className="flex flex-row items-center gap-2">
-        <span className="text-[10px] text-muted-foreground">
-          {comment.likesCount}
-        </span>
-        <Button
-          variant={"ghost"}
-          onClick={() => onLike?.(comment.id)}
-          className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-foreground/20 transition cursor-pointer"
-        >
-          <Heart
-            size={20}
-            className={
-              comment.isLiked
-                ? "fill-red-500 text-red-500"
-                : "text-muted-foreground"
-            }
-          />
-        </Button>
-        <CommentActionsMenu
-          isAuthor={comment.authorId === data?.data.id}
-          onEdit={() => onEdit?.(comment)}
-          onDelete={() => onDelete?.(comment.id)}
-        />
+        {/* Footer: likes bottom-left */}
+        <div className="flex items-center gap-2 mt-2 ">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onLike?.(comment.id)}
+            className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-foreground/20 transition cursor-pointer"
+          >
+            <Heart
+              size={16}
+              className={
+                comment.isLiked
+                  ? "fill-red-500 text-red-500"
+                  : "text-muted-foreground"
+              }
+            />
+          </Button>
+            <span className="text-sm text-primary">
+              {comment.likesCount}
+            </span>
+        </div>
       </div>
     </div>
   );

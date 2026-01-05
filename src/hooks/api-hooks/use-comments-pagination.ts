@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getComments } from "@/api/comment-api";
 
-export function useCommentsPagination(postId: string ,enabled: boolean, limit = 10) {
+export function useCommentsPagination(postId: string ,enabled: boolean, limit :number) {
   const query = useInfiniteQuery({
     queryKey: ["comments", postId],
     initialPageParam: 1,

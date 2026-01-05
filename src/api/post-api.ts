@@ -153,23 +153,42 @@ export const savedPostsApi = (page: number, limit: number, lang?: Lang) =>
     params: { page, limit },
   });
 
-/**
- * Updates an existing post by ID.
- * Requires authentication; only the post owner can update.
- * Supports multipart form-data for image upload or string URL.
- *
- * @param postId - Unique identifier of the post
- * @param data - PostData object with fields to update
- * @param lang - Optional language override for error messages
- */
-export const updatePostApi = (postId: string, data: PostData, lang?: Lang) =>
-  apiRequest<UpdatePostResponse, PostData>(
+export const updatePostApi = (postId: string, data: PostData, lang?: Lang) => {
+  // If we have a File, build FormData
+  if (data.image instanceof File) {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formData.append(key, value);
+      }
+      if (value === null) {
+        // optional: you can skip appending, backend will treat missing as null if JSON used
+        formData.append(key, "null"); // only if you want sentinel
+      }
+    });
+
+    return apiRequest<UpdatePostResponse, FormData>(
+      "put",
+      `/posts/update/${postId}`,
+      formData,
+      {
+        withCredentials: true,
+        // ❌ don't set Content-Type manually, browser will handle it
+        lang: lang || "en",
+      }
+    );
+  }
+
+  // Otherwise send JSON (handles string URL or null cleanly)
+  return apiRequest<UpdatePostResponse, PostData>(
     "put",
     `/posts/update/${postId}`,
     data,
     {
       withCredentials: true,
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { "Content-Type": "application/json" },
       lang: lang || "en",
     }
   );
+};
+

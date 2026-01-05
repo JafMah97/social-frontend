@@ -5,8 +5,9 @@ import {
   useSavePost,
   useUnsavePost,
   useDeletePost,
+  useUpdatePost, 
 } from "@/hooks/api-hooks/post-hooks";
-import { PostDTO } from "@/types/api-types";
+import { PostDTO, PostData } from "@/types/api-types";
 import { toast } from "sonner";
 import { useTranslation } from "@/providers/translation-provider";
 import { useQueryClient } from "@tanstack/react-query";
@@ -112,11 +113,28 @@ export function usePostActions(post: PostDTO) {
   const deleteMutation = useDeletePost({
     onSuccess: () => {
       toast.success(dictToast.deleteSuccess);
-
-      // ⭐ Refresh all posts lists (infinite feed, profile feed, etc.)
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: () => toast.error(dictToast.deleteError),
+  });
+
+  const updateMutation = useUpdatePost({
+    onMutate: async () => {
+
+    },
+    onSuccess: (updated) => {
+      toast.success(dictToast.updateSuccess ?? "Post updated successfully");
+      setLocalPost((prev) => ({
+        ...prev,
+        ...updated.data.post,
+      }));
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: () => {
+      toast.error(dictToast.updateError ?? "Failed to update post");
+      // optionally rollback
+      setLocalPost(post);
+    },
   });
 
   return {
@@ -130,9 +148,12 @@ export function usePostActions(post: PostDTO) {
     save: () => saveMutation.mutate(localPost.id),
     unsave: () => unsaveMutation.mutate(localPost.id),
     deletePost: () => deleteMutation.mutate(localPost.id),
+    updatePost: (data: PostData) =>
+      updateMutation.mutate({ postId: localPost.id, data }),
 
     isLiking: likeMutation.isPending || unlikeMutation.isPending,
     isSaving: saveMutation.isPending || unsaveMutation.isPending,
     isDeleting: deleteMutation.isPending,
+    isUpdating: updateMutation.isPending,
   };
 }

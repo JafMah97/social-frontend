@@ -1,16 +1,17 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "@/providers/translation-provider";
-import {  ChangeEventHandler, RefObject } from "react";
+import { ChangeEventHandler, RefObject } from "react";
 
 interface PostTextAreaProps {
   value: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
-  textareaRef: RefObject<null>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>; // <-- allow null
   shake: boolean;
   charactersRemaining: number;
   maxChars: number;
 }
+
 
 export default function PostTextarea({
   value,
@@ -19,8 +20,8 @@ export default function PostTextarea({
   shake,
   charactersRemaining,
   maxChars,
-}:PostTextAreaProps) {
-  const dict = useTranslation().createPost.placeholder
+}: PostTextAreaProps) {
+  const dict = useTranslation().createPost.placeholder;
 
   return (
     <div className="space-y-2">
@@ -29,7 +30,7 @@ export default function PostTextarea({
         value={value}
         onChange={onChange}
         placeholder={dict.text}
-        className={`min-h-18 md:min-h-20 border-0 p-4 text-lg resize-none bg-transparent 
+        className={`min-h-18 md:min-h-20 border-0 p-4 text-lg resize-none bg-primary/10 
           placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:outline-none break-all
           ${shake ? "animate-shake" : ""}
         `}

@@ -35,7 +35,7 @@ export default function PostCard({ post }: PostCardProps) {
 
   // Prevent undefined postId from triggering the query
   const { comments, isLoading, isFetchingMore, loadMore, hasMore } =
-    useCommentsPagination(post.id,showComments);
+    useCommentsPagination(post.id,showComments,5);
 
   const {
     post: p,
@@ -77,6 +77,7 @@ export default function PostCard({ post }: PostCardProps) {
           isAuthor={data?.data?.id === p.author.id}
           deletePost={deletePost}
           isDeleting={isDeleting}
+          post={post}
         />
       </CardHeader>
 
@@ -101,7 +102,6 @@ export default function PostCard({ post }: PostCardProps) {
       <CardFooter className="px-0 pt-4 flex justify-between text-sm text-muted-foreground">
         <div className="flex flex-col w-full">
           <div className="px-2 flex flex-row justify-between items-center w-full">
-            <div className="flex -space-x-2 min-h-8 items-center"></div>
 
             <div className="flex gap-3">
               <span>
@@ -133,7 +133,7 @@ export default function PostCard({ post }: PostCardProps) {
             >
               <MessageCircle /> {dictPost.comment}
             </Button>
-
+        
             <Button
               variant="ghost"
               className={`cursor-pointer${saved ? "text-blue-600" : ""}`}

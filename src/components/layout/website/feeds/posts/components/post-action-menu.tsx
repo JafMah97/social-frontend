@@ -10,17 +10,21 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import CustomAlertDialog from "@/components/layout/custom/alert-dialog";
 import { useTranslation } from "@/providers/translation-provider";
+import PostEditDialog from "./post-edit-dialog";
+import { PostDTO } from "@/types/api-types";
 
 interface PostActionsMenuProps {
   isAuthor: boolean;
   deletePost: () => void;
   isDeleting: boolean;
+  post:PostDTO
 }
 
 export default function PostActionsMenu({
   isAuthor,
   deletePost,
   isDeleting,
+  post
 }: PostActionsMenuProps) {
   const dictPost = useTranslation().feedsPage.post
   return (
@@ -30,44 +34,27 @@ export default function PostActionsMenu({
       </PopoverTrigger>
 
       <PopoverContent className="text-xs w-30 p-2">
-        {isAuthor ? (
-          <div className="flex flex-col gap-2">
-            <Button variant="ghost" size="sm" className="justify-start cursor-pointer">
-              {dictPost.edit}
-            </Button>
-            <CustomAlertDialog
-              trigger={
-                <Button
-                  variant="ghost"
-                  disabled={isDeleting}
-                  className="justify-start text-red-500 cursor-pointer"
-                >
-                  {isDeleting ? <Spinner /> : dictPost.delete}
-                </Button>
-              }
-              title={dictPost.deleteTitle}
-              description={dictPost.deleteDescription}
-              continueText={dictPost.deleteConfirm}
-              cancelText={dictPost.deleteCancel}
-              onContinue={deletePost}
-              isPending={isDeleting}
-            />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <Button variant="ghost" size="sm">
-              {dictPost.report}
-            </Button>
-
-            <Button variant="ghost" size="sm">
-              {dictPost.hide}
-            </Button>
-
-            <Button variant="ghost" size="sm">
-              {dictPost.share}
-            </Button>
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          <PostEditDialog isAuthor p={post} />
+          
+          <CustomAlertDialog
+            trigger={
+              <Button
+                variant="ghost"
+                disabled={isDeleting || !isAuthor}
+                className="justify-start text-red-500 cursor-pointer"
+              >
+                {isDeleting ? <Spinner /> : dictPost.delete}
+              </Button>
+            }
+            title={dictPost.deleteTitle}
+            description={dictPost.deleteDescription}
+            continueText={dictPost.deleteConfirm}
+            cancelText={dictPost.deleteCancel}
+            onContinue={deletePost}
+            isPending={isDeleting}
+          />
+        </div>
       </PopoverContent>
     </Popover>
   );

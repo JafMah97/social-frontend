@@ -17,7 +17,6 @@ export default function Posts() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log("triggerd")
     if (!hasMore) return;
 
     const observer = new IntersectionObserver((entries) => {

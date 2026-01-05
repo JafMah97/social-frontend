@@ -446,13 +446,20 @@
       "saveError": "Failed to save post",
       "unsaveError": "Failed to unsave post",
       "deleteSuccess": "Post deleted",
-      "deleteError": "Failed to delete post"
+      "deleteError": "Failed to delete post",
+      "updateSuccess": "Edit Post completed successfully",
+      "updateError": "Something went wrong while editing your post"
     },
     "post": {
       "noPosts":"No Posts Yet ",
       "newPostsAppear":"When new posts appear, they’ll show up here.",
       "delete": "Delete",
-      "edit": "Edit",
+      "edit": {
+        "edit":"Edit",
+        "cancel":"Cancel",
+        "process":"Edit",
+        "title":"Edit Post"
+      },
       "report": "Report Post",
       "hide": "Hide Post",
       "share": "Share",

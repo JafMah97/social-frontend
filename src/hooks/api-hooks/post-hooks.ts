@@ -158,10 +158,6 @@ export function useSavedPosts(
     ...options,
   });
 }
-
-/**
- * Hook for updating a post by ID.
- */
 export function useUpdatePost(
   options?: UseMutationOptions<
     UpdatePostResponse,
@@ -169,11 +165,7 @@ export function useUpdatePost(
     { postId: string; data: PostData }
   >
 ) {
-  return useMutation<
-    UpdatePostResponse,
-    ApiErrorResponse,
-    { postId: string; data: PostData }
-  >({
+  return useMutation({
     mutationFn: ({ postId, data }) => updatePostApi(postId, data),
     ...options,
   });
