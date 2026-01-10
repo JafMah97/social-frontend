@@ -57,6 +57,8 @@ export function useCurrentLoggedUser() {
     retry: false,
     refetchOnWindowFocus: false,
     refetchInterval: false,
+    staleTime:
+      1000 * 60 * 5, // 5 minutes
   });
 }
 

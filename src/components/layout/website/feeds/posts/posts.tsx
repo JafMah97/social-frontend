@@ -8,10 +8,11 @@ import { useTranslation } from "@/providers/translation-provider";
 import { usePostsPagination } from "@/hooks/api-hooks/use-posts-pagination";
 
 export default function Posts() {
-  const { posts, isLoading, isFetchingMore, loadMore, hasMore } =
+  const { posts, isLoading, isFetchingMore, loadMore, hasMore ,isSuccess,isError } =
     usePostsPagination(true,4); // showFeed → true for now
 
   const dict = useTranslation().feedsPage.post;
+  const dictError = useTranslation().errors
 
   // Sentinel div for infinite scroll
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -40,7 +41,7 @@ export default function Posts() {
     );
   }
 
-  if (!isLoading && posts?.length === 0) {
+  if (!isLoading && isSuccess && posts?.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center text-gray-600">
         <div className="bg-primary p-4 rounded-full mb-4">
@@ -50,6 +51,19 @@ export default function Posts() {
           {dict.noPosts}
         </h2>
         <p className="text-muted-foreground mt-1">{dict.newPostsAppear}</p>
+      </div>
+    );
+  }
+
+  if (!isLoading && isError && posts?.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center text-gray-600">
+        <div className="bg-primary p-4 rounded-full mb-4">
+          <Inbox className="h-10 w-10 text-background" />
+        </div>
+        <h2 className="text-xl font-semibold text-foreground">
+          {dictError.networkError}
+        </h2>
       </div>
     );
   }

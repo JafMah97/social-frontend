@@ -4,30 +4,27 @@ import {
   DeleteCommentResponse,
   UpdateCommentData,
   UpdateCommentResponse,
-  likeCommentData,
+  LikeCommentData,
   LikeCommentResponse,
   UnlikeCommentData,
   UnlikeCommentResponse,
-  ListCommentsResponse,
   ApiErrorResponse,
   CreateCommentData,
-  UseCommentsParams,
+  CommentQueryContext,
 } from "@/types/api-types";
 
 import {
   createComment,
   deleteComment,
   updateComment,
-  LikeComment,
+  likeComment,
   unlikeComment,
-  getComments,
+  
 } from "@/api/comment-api";
 
 import {
   useMutation,
   UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
 } from "@tanstack/react-query";
 
 /**
@@ -57,19 +54,17 @@ export function useDeleteComment(
   options?: UseMutationOptions<
     DeleteCommentResponse,
     ApiErrorResponse,
-    DeleteCommentData
+    DeleteCommentData,
+    CommentQueryContext
   >
 ) {
   return useMutation<
     DeleteCommentResponse,
     ApiErrorResponse,
-    DeleteCommentData
-  >({
-    mutationFn: (data) => deleteComment(data),
-    ...options,
-  });
+    DeleteCommentData,
+    CommentQueryContext
+  >({ mutationFn: (data) => deleteComment(data), ...options });
 }
-
 /**
  * Hook for updating a comment.
  */
@@ -77,13 +72,15 @@ export function useUpdateComment(
   options?: UseMutationOptions<
     UpdateCommentResponse,
     ApiErrorResponse,
-    UpdateCommentData
+    UpdateCommentData,
+    CommentQueryContext
   >
 ) {
   return useMutation<
     UpdateCommentResponse,
     ApiErrorResponse,
-    UpdateCommentData
+    UpdateCommentData,
+    CommentQueryContext
   >({
     mutationFn: (data) => updateComment(data),
     ...options,
@@ -97,11 +94,17 @@ export function useLikeComment(
   options?: UseMutationOptions<
     LikeCommentResponse,
     ApiErrorResponse,
-    likeCommentData
+    LikeCommentData,
+    CommentQueryContext
   >
 ) {
-  return useMutation<LikeCommentResponse, ApiErrorResponse, likeCommentData>({
-    mutationFn: (data) => LikeComment(data),
+  return useMutation<
+    LikeCommentResponse,
+    ApiErrorResponse,
+    LikeCommentData,
+    CommentQueryContext
+  >({
+    mutationFn: (data) => likeComment(data),
     ...options,
   });
 }
@@ -113,33 +116,19 @@ export function useUnlikeComment(
   options?: UseMutationOptions<
     UnlikeCommentResponse,
     ApiErrorResponse,
-    UnlikeCommentData
+    UnlikeCommentData,
+    CommentQueryContext
   >
 ) {
   return useMutation<
     UnlikeCommentResponse,
     ApiErrorResponse,
-    UnlikeCommentData
+    UnlikeCommentData,
+    CommentQueryContext
   >({
     mutationFn: (data) => unlikeComment(data),
     ...options,
   });
 }
 
-export function useComments(
-  { postId, page, limit = 10 }: UseCommentsParams,
-  options?: Omit<
-    UseQueryOptions<ListCommentsResponse, ApiErrorResponse>,
-    "queryKey" | "queryFn"
-  >
-) {
-  return useQuery<ListCommentsResponse, ApiErrorResponse>({
-    queryKey: ["comments", postId, page, limit],
-    queryFn: () => getComments(postId, page, limit),
 
-    enabled: !!postId, 
-
-    placeholderData: (prev) => prev,
-    ...options,
-  });
-}

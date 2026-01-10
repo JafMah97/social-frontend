@@ -451,18 +451,19 @@
       "updateError": "Something went wrong while editing your post"
     },
     "post": {
-      "noPosts":"No Posts Yet ",
-      "newPostsAppear":"When new posts appear, they’ll show up here.",
-      "delete": "Delete",
+      "noPosts": "No Posts Yet ",
+      "newPostsAppear": "When new posts appear, they’ll show up here.",
       "edit": {
-        "edit":"Edit",
-        "cancel":"Cancel",
-        "process":"Edit",
-        "title":"Edit Post"
+        "title": "Edit Post",
+        "confrim": "Edit",
+        "cancel": "Cancel"
       },
-      "report": "Report Post",
-      "hide": "Hide Post",
-      "share": "Share",
+      "delete": {
+        "title": "Delete Post",
+        "description": "Are you sure you want to delete this post? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
       "comments": "Comments",
       "likes": "Likes",
       "like": "Like",
@@ -470,11 +471,18 @@
       "comment": "Comment",
       "save": "Save",
       "saved": "Saved",
-      "deleteTitle": "Delete Post",
-      "deleteDescription": "Are you sure you want to delete this post? This action cannot be undone.",
-      "deleteConfirm": "Delete",
-      "deleteCancel": "Cancel"
+      "temp": {
+        "delete":{
+          "main": "Deleting",
+          "desc": "This action cannot be undone"
+        },
+        "edit":{
+          "main": "Editing",
+          "desc":"Please wait while updating"
+        }
+      }
     },
+    
     "timeAgo": {
       "justNow": "just now",
       "minutes": "{{n}} minutes ago",
@@ -490,18 +498,41 @@
       "years": "{{n}} years ago",
       "year": "{{n}} year ago"
     },
-    "comments":{
-      "noComments":"No comments yet",
-      "commentInput":{
-        "placeholder": "Write a comment...",
-        "toast":{
-          "success":"Your comment was posted successfully.",
-          "error":"Something went wrong. Please try again."
+    "comments": {
+      "noComments": "No comments yet",
+      "loadMore": "Load more",
+      "toast": {
+        "create": {
+          "success": "Comment created successfully",
+          "error": "Failed to create comment"
+        },
+        "update": {
+          "success": "Comment updated successfully",
+          "error": "Failed to update comment"
+        },
+        "delete": {
+          "success": "Comment deleted successfully",
+          "error": "Failed to delete comment"
+        },
+        "like": {
+          "error": "Failed to like comment"
+        },
+        "unlike": {
+          "error": "Failed to unlike comment"
         }
       },
-      "commentMenu":{
+      "commentInput": {
+        "placeholder": "Write a comment..."
+      },
+      "commentMenu": {
         "edit": "Edit",
         "delete": "Delete"
+      },
+      "deleteModal": {
+        "title": "Delete Comment",
+        "description": "Are you sure you want to delete this comment? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
       }
     }
   }

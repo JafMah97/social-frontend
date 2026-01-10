@@ -1,58 +1,58 @@
-"use client";
-
-import { CommentItem } from "@/types/api-types";
-import CommentItemCard from "./components/comment-item-card";
-import CommentInput from "./components/comment-input";
-import { Spinner } from "@/components/ui/spinner";
+import { NormalizedComment } from "@/types/api-types";
+import CommentCard from "./components/comment-card";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useTranslation } from "@/providers/translation-provider";
+import CommentInput from "./components/comment-input";
 
 interface CommentSectionProps {
-  comments: CommentItem[];
-  isLoading: boolean;
-  postId: string;
-  fetchNextPage: () => void;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
+  postId:string;
+  comments: NormalizedComment[];
+  isCommentsPending: boolean;
+  loadMoreComments: () => void;
+  hasMoreComments: boolean;
+  isFetchingMoreComments: boolean;
 }
-
 export default function CommentSection({
-  comments,
-  isLoading,
   postId,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
+  comments,
+  isCommentsPending,
+  loadMoreComments,
+  hasMoreComments,
+  isFetchingMoreComments,
 }: CommentSectionProps) {
-  const dict = useTranslation().feedsPage.comments.noComments;
+  const dict = useTranslation().feedsPage.comments;
+  if (isCommentsPending) return (
+    <div className="p-5 flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
 
   return (
-    <div className="w-full pt-5">
-      <div className="flex flex-col justify-center items-center p-2 px-10 space-y-3">
-        {isLoading && <Spinner />}
-
-        {!isLoading && comments.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground">{dict}</p>
-        )}
-
-        {!isLoading &&
-          comments.length > 0 &&
-          comments.map((comment) => (
-            <CommentItemCard key={comment.id} comment={comment} />
-          ))}
-
-        {hasNextPage && (
+    <div className="pt-5 px-5">
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <CommentCard key={comment.id} comment={comment} />
+        ))
+      ) : (
+        <div className="flex justify-center items-center">
+          {dict.noComments}
+        </div>
+      )}
+      {hasMoreComments &&
+        (isFetchingMoreComments ? (
+          <div className="p-5 flex justify-center items-center">
+            <Spinner />
+          </div>
+        ) : (
           <Button
-            variant="ghost"
-            className="mt-4"
-            onClick={fetchNextPage}
-            disabled={isFetchingNextPage}
+            variant="outline"
+            className="w-full my-4"
+            onClick={loadMoreComments}
           >
-            {isFetchingNextPage ? <Spinner /> : "Show more"}
+            {dict.loadMore}
           </Button>
-        )}
-      </div>
-
+        ))}
       <CommentInput postId={postId} />
     </div>
   );

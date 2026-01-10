@@ -1,5 +1,4 @@
 import {
-  PostData,
   CreatePostResponse,
   DeletePostResponse,
   GetPostByIdResponse,
@@ -10,6 +9,8 @@ import {
   ListPostsResponse,
   SavedPostsResponse,
   UpdatePostResponse,
+  UpdatePostData,
+  CreatePostData,
 } from "@/types/api-types";
 import { apiRequest } from "./api-request";
 import { Lang } from "@/utils/translation/dictionary-utils";
@@ -21,8 +22,8 @@ import { Lang } from "@/utils/translation/dictionary-utils";
  * @param data - PostData object containing title, content, image, format, etc.
  * @param lang - Optional language override for error messages
  */
-export const createPostApi = (data: PostData, lang?: Lang) =>
-  apiRequest<CreatePostResponse, PostData>("post", "/posts/create", data, {
+export const createPostApi = (data: CreatePostData, lang?: Lang) =>
+  apiRequest<CreatePostResponse, CreatePostData>("post", "/posts/create", data, {
     withCredentials: true,
     headers: { "Content-Type": "multipart/form-data" },
     lang: lang || "en",
@@ -153,7 +154,7 @@ export const savedPostsApi = (page: number, limit: number, lang?: Lang) =>
     params: { page, limit },
   });
 
-export const updatePostApi = (postId: string, data: PostData, lang?: Lang) => {
+export const updatePostApi = (postId: string, data: UpdatePostData, lang?: Lang) => {
   // If we have a File, build FormData
   if (data.image instanceof File) {
     const formData = new FormData();
@@ -180,7 +181,7 @@ export const updatePostApi = (postId: string, data: PostData, lang?: Lang) => {
   }
 
   // Otherwise send JSON (handles string URL or null cleanly)
-  return apiRequest<UpdatePostResponse, PostData>(
+  return apiRequest<UpdatePostResponse, UpdatePostData>(
     "put",
     `/posts/update/${postId}`,
     data,

@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface CustomAlertDialogProps {
-  trigger: React.ReactNode; // parent provides the button
+  
+  trigger: React.ReactNode;
   title: string;
   description: string;
   cancelText?: string;
@@ -21,6 +22,7 @@ interface CustomAlertDialogProps {
 }
 
 export default function CustomAlertDialog({
+  
   trigger,
   title,
   description,
@@ -42,7 +44,7 @@ export default function CustomAlertDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel className="cursor-pointer">
+          <AlertDialogCancel  className="cursor-pointer">
             {cancelText}
           </AlertDialogCancel>
 

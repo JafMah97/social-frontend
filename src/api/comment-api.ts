@@ -3,7 +3,7 @@ import {
   CreateCommentResponse,
   DeleteCommentData,
   DeleteCommentResponse,
-  likeCommentData,
+  LikeCommentData,
   LikeCommentResponse,
   ListCommentsResponse,
   UnlikeCommentData,
@@ -14,6 +14,9 @@ import {
 import { Lang } from "@/utils/translation/dictionary-utils";
 import { apiRequest } from "./api-request";
 
+/**
+ * Create a new comment
+ */
 export const createComment = (data: CreateCommentData, lang?: Lang) =>
   apiRequest<CreateCommentResponse, CreateCommentData>(
     "post",
@@ -25,17 +28,22 @@ export const createComment = (data: CreateCommentData, lang?: Lang) =>
     }
   );
 
+/**
+ * Delete a comment (param‑based)
+ */
 export const deleteComment = (data: DeleteCommentData, lang?: Lang) =>
-  apiRequest<DeleteCommentResponse, DeleteCommentData>(
+  apiRequest<DeleteCommentResponse>(
     "delete",
-    `/comments/delete`,
-    data,
+    `/comments/delete/${data.commentId}`, 
+    undefined,                           
     {
       withCredentials: true,
       lang: lang || "en",
     }
   );
-
+/**
+ * Update a comment
+ */
 export const updateComment = (data: UpdateCommentData, lang?: Lang) =>
   apiRequest<UpdateCommentResponse, UpdateCommentData>(
     "put",
@@ -47,8 +55,11 @@ export const updateComment = (data: UpdateCommentData, lang?: Lang) =>
     }
   );
 
-export const LikeComment = (data: likeCommentData, lang?: Lang) =>
-  apiRequest<LikeCommentResponse, likeCommentData>(
+/**
+ * Like a comment
+ */
+export const likeComment = (data: LikeCommentData, lang?: Lang) =>
+  apiRequest<LikeCommentResponse, LikeCommentData>(
     "post",
     `/comments/like`,
     data,
@@ -58,6 +69,9 @@ export const LikeComment = (data: likeCommentData, lang?: Lang) =>
     }
   );
 
+/**
+ * Unlike a comment
+ */
 export const unlikeComment = (data: UnlikeCommentData, lang?: Lang) =>
   apiRequest<UnlikeCommentResponse, UnlikeCommentData>(
     "post",
@@ -69,6 +83,9 @@ export const unlikeComment = (data: UnlikeCommentData, lang?: Lang) =>
     }
   );
 
+/**
+ * Get comments for a post with pagination
+ */
 export const getComments = (postId: string, page = 1, limit = 10) =>
   apiRequest<ListCommentsResponse>(
     "get",
@@ -76,4 +93,3 @@ export const getComments = (postId: string, page = 1, limit = 10) =>
     undefined,
     { withCredentials: true }
   );
-

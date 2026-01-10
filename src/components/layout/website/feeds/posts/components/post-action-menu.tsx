@@ -1,61 +1,81 @@
-"use client";
-
+"use client"
+import CustomPopoverMenu from "@/components/layout/custom/custom-popover-menu";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 import { EllipsisVertical } from "lucide-react";
-import CustomAlertDialog from "@/components/layout/custom/alert-dialog";
-import { useTranslation } from "@/providers/translation-provider";
 import PostEditDialog from "./post-edit-dialog";
-import { PostDTO } from "@/types/api-types";
+import CustomAlert from "@/components/layout/custom/custom-alert";
+import { useState } from "react";
+import { useTranslation } from "@/providers/translation-provider";
+import { PostDTO, UpdatePostData } from "@/types/api-types";
 
-interface PostActionsMenuProps {
-  isAuthor: boolean;
-  deletePost: () => void;
-  isDeleting: boolean;
-  post:PostDTO
+interface PostActionMenuProps {
+  show?:boolean;
+  post:PostDTO;
+  updatePost:(data:UpdatePostData)=>void
+  deletePost:()=>void
 }
 
-export default function PostActionsMenu({
-  isAuthor,
-  deletePost,
-  isDeleting,
-  post
-}: PostActionsMenuProps) {
+export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: PostActionMenuProps) {
   const dictPost = useTranslation().feedsPage.post
-  return (
-    <Popover>
-      <PopoverTrigger className="text-xs cursor-pointer">
-        <EllipsisVertical size={20} />
-      </PopoverTrigger>
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-      <PopoverContent className="text-xs w-30 p-2">
-        <div className="flex flex-col gap-2">
-          <PostEditDialog isAuthor p={post} />
-          
-          <CustomAlertDialog
-            trigger={
-              <Button
-                variant="ghost"
-                disabled={isDeleting || !isAuthor}
-                className="justify-start text-red-500 cursor-pointer"
-              >
-                {isDeleting ? <Spinner /> : dictPost.delete}
-              </Button>
-            }
-            title={dictPost.deleteTitle}
-            description={dictPost.deleteDescription}
-            continueText={dictPost.deleteConfirm}
-            cancelText={dictPost.deleteCancel}
-            onContinue={deletePost}
-            isPending={isDeleting}
-          />
-        </div>
-      </PopoverContent>
-    </Popover>
+    if (!show) return null;
+
+  return (
+    <>
+      {show && (
+        <CustomPopoverMenu
+          open={isPopoverOpen}
+          onOpenChange={setIsPopoverOpen}
+          trigger={
+            <Button
+              className="cursor-pointer"
+              variant={"ghost"}
+              onClick={() => setIsPopoverOpen(true)}
+            >
+              <EllipsisVertical size={20} />
+            </Button>
+          }
+        >
+          <div className="flex flex-col ">
+            <Button
+              className="justify-start cursor-pointer"
+              variant={"ghost"}
+              onClick={() => {
+                setIsPopoverOpen(false);
+                setIsEditDialogOpen(true);
+              }}
+            >
+              {dictPost.edit.confrim}
+            </Button>
+
+            <Button
+              className="justify-start cursor-pointer"
+              variant={"ghost"}
+              onClick={() => {
+                setIsPopoverOpen(false);
+                setIsDeleteAlertOpen(true);
+              }}
+            >
+              {dictPost.delete.confirm}
+            </Button>
+          </div>
+        </CustomPopoverMenu>
+      )}
+      <PostEditDialog
+        editDialogOpen={isEditDialogOpen}
+        onEditDialogOpen={setIsEditDialogOpen}
+        p={post}
+        onConfirm={updatePost}
+      />
+      <CustomAlert
+        open={isDeleteAlertOpen}
+        onOpenChange={setIsDeleteAlertOpen}
+        dict={dictPost.delete}
+        onConfirm={deletePost}
+      />
+    </>
   );
 }

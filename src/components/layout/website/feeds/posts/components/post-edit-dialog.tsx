@@ -1,24 +1,27 @@
 "use client";
 
 import EditDialog from "@/components/layout/custom/edit-dialog";
-import { Button } from "@/components/ui/button";
 import { maxChars } from "@/constants";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 import { useTranslation } from "@/providers/translation-provider";
-import { PostDTO, PostData } from "@/types/api-types";
+import { PostDTO ,UpdatePostData } from "@/types/api-types";
 import { useRef, useState } from "react";
 import PostTextarea from "../../create-post/components/post-textarea";
 import PostEditImage from "./post-edit-image";
-import { usePostActions } from "@/hooks/api-hooks/use-post-actions";
-import { Spinner } from "@/components/ui/spinner";
+
+interface PostEditDialogProps {
+  editDialogOpen: boolean;
+  onEditDialogOpen: (open: boolean) => void;
+  p: PostDTO;
+  onConfirm: (data:UpdatePostData)=>void;
+}
 
 export default function PostEditDialog({
-  isAuthor,
+  editDialogOpen,
+  onEditDialogOpen,
   p,
-}: {
-  isAuthor: boolean;
-  p: PostDTO;
-}) {
+  onConfirm,
+}: PostEditDialogProps) {
   const [postContent, setPostContent] = useState(p.content ?? "");
   const [shake, setShake] = useState(false);
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
@@ -27,8 +30,6 @@ export default function PostEditDialog({
 
   const dict = useTranslation().feedsPage.post.edit;
   const user = useCurrentLoggedUser();
-
-  const { updatePost, isUpdating } = usePostActions(p);
 
   const charactersRemaining = maxChars - postContent.length;
 
@@ -45,11 +46,11 @@ export default function PostEditDialog({
   if (!user.data?.success) return null;
 
   const handleEdit = () => {
-    // ✅ Simplified finalImage logic
     const finalImage =
       removedInitial && !newImageFile ? null : newImageFile ?? p.image ?? null;
 
-    const data: PostData = {
+    const data: UpdatePostData = {
+      id:p.id,
       content: postContent,
       image: finalImage,
       format: "TEXT",
@@ -57,7 +58,8 @@ export default function PostEditDialog({
       visibility: p.visibility ?? "PUBLIC",
     };
 
-    updatePost(data);
+    // ✅ trigger the mutation
+    onConfirm(data);
   };
 
   // Detect changes precisely
@@ -67,41 +69,28 @@ export default function PostEditDialog({
 
   return (
     <EditDialog
-      trigger={
-        <Button
-          disabled={!isAuthor}
-          variant="ghost"
-          size="sm"
-          className="justify-start cursor-pointer"
-        >
-          {dict.edit}
-        </Button>
-      }
-      cancel={dict.cancel}
-      process={isUpdating ? <Spinner /> : dict.process}
-      title={dict.title}
-      onProcess={handleEdit}
-      processDisabled={!hasChanges || isUpdating}
-      headerChildren={<></>}
-      contentChildren={
-        <>
-          <PostEditImage
-            initialImage={p.image}
-            setImage={(file) => setNewImageFile(file)}
-            onInitialRemove={() => setRemovedInitial(true)}
-          />
+      dict={dict}
+      open={editDialogOpen}
+      onOpenChange={onEditDialogOpen}
+      onConfirm={handleEdit}
+      confirmDisabled={!hasChanges}
+    >
+      <>
+        <PostEditImage
+          initialImage={p.image}
+          setImage={(file) => setNewImageFile(file)}
+          onInitialRemove={() => setRemovedInitial(true)}
+        />
 
-          <PostTextarea
-            value={postContent}
-            onChange={handleChange}
-            textareaRef={textareaRef}
-            shake={shake}
-            charactersRemaining={charactersRemaining}
-            maxChars={maxChars}
-          
-          />
-        </>
-      }
-    />
+        <PostTextarea
+          value={postContent}
+          onChange={handleChange}
+          textareaRef={textareaRef}
+          shake={shake}
+          charactersRemaining={charactersRemaining}
+          maxChars={maxChars}
+        />
+      </>
+    </EditDialog>
   );
 }

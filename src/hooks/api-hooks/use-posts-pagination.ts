@@ -36,5 +36,7 @@ export function usePostsPagination(
     isFetchingMore: query.isFetchingNextPage,
     loadMore: query.fetchNextPage,
     hasMore: query.hasNextPage,
+    isSuccess:query.isSuccess,
+    isError:query.isError
   };
 }

@@ -139,7 +139,6 @@ export function usePostActions(post: PostDTO) {
 
   return {
     post: localPost,
-
     liked: localPost.isLiked,
     saved: localPost.isSaved,
 
@@ -148,6 +147,7 @@ export function usePostActions(post: PostDTO) {
     save: () => saveMutation.mutate(localPost.id),
     unsave: () => unsaveMutation.mutate(localPost.id),
     deletePost: () => deleteMutation.mutate(localPost.id),
+
     updatePost: (data: PostData) =>
       updateMutation.mutate({ postId: localPost.id, data }),
 
@@ -155,5 +155,6 @@ export function usePostActions(post: PostDTO) {
     isSaving: saveMutation.isPending || unsaveMutation.isPending,
     isDeleting: deleteMutation.isPending,
     isUpdating: updateMutation.isPending,
+    isUpdated: updateMutation.isSuccess,
   };
 }

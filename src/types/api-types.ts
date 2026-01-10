@@ -186,7 +186,19 @@ export interface CompleteYourProfileResponse {
 
 // feeds types
 
-export interface PostData {
+export interface UpdatePostData {
+  id:string
+  title?: string | null;
+  content?: string | null;
+  image?: string | File | null;
+  format?: "TEXT" | "IMAGE" | "VIDEO" | string;
+  postType?: "STANDARD" | "SPONSORED" | string;
+  visibility?: "PUBLIC" | "FOLLOWERS_ONLY" | "PRIVATE" | string;
+  startsAt?: string | null;
+  endsAt?: string | null;
+}
+
+export interface CreatePostData {
   title?: string | null;
   content?: string | null;
   image?: string | File | null;
@@ -336,123 +348,103 @@ export interface UpdatePostResponse {
   };
 }
 
-// comments type
+// Request payloads
 export interface CreateCommentData {
   postId: string;
   content: string;
 }
 
-export interface CreateCommentResponse {
-  success: boolean;
-  message: string;
-  data: CommentData;
-}
-
-export interface CommentData {
+export interface UpdateCommentData {
   commentId: string;
-  postId: string;
   content: string;
-  userId: string;
-  username: string;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  likes: number;
-}
-
-/// delete comment
-export interface DeleteCommentResponse {
-  success: boolean;
-  message: string;
-  data: DeleteCommentData;
 }
 
 export interface DeleteCommentData {
   commentId: string;
   postId: string;
-  deletedAt: string; // ISO timestamp
 }
 
-/// update comment
-
-export interface UpdateCommentData {
-  postId: string;
-  content: string;
-}
-
-export interface UpdateCommentResponse {
-  success: boolean;
-  message: string;
-  data: UpdatedCommentData;
-}
-
-export interface UpdatedCommentData {
+export interface LikeCommentData {
   commentId: string;
-  postId: string;
-  content: string;
-  userId: string;
-  updatedAt: string; // ISO timestamp
-  createdAt: string; // ISO timestamp
-}
-
-export interface likeCommentData {
-  commentId: string;
-}
-
-export interface LikeCommentResponse {
-  success: boolean;
-  message: string;
-  data: {
-    commentId: string;
-    likesCount: number;
-    isLiked: boolean;
-  };
-}
-
-export interface  UnlikeCommentResponse {
-  success: boolean;
-  message: string;
-  data: {
-    commentId: string;
-    likesCount: number;
-  };
 }
 
 export interface UnlikeCommentData {
   commentId: string;
 }
 
-
-export interface ListCommentsResponse {
-  success: boolean;
-  data: {
-    comments: CommentItem[];
-    pagination: PaginationInfo;
-  };
+export interface CommentQueryContext {
+  prevComments: NormalizedComment[];
 }
 
-export interface CommentItem {
+// Normalized comment shape returned by all endpoints
+export interface NormalizedComment {
   id: string;
   postId: string;
-  authorId: string;
   content: string;
-  authorUsername: string;
-  authorImage: string;
-  isFlagged: boolean;
-  isDeleted: boolean;
+  author: {
+    id: string;
+    username: string;
+    profileImage: string | null;
+    fullName: string | null;
+  };
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
-  author: CommentAuthor;
   likesCount: number;
   isLiked: boolean;
 }
 
-export interface CommentAuthor {
-  id: string;
-  username: string;
-  profileImage: string;
-  fullName: string;
+// Response payloads
+export interface CreateCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    comment: NormalizedComment;
+  };
 }
 
+export interface UpdateCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    comment: NormalizedComment;
+  };
+}
+
+export interface DeleteCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    commentId: string;
+    postId: string;
+    deletedAt: string; // ISO timestamp
+  };
+}
+
+export interface LikeCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    comment: NormalizedComment;
+  };
+}
+
+export interface UnlikeCommentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    comment: NormalizedComment;
+  };
+}
+
+export interface ListCommentsResponse {
+  success: boolean;
+  data: {
+    comments: NormalizedComment[];
+    pagination: PaginationInfo;
+  };
+}
+
+// Pagination info stays the same
 export interface PaginationInfo {
   currentPage: number;
   totalPages: number;
@@ -461,6 +453,7 @@ export interface PaginationInfo {
   hasPrev: boolean;
 }
 
+// Hook params
 export interface UseCommentsParams {
   postId: string;
   page: number;
