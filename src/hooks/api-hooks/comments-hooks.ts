@@ -10,7 +10,9 @@ import {
   UnlikeCommentResponse,
   ApiErrorResponse,
   CreateCommentData,
-  CommentQueryContext,
+  ListCommentsResponse,
+  CommentItem,
+  MutationCommentsContext,
 } from "@/types/api-types";
 
 import {
@@ -19,10 +21,11 @@ import {
   updateComment,
   likeComment,
   unlikeComment,
-  
+  getComments,
 } from "@/api/comment-api";
 
 import {
+  useInfiniteQuery,
   useMutation,
   UseMutationOptions,
 } from "@tanstack/react-query";
@@ -37,11 +40,7 @@ export function useCreateComment(
     CreateCommentData
   >
 ) {
-  return useMutation<
-    CreateCommentResponse,
-    ApiErrorResponse,
-    CreateCommentData
-  >({
+  return useMutation({
     mutationFn: (data) => createComment(data),
     ...options,
   });
@@ -55,15 +54,10 @@ export function useDeleteComment(
     DeleteCommentResponse,
     ApiErrorResponse,
     DeleteCommentData,
-    CommentQueryContext
+    MutationCommentsContext
   >
 ) {
-  return useMutation<
-    DeleteCommentResponse,
-    ApiErrorResponse,
-    DeleteCommentData,
-    CommentQueryContext
-  >({ mutationFn: (data) => deleteComment(data), ...options });
+  return useMutation({ mutationFn: (data) => deleteComment(data), ...options });
 }
 /**
  * Hook for updating a comment.
@@ -73,15 +67,10 @@ export function useUpdateComment(
     UpdateCommentResponse,
     ApiErrorResponse,
     UpdateCommentData,
-    CommentQueryContext
+    MutationCommentsContext
   >
 ) {
-  return useMutation<
-    UpdateCommentResponse,
-    ApiErrorResponse,
-    UpdateCommentData,
-    CommentQueryContext
-  >({
+  return useMutation({
     mutationFn: (data) => updateComment(data),
     ...options,
   });
@@ -95,15 +84,10 @@ export function useLikeComment(
     LikeCommentResponse,
     ApiErrorResponse,
     LikeCommentData,
-    CommentQueryContext
+    MutationCommentsContext
   >
 ) {
-  return useMutation<
-    LikeCommentResponse,
-    ApiErrorResponse,
-    LikeCommentData,
-    CommentQueryContext
-  >({
+  return useMutation({
     mutationFn: (data) => likeComment(data),
     ...options,
   });
@@ -117,18 +101,46 @@ export function useUnlikeComment(
     UnlikeCommentResponse,
     ApiErrorResponse,
     UnlikeCommentData,
-    CommentQueryContext
+    MutationCommentsContext
   >
 ) {
-  return useMutation<
-    UnlikeCommentResponse,
-    ApiErrorResponse,
-    UnlikeCommentData,
-    CommentQueryContext
-  >({
+  return useMutation({
     mutationFn: (data) => unlikeComment(data),
     ...options,
   });
 }
 
+export function useCommentsPagination(
+  postId: string,
+  enabled: boolean,
+  limit: number
+) {
+  const query = useInfiniteQuery<ListCommentsResponse, ApiErrorResponse>({
+    queryKey: ["comments", postId, limit],
+    initialPageParam: 1,
 
+    enabled: enabled && !!postId,
+
+    queryFn: ({ pageParam }) => {
+      const page = typeof pageParam === "number" ? pageParam : 1;
+      return getComments(postId, page, limit);
+    },
+
+    getNextPageParam: (lastPage) => {
+      const { pagination } = lastPage.data;
+      return pagination.hasNext ? pagination.currentPage + 1 : undefined;
+    },
+  });
+
+  const comments: CommentItem[] =
+    query.data?.pages.flatMap((page) => page.data.comments) ?? [];
+
+  return {
+    comments,
+    isLoading: query.isLoading,
+    isFetchingMore: query.isFetchingNextPage,
+    loadMore: query.fetchNextPage,
+    hasMore: query.hasNextPage,
+    refetch: query.refetch,
+  };
+}

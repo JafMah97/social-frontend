@@ -411,10 +411,6 @@
     }
   },
   "createPost": {
-    "toast": {
-      "success": "Your post has been published successfully",
-      "error": "Something went wrong while creating your post"
-    },
     "placeholder": {
       "text": "What's on your mind?",
       "title": "Title",
@@ -440,16 +436,6 @@
     }
   },
   "feedsPage": {
-    "toast": {
-      "likeError": "Failed to like post",
-      "unlikeError": "Failed to unlike post",
-      "saveError": "Failed to save post",
-      "unsaveError": "Failed to unsave post",
-      "deleteSuccess": "Post deleted",
-      "deleteError": "Failed to delete post",
-      "updateSuccess": "Edit Post completed successfully",
-      "updateError": "Something went wrong while editing your post"
-    },
     "post": {
       "noPosts": "No Posts Yet ",
       "newPostsAppear": "When new posts appear, they’ll show up here.",
@@ -464,7 +450,6 @@
         "confirm": "Delete",
         "cancel": "Cancel"
       },
-      "comments": "Comments",
       "likes": "Likes",
       "like": "Like",
       "liked": "Liked",
@@ -472,17 +457,42 @@
       "save": "Save",
       "saved": "Saved",
       "temp": {
-        "delete":{
+        "delete": {
           "main": "Deleting",
           "desc": "This action cannot be undone"
         },
-        "edit":{
+        "edit": {
           "main": "Editing",
-          "desc":"Please wait while updating"
+          "desc": "Please wait while updating"
+        }
+      },
+      "toast": {
+        "create": {
+          "success": "Your post was published — great job!",
+          "error": "We couldn't publish your post. Please try again."
+        },
+        "like": {
+          "error": "Could not like the Post. Try again shortly."
+        },
+        "unlike": {
+          "error": "Could not remove like. Please try again."
+        },
+        "save": {
+          "error": "Could not save the post. Please try again."
+        },
+        "unSave": {
+          "error": "Could not remove the post from saved items. Please try again."
+        },
+        "delete": {
+          "success": "Post removed successfully.",
+          "error": "Unable to delete the post. Please try again."
+        },
+        "update": {
+          "success": "Post updated successfully.",
+          "error": "We couldn't update your post. Please try again."
         }
       }
     },
-    
     "timeAgo": {
       "justNow": "just now",
       "minutes": "{{n}} minutes ago",
@@ -499,6 +509,7 @@
       "year": "{{n}} year ago"
     },
     "comments": {
+      "comments": "Comments",
       "noComments": "No comments yet",
       "loadMore": "Load more",
       "toast": {

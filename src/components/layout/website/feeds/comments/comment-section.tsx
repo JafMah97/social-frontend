@@ -1,4 +1,4 @@
-import { NormalizedComment } from "@/types/api-types";
+import { CommentItem } from "@/types/api-types";
 import CommentCard from "./components/comment-card";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -7,7 +7,7 @@ import CommentInput from "./components/comment-input";
 
 interface CommentSectionProps {
   postId:string;
-  comments: NormalizedComment[];
+  comments: CommentItem[];
   isCommentsPending: boolean;
   loadMoreComments: () => void;
   hasMoreComments: boolean;

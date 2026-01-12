@@ -1,6 +1,10 @@
 "use client";
-import { useState } from "react";
-import { useCommentsPagination } from "./use-comments-pagination";
+
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useTranslation } from "@/providers/translation-provider";
+
+import { ListCommentsResponse, CommentItem } from "@/types/api-types";
 import {
   useCreateComment,
   useDeleteComment,
@@ -8,199 +12,128 @@ import {
   useUnlikeComment,
   useUpdateComment,
 } from "./comments-hooks";
-import { useTranslation } from "@/providers/translation-provider";
-import { toast } from "sonner";
-import { NormalizedComment } from "@/types/api-types";
+import { removeCommentInPages } from "../helpers/comments-cache";
+import { makeOptimisticCommentMutation } from "../helpers/optimistic-update-helper";
 
-interface UseCommentActionsParams {
-  
-    postId: string;
-    enabled: boolean;
-    limit: number;
-}
 export function useCommentActions({
-  postId, enabled, limit 
-}: UseCommentActionsParams) {
-  const dict = useTranslation().feedsPage.comments.toast;
+  postId,
+  limit,
+}: {
+  postId: string;
+  limit: number;
+}) {
+  const dictToast = useTranslation().feedsPage.comments.toast;
+  const queryClient = useQueryClient();
+  const key = ["comments", postId, limit] as const;
 
-  const [comments, setComments] = useState<NormalizedComment[] | []>([]);
-
-  const {
-    refetch: refetchComments,
-    comments: requestedComments,
-    hasMore,
-    isFetchingMore: isFetchingMoreComments,
-    isLoading: isCommentsPending,
-    loadMore,
-  } = useCommentsPagination(postId, enabled, limit);
-
-  if (!isCommentsPending && !isFetchingMoreComments) {
-    setComments((prev) => {
-      if (prev === requestedComments) return prev;
-      return requestedComments;
-    });
-  }
-
-  const {
-    mutate: createComment,
-    data: CreateCommentData,
-    isSuccess: isCreateSuccess,
-    isPending: isCreatePending,
-    isError: isCreateError,
-  } = useCreateComment({
-    onSuccess: () => {
-      toast.success(dict.create.success); 
-      setComments((prev) => [...prev, CreateCommentData!.data.comment]);
-    },
-    onError: () => {
-      toast.error(dict.create.error);
-    },
-  });
-
-  const {
-    mutate: updateComment,
-    isPending: isUpdatePending,
-    isSuccess: isUpdateSuccess,
-    isError: isUpdateError,
-  } = useUpdateComment({
-    onMutate: (vars) => {
-      const prevComments = comments;
-
-      setComments((prev) =>
-        prev.map((c) =>
-          c.id === vars.commentId ? { ...c, content: vars.content } : c
-        )
-      );
-      return { prevComments };
-    },
-    onSuccess: (data) => {
-      toast.success(dict.update.success);
-      setComments((prev) =>
-        prev.map((c) => (c.id === data.data.comment.id ? data.data.comment : c))
-      );
-    },
-    onError: (err, vars, context) => {
-      if (context?.prevComments) {
-        setComments(context.prevComments);
-      }
-      toast.error(dict.update.error);
-    },
-  });
+  // Like
   const {
     mutate: likeComment,
-    isPending: isLikePending,
-    isError: isLikeError,
-    isSuccess: isLikeSuccess,
-  } = useLikeComment({
-    onMutate: (vars) => {
-      const prevComments = comments;
-      setComments((prev) =>
-        prev.map((c) =>
-          c.id === vars.commentId
-            ? { ...c, isLiked: true, likesCount: c.likesCount + 1 }
-            : c
-        )
-      );
-      return { prevComments };
-    },
-    onSuccess: (data) => {
-      setComments((prev) =>
-        prev.map((c) => (c.id === data.data.comment.id ? data.data.comment : c))
-      );
-    },
-    onError: (err, vars, context) => {
-      if (context?.prevComments) {
-        setComments(context.prevComments);
-      }
-      toast.error(dict.like.error);
-    },
+    isSuccess: isLikeCommentSuccess,
+    isPending: isLikeCommentPending,
+    isError: isLikeCommentError,
+  } = makeOptimisticCommentMutation(useLikeComment, {
+    key,
+    queryClient,
+    fieldPatch: (c: CommentItem) => ({
+      isLiked: true,
+      likesCount: c.likesCount + 1,
+    }),
+    errorToast: dictToast.like.error,
   });
+
+  // Unlike
   const {
-    mutate: unLikeComment,
-    isPending: isUnLikePending,
-    isError: isUnLikeError,
-    isSuccess: isUnLikeSuccess,
-  } = useUnlikeComment({
-    onMutate: (vars) => {
-      const prevComments = comments;
-      setComments((prev) =>
-        prev.map((c) =>
-          c.id === vars.commentId
-            ? { ...c, isLiked: false, likesCount: c.likesCount - 1 }
-            : c
-        )
-      );
-      return { prevComments };
-    },
-    onSuccess: (data) => {
-      setComments((prev) =>
-        prev.map((c) => (c.id === data.data.comment.id ? data.data.comment : c))
-      );
-    },
-    onError: (err, vars, context) => {
-      if (context?.prevComments) {
-        setComments(context.prevComments);
-      }
-      toast.error(dict.like.error);
-    },
+    mutate: unlikeComment,
+    isSuccess: isUnlikeCommentSuccess,
+    isPending: isUnlikeCommentPending,
+    isError: isUnlikeCommentError,
+  } = makeOptimisticCommentMutation(useUnlikeComment, {
+    key,
+    queryClient,
+    fieldPatch: (c: CommentItem) => ({
+      isLiked: false,
+      likesCount: Math.max(c.likesCount - 1, 0),
+    }),
+    errorToast: dictToast.unlike.error,
   });
+
+  // Update
+  const {
+    mutate: updateComment,
+    isSuccess: isUpdateCommentSuccess,
+    isPending: isUpdateCommentPending,
+    isError: isUpdateCommentError,
+  } = makeOptimisticCommentMutation(useUpdateComment, {
+    key,
+    queryClient,
+    fieldPatch: (c: CommentItem) => c, // identity patch, server result replaces
+    successToast: dictToast.update.success,
+    errorToast: dictToast.update.error,
+  });
+
+  // Delete (remove from cache)
   const {
     mutate: deleteComment,
-    isPending: isDeletePending,
-    isSuccess: isDeleteSuccess,
-    isError: isDeleteError,
+    isSuccess: isDeleteCommentSuccess,
+    isPending: isDeleteCommentPending,
+    isError: isDeleteCommentError,
   } = useDeleteComment({
-    onMutate: (context) => {
-      const prevComments = comments;
-      setComments((prev) => prev.filter((c) => c.id !== context.commentId));
-      return { prevComments };
+    onSuccess: (_res, variables) => {
+      toast.success(dictToast.delete.success);
+      queryClient.setQueryData<InfiniteData<ListCommentsResponse>>(
+        key,
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            pages: removeCommentInPages(old.pages, variables.commentId),
+          };
+        }
+      );
     },
-    onSuccess: () => {
-      toast.success(dict.delete.success);
-    },
-    onError: (err, vars, context) => {
-      if (context?.prevComments) {
-        setComments(context.prevComments);
-      }
-    },
+    onError: () => toast.error(dictToast.delete.error),
   });
+
+  // Create (invalidate to fetch new comments)
+  const {
+    mutate: createComment,
+    isSuccess: isCreateCommentSuccess,
+    isPending: isCreateCommentPending,
+    isError: isCreateCommentError,
+  } = useCreateComment({
+    onSuccess: () => {
+      toast.success(dictToast.create.success);
+      queryClient.invalidateQueries({ queryKey: key });
+    },
+    onError: () => toast.error(dictToast.create.error),
+  });
+
   return {
-    // comments
-    comments,
-    isCommentsPending,
-    loadMore,
-    hasMore,
-    isFetchingMoreComments,
-    refetchComments,
-
-    // creating comment
     createComment,
-    isCreatePending,
-    isCreateSuccess,
-    isCreateError,
-
-    //update comment
-    updateComment,
-    isUpdatePending,
-    isUpdateSuccess,
-    isUpdateError,
-
-    // like comment
     likeComment,
-    isLikePending,
-    isLikeSuccess,
-    isLikeError,
-
-    // unLike Comment
-    unLikeComment,
-    isUnLikePending,
-    isUnLikeSuccess,
-    isUnLikeError,
-
-    // delete Comment
+    unlikeComment,
+    updateComment,
     deleteComment,
-    isDeletePending,
-    isDeleteSuccess,
-    isDeleteError,
+
+    isLikeCommentSuccess,
+    isLikeCommentPending,
+    isLikeCommentError,
+
+    isUnlikeCommentSuccess,
+    isUnlikeCommentPending,
+    isUnlikeCommentError,
+
+    isUpdateCommentSuccess,
+    isUpdateCommentPending,
+    isUpdateCommentError,
+
+    isDeleteCommentSuccess,
+    isDeleteCommentPending,
+    isDeleteCommentError,
+
+    isCreateCommentSuccess,
+    isCreateCommentPending,
+    isCreateCommentError,
   };
 }

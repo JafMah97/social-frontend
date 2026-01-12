@@ -1,5 +1,7 @@
 // error types
 
+import { InfiniteData } from "@tanstack/react-query";
+
 export interface ApiErrorDetail {
   field: string;
   message: string;
@@ -186,6 +188,8 @@ export interface CompleteYourProfileResponse {
 
 // feeds types
 
+export type MutationPostContext = { previous?: InfiniteData<ListPostsResponse> };
+
 export interface UpdatePostData {
   id:string
   title?: string | null;
@@ -223,8 +227,8 @@ export interface PostDTO {
   title: string | null;
   content: string | null;
   image: string | null;
-  format: "TEXT" | "IMAGE" | "VIDEO" | string; // match your Prisma enum
-  postType: "STANDARD" | "SPONSORED" | string; // match your Prisma enum
+  format: "TEXT" | "IMAGE" | "VIDEO" | string; 
+  postType: "STANDARD" | "SPONSORED" | string;
   visibility: "PUBLIC" | "FOLLOWERS_ONLY" | "PRIVATE" | string;
   tags: string[];
   createdAt: string; // ISO date string
@@ -348,7 +352,12 @@ export interface UpdatePostResponse {
   };
 }
 
-// Request payloads
+// comments
+
+export type MutationCommentsContext = {
+  previous?: InfiniteData<ListCommentsResponse>;
+};
+
 export interface CreateCommentData {
   postId: string;
   content: string;
@@ -372,12 +381,8 @@ export interface UnlikeCommentData {
   commentId: string;
 }
 
-export interface CommentQueryContext {
-  prevComments: NormalizedComment[];
-}
-
 // Normalized comment shape returned by all endpoints
-export interface NormalizedComment {
+export interface CommentItem {
   id: string;
   postId: string;
   content: string;
@@ -398,7 +403,7 @@ export interface CreateCommentResponse {
   success: boolean;
   message: string;
   data: {
-    comment: NormalizedComment;
+    comment: CommentItem;
   };
 }
 
@@ -406,7 +411,7 @@ export interface UpdateCommentResponse {
   success: boolean;
   message: string;
   data: {
-    comment: NormalizedComment;
+    comment: CommentItem;
   };
 }
 
@@ -424,7 +429,7 @@ export interface LikeCommentResponse {
   success: boolean;
   message: string;
   data: {
-    comment: NormalizedComment;
+    comment: CommentItem;
   };
 }
 
@@ -432,14 +437,14 @@ export interface UnlikeCommentResponse {
   success: boolean;
   message: string;
   data: {
-    comment: NormalizedComment;
+    comment: CommentItem;
   };
 }
 
 export interface ListCommentsResponse {
   success: boolean;
   data: {
-    comments: NormalizedComment[];
+    comments: CommentItem[];
     pagination: PaginationInfo;
   };
 }

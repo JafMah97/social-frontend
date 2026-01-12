@@ -13,7 +13,7 @@ interface PostEditDialogProps {
   editDialogOpen: boolean;
   onEditDialogOpen: (open: boolean) => void;
   p: PostDTO;
-  onConfirm: (data:UpdatePostData)=>void;
+  onConfirm: ({postId,data}:{postId:string;data:UpdatePostData})=>void;
 }
 
 export default function PostEditDialog({
@@ -59,7 +59,7 @@ export default function PostEditDialog({
     };
 
     // ✅ trigger the mutation
-    onConfirm(data);
+    onConfirm({postId:p.id,data:data});
   };
 
   // Detect changes precisely

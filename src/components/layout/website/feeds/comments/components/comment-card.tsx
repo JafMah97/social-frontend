@@ -9,12 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useTimeAgo } from "@/hooks/use-time-ago";
-import { NormalizedComment } from "@/types/api-types";
+import { CommentItem } from "@/types/api-types";
 import { Heart, MoreVertical } from "lucide-react";
 import { useState } from "react";
 
 interface CommentCardProps {
-  comment: NormalizedComment;
+  comment: CommentItem;
 }
 
 export default function CommentCard({ comment }: CommentCardProps) {

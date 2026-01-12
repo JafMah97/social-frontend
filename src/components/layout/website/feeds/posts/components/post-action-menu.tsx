@@ -11,8 +11,8 @@ import { PostDTO, UpdatePostData } from "@/types/api-types";
 interface PostActionMenuProps {
   show?:boolean;
   post:PostDTO;
-  updatePost:(data:UpdatePostData)=>void
-  deletePost:()=>void
+  updatePost:({postId,data}:{postId:string,data:UpdatePostData})=>void
+  deletePost:(postId:string)=>void
 }
 
 export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: PostActionMenuProps) {
@@ -75,6 +75,7 @@ export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: 
         onOpenChange={setIsDeleteAlertOpen}
         dict={dictPost.delete}
         onConfirm={deletePost}
+        postId={post.id}
       />
     </>
   );

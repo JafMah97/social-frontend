@@ -20,55 +20,70 @@ import { usePostActions } from "@/hooks/api-hooks/use-post-actions";
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 import { useTranslation } from "@/providers/translation-provider";
 import { useTimeAgo } from "@/hooks/use-time-ago";
-import { useCommentActions } from "@/hooks/api-hooks/use-comment-action";
-import { usePostsPagination } from "@/hooks/api-hooks/use-posts-pagination";
 import Overlay from "./overlay";
 import PostActionMenu from "./post-action-menu";
+import { useCommentsPagination } from "@/hooks/api-hooks/comments-hooks";
 
 interface PostCardProps {
   post: PostDTO;
+  isLoading: boolean;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, isLoading }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
 
   const { data } = useCurrentLoggedUser();
   const dictPost = useTranslation().feedsPage.post;
-
+  const dictComment = useTranslation().feedsPage.comments;
   const {
-    post: p,
-    liked,
-    saved,
-    like,
-    unlike,
-    save,
-    unsave,
-    deletePost,
+    isDeletePostPending,
+    isPostUpdatePending,
     updatePost,
-    isLiking,
-    isSaving,
-    isDeleting,
-    isUpdating,
-  } = usePostActions(post);
+    deletePost,
+    isLikePostPending,
+    likePost: like,
+    unLikePost: unlike,
+    isUnLikePostPending,
+    isSavePostPending,
+    isUnSavePostPending,
+    savePost: save,
+    unSavePost: unsave,
+  } = usePostActions({
+    limit: 4,
+    authorId: undefined,
+    format: undefined,
+  });
 
-  const { isLoading: isPostLoading } = usePostsPagination(false, 4);
+  const timeAgo = useTimeAgo(post.createdAt);
 
-  const timeAgo = useTimeAgo(p.createdAt);
+  const {comments,hasMore,loadMore,isLoading:isLoadingComments,isFetchingMore:isFetchingMoreComments} = useCommentsPagination(post.id,true,4)
 
-  // const {comments,isCommentsPending,loadMore,hasMore,isFetchingMoreComments} = useCommentActions({
-  //   postId: p.id,
-  //   enabled: showComments,
-  //   limit: 5,
-  // });
+  const handleLikeButton = (isLiked: boolean) => {
+    if (isLikePostPending || isUnLikePostPending) return
+    if (!isLiked) {
+      like(post.id);
+    } else {
+      unlike(post.id);
+    }
+  };
+
+  const handleSaveButton = (isSaved: boolean) => {
+    if (isSavePostPending || isUnSavePostPending) return;
+    if (!isSaved) {
+      save(post.id);
+    } else {
+      unsave(post.id);
+    }
+  };
 
   return (
     <Card
       className={`bg-background gap-0 border-none p-4 my-4 
       `}
     >
-      {isDeleting || isPostLoading || isUpdating ? (
+      {isDeletePostPending || isLoading || isPostUpdatePending ? (
         <Overlay
-          dict={isDeleting ? dictPost.temp.delete : dictPost.temp.edit}
+          dict={isDeletePostPending ? dictPost.temp.delete : dictPost.temp.edit}
         />
       ) : (
         <div>
@@ -76,13 +91,13 @@ export default function PostCard({ post }: PostCardProps) {
           <CardHeader className="flex justify-between items-center gap-4 px-2">
             <div className="flex items-center gap-4">
               <CustomAvatar
-                src={p.author.profileImage}
-                fallback={p.author.username}
+                src={post.author.profileImage}
+                fallback={post.author.username}
                 className="md:w-15 md:h-15 w-10 h-10"
               />
               <div>
                 <CardTitle className="text-lg font-semibold">
-                  @{p.author.username}
+                  @{post.author.username}
                 </CardTitle>
                 <CardDescription className="flex flex-col">
                   <span className="text-xs text-muted-foreground">
@@ -92,8 +107,8 @@ export default function PostCard({ post }: PostCardProps) {
               </div>
             </div>
             <PostActionMenu
-              show={data?.data.id === p.author.id}
-              post={p}
+              show={data?.data.id === post.author.id}
+              post={post}
               updatePost={updatePost}
               deletePost={deletePost}
             />
@@ -101,10 +116,10 @@ export default function PostCard({ post }: PostCardProps) {
 
           {/* Content */}
           <CardContent className="px-2">
-            {p.image && (
+            {post.image && (
               <div className="mt-2 md:mt-4 rounded-md overflow-hidden">
                 <Image
-                  src={p.image}
+                  src={post.image}
                   alt="Post image"
                   width={1000}
                   height={1000}
@@ -113,7 +128,7 @@ export default function PostCard({ post }: PostCardProps) {
               </div>
             )}
 
-            <p className="mt-4 text-wrap wrap-break-word">{p.content}</p>
+            <p className="mt-4 text-wrap wrap-break-word">{post.content}</p>
           </CardContent>
 
           {/* Footer */}
@@ -122,11 +137,13 @@ export default function PostCard({ post }: PostCardProps) {
               <div className="px-2 flex flex-row justify-between items-center w-full">
                 <div className="flex gap-3">
                   <span>
-                    <span className="text-primary mx-1">{p.commentsCount}</span>
-                    {dictPost.comments}
+                    <span className="text-primary mx-1">
+                      {post.commentsCount}
+                    </span>
+                    {dictComment.comments}
                   </span>
                   <span>
-                    <span className="text-primary mx-1">{p.likesCount}</span>
+                    <span className="text-primary mx-1">{post.likesCount}</span>
                     {dictPost.likes}
                   </span>
                 </div>
@@ -135,12 +152,16 @@ export default function PostCard({ post }: PostCardProps) {
               <div className="mt-2 py-2 flex border-t border-b border-foreground/20 flex-row justify-evenly">
                 <Button
                   variant="ghost"
-                  className={`cursor-pointer ${liked ? "text-red-600" : ""}`}
-                  onClick={() => (liked ? unlike() : like())}
-                  disabled={isLiking}
+                  className={`cursor-pointer ${
+                    post.isLiked ? "text-red-600" : ""
+                  }`}
+                  onClick={() =>
+                    handleLikeButton(post.isLiked)
+                  }
+                  
                 >
-                  <Heart className={liked ? "text-red-600" : ""} />
-                  <span>{liked ? dictPost.liked : dictPost.like}</span>
+                  <Heart />
+                  <span>{post.isLiked ? dictPost.liked : dictPost.like}</span>
                 </Button>
 
                 <Button
@@ -153,25 +174,29 @@ export default function PostCard({ post }: PostCardProps) {
 
                 <Button
                   variant="ghost"
-                  className={`cursor-pointer${saved ? "text-blue-600" : ""}`}
-                  onClick={() => (saved ? unsave() : save())}
-                  disabled={isSaving}
+                  className={`cursor-pointer ${
+                    post.isSaved ? "text-blue-600" : ""
+                  }`}
+                  onClick={() =>
+                    handleSaveButton(post.isSaved)
+                  }
+                  
                 >
-                  <Bookmark />
-                  <span>{saved ? dictPost.saved : dictPost.save}</span>
+                  <Bookmark/>
+                  <span>{post.isSaved ? dictPost.saved : dictPost.save}</span>
                 </Button>
               </div>
 
-              {/* {showComments && (
+              {showComments && (
             <CommentSection
-            postId={p.id}
+            postId={post.id}
               comments={comments}
-              isCommentsPending={isCommentsPending}
+              isCommentsPending={isLoadingComments}
               loadMoreComments={loadMore}
               hasMoreComments={hasMore}
               isFetchingMoreComments={isFetchingMoreComments}
             />
-          )} */}
+          )}
             </div>
           </CardFooter>
         </div>

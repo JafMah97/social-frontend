@@ -1,6 +1,6 @@
 // src/hooks/post-hooks.ts
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  PostData,
   CreatePostResponse,
   DeletePostResponse,
   GetPostByIdResponse,
@@ -8,10 +8,13 @@ import {
   UnlikePostResponse,
   SavePostResponse,
   UnsavePostResponse,
-  ListPostsResponse,
   SavedPostsResponse,
   UpdatePostResponse,
   ApiErrorResponse,
+  CreatePostData,
+  UpdatePostData,
+  MutationPostContext,
+  
 } from "@/types/api-types";
 import {
   createPostApi,
@@ -36,10 +39,15 @@ import {
  * Hook for creating a new post.
  */
 export function useCreatePost(
-  options?: UseMutationOptions<CreatePostResponse, ApiErrorResponse, PostData>
+  options?: UseMutationOptions<
+    CreatePostResponse,
+    ApiErrorResponse,
+    CreatePostData,
+    MutationPostContext
+  >
 ) {
-  return useMutation<CreatePostResponse, ApiErrorResponse, PostData>({
-    mutationFn: (data: PostData) => createPostApi(data),
+  return useMutation({
+    mutationFn: (data: CreatePostData) => createPostApi(data),
     ...options,
   });
 }
@@ -48,9 +56,14 @@ export function useCreatePost(
  * Hook for deleting a post by ID.
  */
 export function useDeletePost(
-  options?: UseMutationOptions<DeletePostResponse, ApiErrorResponse, string>
+  options?: UseMutationOptions<
+    DeletePostResponse,
+    ApiErrorResponse,
+    string,
+    MutationPostContext
+  >
 ) {
-  return useMutation<DeletePostResponse, ApiErrorResponse, string>({
+  return useMutation({
     mutationFn: (postId: string) => deletePostApi(postId),
     ...options,
   });
@@ -63,7 +76,7 @@ export function useGetPostById(
   postId: string,
   options?: UseQueryOptions<GetPostByIdResponse, ApiErrorResponse>
 ) {
-  return useQuery<GetPostByIdResponse, ApiErrorResponse>({
+  return useQuery({
     queryKey: ["post", postId],
     queryFn: () => getPostByIdApi(postId),
     ...options,
@@ -74,9 +87,14 @@ export function useGetPostById(
  * Hook for liking a post.
  */
 export function useLikePost(
-  options?: UseMutationOptions<LikePostResponse, ApiErrorResponse, string>
+  options?: UseMutationOptions<
+    LikePostResponse,
+    ApiErrorResponse,
+    string,
+    MutationPostContext
+  >
 ) {
-  return useMutation<LikePostResponse, ApiErrorResponse, string>({
+  return useMutation({
     mutationFn: (postId: string) => likePostApi(postId),
     ...options,
   });
@@ -86,9 +104,14 @@ export function useLikePost(
  * Hook for unliking a post.
  */
 export function useUnlikePost(
-  options?: UseMutationOptions<UnlikePostResponse, ApiErrorResponse, string>
+  options?: UseMutationOptions<
+    UnlikePostResponse,
+    ApiErrorResponse,
+    string,
+    MutationPostContext
+  >
 ) {
-  return useMutation<UnlikePostResponse, ApiErrorResponse, string>({
+  return useMutation({
     mutationFn: (postId: string) => unlikePostApi(postId),
     ...options,
   });
@@ -98,9 +121,14 @@ export function useUnlikePost(
  * Hook for saving a post.
  */
 export function useSavePost(
-  options?: UseMutationOptions<SavePostResponse, ApiErrorResponse, string>
+  options?: UseMutationOptions<
+    SavePostResponse,
+    ApiErrorResponse,
+    string,
+    MutationPostContext
+  >
 ) {
-  return useMutation<SavePostResponse, ApiErrorResponse, string>({
+  return useMutation({
     mutationFn: (postId: string) => savePostApi(postId),
     ...options,
   });
@@ -110,36 +138,16 @@ export function useSavePost(
  * Hook for unsaving a post.
  */
 export function useUnsavePost(
-  options?: UseMutationOptions<UnsavePostResponse, ApiErrorResponse, string>
-) {
-  return useMutation<UnsavePostResponse, ApiErrorResponse, string>({
-    mutationFn: (postId: string) => unsavePostApi(postId),
-    ...options,
-  });
-}
-
-/**
- * Hook for listing posts with pagination and optional filters.
- */
-export function usePosts(
-  {
-    page,
-    limit,
-    authorId,
-    format,
-  }: { page: number; limit?: number; authorId?: string; format?: string },
-  options?: Omit<
-    UseQueryOptions<ListPostsResponse, ApiErrorResponse>,
-    "queryKey" | "queryFn"
+  options?: UseMutationOptions<
+    UnsavePostResponse,
+    ApiErrorResponse,
+    string,
+    MutationPostContext
   >
 ) {
-  return useQuery<ListPostsResponse, ApiErrorResponse>({
-    queryKey: ["posts", page, limit, authorId, format],
-    queryFn: () => listPostsApi(page, limit as number, authorId, format),
-
-    enabled: page > 0, // same idea as !!postId
-
-    placeholderData: (prev) => prev,
+  return useMutation
+  ({
+    mutationFn: (postId: string) => unsavePostApi(postId),
     ...options,
   });
 }
@@ -152,21 +160,64 @@ export function useSavedPosts(
   limit: number,
   options?: UseQueryOptions<SavedPostsResponse, ApiErrorResponse>
 ) {
-  return useQuery<SavedPostsResponse, ApiErrorResponse>({
+  return useQuery({
     queryKey: ["savedPosts", page, limit],
     queryFn: () => savedPostsApi(page, limit),
     ...options,
   });
 }
+
 export function useUpdatePost(
   options?: UseMutationOptions<
     UpdatePostResponse,
     ApiErrorResponse,
-    { postId: string; data: PostData }
+    { postId: string; data: UpdatePostData },
+    MutationPostContext
   >
 ) {
   return useMutation({
     mutationFn: ({ postId, data }) => updatePostApi(postId, data),
     ...options,
   });
+}
+
+export function usePostsPagination(
+  enabled: boolean,
+  limit = 10,
+  authorId?: string,
+  format?: string
+) {
+  const query = useInfiniteQuery({
+    queryKey: ["posts", limit, authorId, format],
+    initialPageParam: 1,
+
+    enabled: enabled,
+
+    queryFn: ({ pageParam }) => {
+      const page = typeof pageParam === "number" ? pageParam : 1;
+      return listPostsApi(page, limit, authorId, format);
+    },
+
+    getNextPageParam: (lastPage) => {
+      const { pagination } = lastPage.data;
+
+      const current = pagination.page;
+      const totalPages = pagination.pages;
+
+      return current < totalPages ? current + 1 : undefined;
+    },
+  });
+
+  const posts = query.data?.pages.flatMap((page) => page.data.posts) ?? [];
+
+  return {
+    posts,
+    isLoading: query.isLoading,
+    isFetchingMore: query.isFetchingNextPage,
+    loadMore: query.fetchNextPage,
+    hasMore: query.hasNextPage,
+    isSuccess: query.isSuccess,
+    isError: query.isError,
+    _rawQuery: query,
+  };
 }

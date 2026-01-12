@@ -1,160 +1,175 @@
-import { useState } from "react";
+"use client";
+
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useTranslation } from "@/providers/translation-provider";
 import {
   useLikePost,
   useUnlikePost,
   useSavePost,
   useUnsavePost,
   useDeletePost,
-  useUpdatePost, 
+  useUpdatePost,
+  useCreatePost,
 } from "@/hooks/api-hooks/post-hooks";
-import { PostDTO, PostData } from "@/types/api-types";
-import { toast } from "sonner";
-import { useTranslation } from "@/providers/translation-provider";
-import { useQueryClient } from "@tanstack/react-query";
-
-export function usePostActions(post: PostDTO) {
-  const dictToast = useTranslation().feedsPage.toast;
-  const [localPost, setLocalPost] = useState(post);
-
+import { ListPostsResponse, PostDTO } from "@/types/api-types";
+import { removePostInPages } from "../helpers/posts-cache";
+import { makeOptimisticPostMutation } from "../helpers/optimistic-update-helper";
+export function usePostActions({
+  limit,
+  authorId,
+  format,
+}: {
+  limit: number;
+  authorId?: string;
+  format?: string;
+}) {
+  const dictToast = useTranslation().feedsPage.post.toast;
   const queryClient = useQueryClient();
+  const key = ["posts", limit, authorId, format] as const;
 
-  const likeMutation = useLikePost({
-    onMutate: async () => {
-      setLocalPost((prev) => ({
-        ...prev,
-        isLiked: true,
-        likesCount: prev.likesCount + 1,
-      }));
-    },
-    onSuccess: (updated) => {
-      setLocalPost((prev) => ({
-        ...prev,
-        ...updated.data.post,
-      }));
-    },
-    onError: () => {
-      toast.error(dictToast.likeError);
-      setLocalPost((prev) => ({
-        ...prev,
-        isLiked: false,
-        likesCount: prev.likesCount - 1,
-      }));
-    },
+  // Like
+  const {
+    mutate: likePost,
+    isSuccess: isLikePostSuccess,
+    isPending: isLikePostPending,
+    isError: isLikePostError,
+  } = makeOptimisticPostMutation(useLikePost, {
+    key,
+    queryClient,
+    fieldPatch: (p: PostDTO) => ({
+      isLiked: true,
+      likesCount: p.likesCount + 1,
+    }),
+
+    errorToast: dictToast.like.error,
   });
 
-  const unlikeMutation = useUnlikePost({
-    onMutate: async () => {
-      setLocalPost((prev) => ({
-        ...prev,
-        isLiked: false,
-        likesCount: prev.likesCount - 1,
-      }));
-    },
-    onSuccess: (updated) => {
-      setLocalPost((prev) => ({
-        ...prev,
-        ...updated.data.post,
-      }));
-    },
-    onError: () => {
-      toast.error(dictToast.unlikeError);
-      setLocalPost((prev) => ({
-        ...prev,
-        isLiked: true,
-        likesCount: prev.likesCount + 1,
-      }));
-    },
+  // Unlike
+  const {
+    mutate: unLikePost,
+    isSuccess: isUnLikePostSuccess,
+    isPending: isUnLikePostPending,
+    isError: isUnLikePostError,
+  } = makeOptimisticPostMutation(useUnlikePost, {
+    key,
+    queryClient,
+    fieldPatch: (p: PostDTO) => ({
+      isLiked: false,
+      likesCount: Math.max(p.likesCount - 1, 0),
+    }),
+    errorToast: dictToast.unlike.error,
   });
 
-  const saveMutation = useSavePost({
-    onMutate: async () => {
-      setLocalPost((prev) => ({
-        ...prev,
-        isSaved: true,
-      }));
-    },
-    onSuccess: (updated) => {
-      setLocalPost((prev) => ({
-        ...prev,
-        ...updated.data.post,
-      }));
-    },
-    onError: () => {
-      toast.error(dictToast.saveError);
-      setLocalPost((prev) => ({
-        ...prev,
-        isSaved: false,
-      }));
-    },
+  // Save
+  const {
+    mutate: savePost,
+    isSuccess: isSavePostSuccess,
+    isPending: isSavePostPending,
+    isError: isSavePostError,
+  } = makeOptimisticPostMutation(useSavePost, {
+    key,
+    queryClient,
+    fieldPatch: () => ({ isSaved: true }),
+    errorToast: dictToast.save.error,
   });
 
-  const unsaveMutation = useUnsavePost({
-    onMutate: async () => {
-      setLocalPost((prev) => ({
-        ...prev,
-        isSaved: false,
-      }));
-    },
-    onSuccess: (updated) => {
-      setLocalPost((prev) => ({
-        ...prev,
-        ...updated.data.post,
-      }));
-    },
-    onError: () => {
-      toast.error(dictToast.unsaveError);
-      setLocalPost((prev) => ({
-        ...prev,
-        isSaved: true,
-      }));
-    },
+  // Unsave
+  const {
+    mutate: unSavePost,
+    isSuccess: isUnSavePostSuccess,
+    isPending: isUnSavePostPending,
+    isError: isUnSavePostError,
+  } = makeOptimisticPostMutation(useUnsavePost, {
+    key,
+    queryClient,
+    fieldPatch: () => ({ isSaved: false }),
+    errorToast: dictToast.unSave.error,
   });
 
-  const deleteMutation = useDeletePost({
+  // Update
+  const {
+    mutate: updatePost,
+    isSuccess: isPostUpdateSuccess,
+    isPending: isPostUpdatePending,
+    isError: isPostUpdateError,
+  } = makeOptimisticPostMutation(useUpdatePost, {
+    key,
+    queryClient,
+    fieldPatch: (p: PostDTO) => p, // optimistic patch can be identity, server result will replace
+    successToast: dictToast.update.success,
+    errorToast: dictToast.update.error,
+  });
+
+  // Delete (special case: remove instead of patch)
+  const {
+    mutate: deletePost,
+    isSuccess: isDeletePostSuccess,
+    isPending: isDeletePostPending,
+    isError: isDeletePostError,
+  } = useDeletePost({
+    onSuccess: (_res, postId) => {
+      toast.success(dictToast.delete.success);
+      queryClient.setQueryData<InfiniteData<ListPostsResponse>>(key, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: removePostInPages(old.pages, postId),
+        };
+      });
+    },
+    onError: () => toast.error(dictToast.delete.error),
+  });
+
+  // Create (still invalidate)
+  const {
+    mutate: createPost,
+    isSuccess: isPostCreateSuccess,
+    isPending: isPostCreatePending,
+    isError: isPostCreateError,
+  } = useCreatePost({
     onSuccess: () => {
-      toast.success(dictToast.deleteSuccess);
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(dictToast.create.success);
+      queryClient.invalidateQueries({ queryKey: key });
     },
-    onError: () => toast.error(dictToast.deleteError),
-  });
-
-  const updateMutation = useUpdatePost({
-    onMutate: async () => {
-
-    },
-    onSuccess: (updated) => {
-      toast.success(dictToast.updateSuccess ?? "Post updated successfully");
-      setLocalPost((prev) => ({
-        ...prev,
-        ...updated.data.post,
-      }));
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
-    onError: () => {
-      toast.error(dictToast.updateError ?? "Failed to update post");
-      // optionally rollback
-      setLocalPost(post);
-    },
+    onError: () => toast.error(dictToast.create.error),
   });
 
   return {
-    post: localPost,
-    liked: localPost.isLiked,
-    saved: localPost.isSaved,
+    createPost,
+    likePost,
+    unLikePost,
+    savePost,
+    unSavePost,
+    updatePost,
+    deletePost,
 
-    like: () => likeMutation.mutate(localPost.id),
-    unlike: () => unlikeMutation.mutate(localPost.id),
-    save: () => saveMutation.mutate(localPost.id),
-    unsave: () => unsaveMutation.mutate(localPost.id),
-    deletePost: () => deleteMutation.mutate(localPost.id),
+    isLikePostSuccess,
+    isLikePostPending,
+    isLikePostError,
 
-    updatePost: (data: PostData) =>
-      updateMutation.mutate({ postId: localPost.id, data }),
+    isUnLikePostSuccess,
+    isUnLikePostPending,
+    isUnLikePostError,
 
-    isLiking: likeMutation.isPending || unlikeMutation.isPending,
-    isSaving: saveMutation.isPending || unsaveMutation.isPending,
-    isDeleting: deleteMutation.isPending,
-    isUpdating: updateMutation.isPending,
-    isUpdated: updateMutation.isSuccess,
+    isSavePostSuccess,
+    isSavePostPending,
+    isSavePostError,
+
+    isUnSavePostSuccess,
+    isUnSavePostPending,
+    isUnSavePostError,
+
+    isPostUpdateSuccess,
+    isPostUpdatePending,
+    isPostUpdateError,
+
+    isDeletePostSuccess,
+    isDeletePostPending,
+    isDeletePostError,
+
+    isPostCreateSuccess,
+    isPostCreatePending,
+    isPostCreateError,
   };
 }

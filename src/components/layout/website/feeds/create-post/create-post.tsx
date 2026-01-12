@@ -2,26 +2,23 @@
 
 import { useState, useRef } from "react";
 import CustomAvatar from "@/components/layout/custom/custom-avatar";
-import { useTranslation } from "@/providers/translation-provider";
 import { useFileUpload } from "@/hooks/use-file-upload";
 
 import { maxChars, maxSizeMB } from "@/constants";
 import PostTextarea from "./components/post-textarea";
 import PostImagePreview from "./components/post-image-preview";
 import PostActionBar from "./components/post-action-bar";
-import { PostData } from "@/types/api-types";
-import { useCreatePost } from "@/hooks/api-hooks/post-hooks";
-import { toast } from "sonner";
+
 import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
-import { useQueryClient } from "@tanstack/react-query";
+
+import { CreatePostData } from "@/types/api-types";
+import { usePostActions } from "@/hooks/api-hooks/use-post-actions";
 
 export default function CreatePost() {
   const [postContent, setPostContent] = useState("");
   const [shake, setShake] = useState(false);
-  const [error, setError] = useState("");
   const textareaRef = useRef(null);
 
-  const dict = useTranslation().createPost;
 
   const [{ files, errors }, { openFileDialog, removeFile, getInputProps }] =
     useFileUpload({
@@ -32,27 +29,15 @@ export default function CreatePost() {
     });
 
   const user = useCurrentLoggedUser();
-  const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useCreatePost({
-    onSuccess: () => {
-      setError("");
-      setPostContent("");
-      toast.success(dict.toast.success);
-
-      if (files[0]) removeFile(files[0].id);
-
-      // ⭐ Refetch posts everywhere in the app
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
-    onError: (error) => {
-      setError(error.error.message);
-      toast.error(dict.toast.error);
-    },
+  const { createPost, isPostCreatePending } = usePostActions({
+    limit: 4,
+    authorId: undefined,
+    format: undefined,
   });
 
   const handlePost = () => {
-    const data: PostData = {
+    const data: CreatePostData = {
       title: null,
       content: postContent,
       image: (files[0]?.file as File) || null,
@@ -62,7 +47,8 @@ export default function CreatePost() {
       endsAt: null,
       format: "TEXT",
     };
-    mutate(data);
+    createPost(data);
+    clearAll();
   };
 
   const charactersRemaining = maxChars - postContent.length;
@@ -108,12 +94,11 @@ export default function CreatePost() {
           <input {...getInputProps()} className="hidden" aria-hidden />
 
           <div className="text-red-500 text-sm my-2 h-4">
-            {(fileErrors.length > 0 || error) && (
+            {(fileErrors.length > 0 ) && (
               <>
                 {fileErrors.map((err, i) => (
                   <div key={i}>{err}</div>
                 ))}
-                {error && <div>{error}</div>}
               </>
             )}
           </div>
@@ -124,7 +109,7 @@ export default function CreatePost() {
             canClear={postContent.length > 0 || files.length > 0}
             canPost={postContent.trim().length > 0 || files.length > 0}
             handlePost={handlePost}
-            isPending={isPending}
+            isPending={isPostCreatePending}
             setPostContent={setPostContent}
           />
 

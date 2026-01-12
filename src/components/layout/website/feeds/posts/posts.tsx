@@ -5,11 +5,11 @@ import PostCard from "./components/post-card";
 import { Spinner } from "@/components/ui/spinner";
 import { Inbox } from "lucide-react";
 import { useTranslation } from "@/providers/translation-provider";
-import { usePostsPagination } from "@/hooks/api-hooks/use-posts-pagination";
+import { usePostsPagination } from "@/hooks/api-hooks/post-hooks";
 
 export default function Posts() {
   const { posts, isLoading, isFetchingMore, loadMore, hasMore ,isSuccess,isError } =
-    usePostsPagination(true,4); // showFeed → true for now
+    usePostsPagination(true,4);
 
   const dict = useTranslation().feedsPage.post;
   const dictError = useTranslation().errors
@@ -72,7 +72,7 @@ export default function Posts() {
     <div>
       {posts?.map((post) => (
         <div key={post.id}>
-          <PostCard post={post} />
+          <PostCard post={post} isLoading={isLoading} />
         </div>
       ))}
 
