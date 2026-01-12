@@ -28,11 +28,11 @@ import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { Spinner } from "@/components/ui/spinner";
 import ResendButton from "./resend-button";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCurrentLoggedUser } from "@/hooks/api-hooks/user/useCurrentLoggedUser";
 import {
   useResendVerifyCode,
   useVerifyEmailWithCode,
 } from "@/hooks/api-hooks/auth-hooks";
+import { useCurrentLoggedUser } from "@/hooks/api-hooks/user-hooks";
 
 interface Props extends React.ComponentProps<"div"> {
   lang: Lang;
