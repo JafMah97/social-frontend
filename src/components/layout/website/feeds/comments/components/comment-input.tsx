@@ -17,9 +17,8 @@ export default function CommentInput({ postId }: { postId: string }) {
 
   const charactersRemaining = maxChars - commentValue.length;
 
-  const { createComment, isCreatePending } = useCommentActions({
+  const { createComment, isCreateCommentPending  } = useCommentActions({
     postId,
-    enabled: false,
     limit: 5,
   });
 
@@ -33,7 +32,7 @@ export default function CommentInput({ postId }: { postId: string }) {
     <div className="flex flex-row justify-center items-center gap-2">
       <div className="w-full mt-5">
         <Input
-          disabled={isCreatePending}
+          disabled={isCreateCommentPending}
           placeholder={dict.commentInput.placeholder}
           value={commentValue}
           onChange={(e) => {
@@ -58,9 +57,9 @@ export default function CommentInput({ postId }: { postId: string }) {
         type="submit"
         className="ml-2 cursor-pointer"
         onClick={handleCreate}
-        disabled={isCreatePending}
+        disabled={isCreateCommentPending}
       >
-        {isCreatePending ? <Spinner /> : <Send />}
+        {isCreateCommentPending ? <Spinner /> : <Send />}
       </Button>
     </div>
   );

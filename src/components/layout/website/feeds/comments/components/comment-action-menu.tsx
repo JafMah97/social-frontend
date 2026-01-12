@@ -2,27 +2,27 @@
 import CustomPopoverMenu from "@/components/layout/custom/custom-popover-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical } from "lucide-react";
-import PostEditDialog from "./post-edit-dialog";
 import CustomAlert from "@/components/layout/custom/custom-alert";
 import { useState } from "react";
 import { useTranslation } from "@/providers/translation-provider";
-import { PostDTO, UpdatePostData } from "@/types/api-types";
+import { CommentItem, DeleteCommentData, UpdateCommentData } from "@/types/api-types";
+import CommentEditDialog from "./comment-edit-dialog";
 
-interface PostActionMenuProps {
+interface CommentActionMenuProps {
   show?:boolean;
-  post:PostDTO;
-  updatePost:({postId,data}:{postId:string,data:UpdatePostData})=>void
-  deletePost:(postId:string)=>void
+  comment:CommentItem;
+  updateComment:(data:UpdateCommentData)=>void
+  deleteComment:(data:DeleteCommentData)=>void
 }
 
-export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: PostActionMenuProps) {
-  const dictPost = useTranslation().feedsPage.post
+export default function CommentActionMenu({ show ,comment ,updateComment ,deleteComment  }: CommentActionMenuProps) {
+  const dictComment = useTranslation().feedsPage.comments
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-    const handleDelete = () => {
-      deletePost(post.id)
+    const handleDelete = ()=> {
+      deleteComment({commentId:comment.id,postId:comment.postId})
     }
 
     if (!show) return null;
@@ -52,7 +52,7 @@ export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: 
                 setIsEditDialogOpen(true);
               }}
             >
-              {dictPost.edit.confrim}
+              {dictComment.edit.confrim}
             </Button>
 
             <Button
@@ -63,22 +63,23 @@ export default function PostActionMenu({ show ,post ,updatePost ,deletePost  }: 
                 setIsDeleteAlertOpen(true);
               }}
             >
-              {dictPost.delete.confirm}
+              {dictComment.delete.confirm}
             </Button>
           </div>
         </CustomPopoverMenu>
       )}
-      <PostEditDialog
+        <CommentEditDialog
         editDialogOpen={isEditDialogOpen}
         onEditDialogOpen={setIsEditDialogOpen}
-        p={post}
-        onConfirm={updatePost}
+        comment={comment}
+        onConfirm={updateComment}
       />
       <CustomAlert
         open={isDeleteAlertOpen}
         onOpenChange={setIsDeleteAlertOpen}
-        dict={dictPost.delete}
+        dict={dictComment.delete}
         onConfirm={handleDelete}
+        
       />
     </>
   );

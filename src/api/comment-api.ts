@@ -47,7 +47,7 @@ export const deleteComment = (data: DeleteCommentData, lang?: Lang) =>
 export const updateComment = (data: UpdateCommentData, lang?: Lang) =>
   apiRequest<UpdateCommentResponse, UpdateCommentData>(
     "put",
-    `/comments/edit`,
+    `/comments/edit/${data.postId}/${data.commentId}`,
     data,
     {
       withCredentials: true,

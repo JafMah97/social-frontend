@@ -365,6 +365,7 @@ export interface CreateCommentData {
 
 export interface UpdateCommentData {
   commentId: string;
+  postId:string;
   content: string;
 }
 

@@ -20,16 +20,15 @@ interface CustomAlertDialogProps {
     cancel: string;
     confirm: string;
   };
-  onConfirm:(postId:string)=>void;
-  postId?:string
+  onConfirm:()=>void;
+  
 }
 
 export default function CustomAlert({
   onOpenChange,
   open,
   dict,
-  onConfirm,
-  postId
+  onConfirm
 }: CustomAlertDialogProps) {
   const { title, description, cancel, confirm } = dict;
   return (
@@ -56,7 +55,7 @@ export default function CustomAlert({
             variant={"destructive"}
               onClick={() => {
                 onOpenChange(false);
-                onConfirm(postId||"");
+                onConfirm();
               }}
             >
               {confirm}

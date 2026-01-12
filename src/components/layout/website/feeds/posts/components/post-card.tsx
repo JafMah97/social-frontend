@@ -56,7 +56,7 @@ export default function PostCard({ post, isLoading }: PostCardProps) {
 
   const timeAgo = useTimeAgo(post.createdAt);
 
-  const {comments,hasMore,loadMore,isLoading:isLoadingComments,isFetchingMore:isFetchingMoreComments} = useCommentsPagination(post.id,true,4)
+  const {comments,hasMore,loadMore,isLoading:isLoadingComments,isFetchingMore:isFetchingMoreComments} = useCommentsPagination(post.id,showComments,4)
 
   const handleLikeButton = (isLiked: boolean) => {
     if (isLikePostPending || isUnLikePostPending) return
