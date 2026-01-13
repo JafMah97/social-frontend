@@ -19,7 +19,6 @@ export default function CreatePost() {
   const [shake, setShake] = useState(false);
   const textareaRef = useRef(null);
 
-
   const [{ files, errors }, { openFileDialog, removeFile, getInputProps }] =
     useFileUpload({
       accept: "image/*",
@@ -92,30 +91,27 @@ export default function CreatePost() {
           />
 
           <input {...getInputProps()} className="hidden" aria-hidden />
-
-          <div className="text-red-500 text-sm my-2 h-4">
-            {(fileErrors.length > 0 ) && (
-              <>
-                {fileErrors.map((err, i) => (
-                  <div key={i}>{err}</div>
-                ))}
-              </>
-            )}
-          </div>
-
-          <PostActionBar
-            openFileDialog={openFileDialog}
-            onClear={clearAll}
-            canClear={postContent.length > 0 || files.length > 0}
-            canPost={postContent.trim().length > 0 || files.length > 0}
-            handlePost={handlePost}
-            isPending={isPostCreatePending}
-            setPostContent={setPostContent}
-          />
-
-          <PostImagePreview files={files} removeFile={removeFile} />
         </div>
       </div>
+      <div className="text-red-500 text-sm my-2 h-4">
+        {fileErrors.length > 0 && (
+          <>
+            {fileErrors.map((err, i) => (
+              <div key={i}>{err}</div>
+            ))}
+          </>
+        )}
+      </div>
+      <PostActionBar
+        openFileDialog={openFileDialog}
+        onClear={clearAll}
+        canClear={postContent.length > 0 || files.length > 0}
+        canPost={postContent.trim().length > 0 || files.length > 0}
+        handlePost={handlePost}
+        isPending={isPostCreatePending}
+        setPostContent={setPostContent}
+      />
+      <PostImagePreview files={files} removeFile={removeFile} />
     </div>
   );
 }

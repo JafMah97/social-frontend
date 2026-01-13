@@ -9,10 +9,10 @@ export default async function FeedsPage() {
           <div className=" min-h-screen overflow-visible py-4 m-4 mt-0 mb-0">
             {/* Main content */}
             <div className="bg-background rounded-xl">
-              <div className=" mt-0 bg-primary/10 rounded-xl p-4">
+              <div className=" mt-0 bg-primary/10 rounded-xl p-2 sm:p-4">
                 <CreatePost />
                 <div>
-                  <div className=" rounded-xl mt-4">
+                  <div className=" rounded-xl mt-2 sm:mt-4">
                     <Posts />
                   </div>
                 </div>

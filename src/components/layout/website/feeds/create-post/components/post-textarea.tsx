@@ -24,15 +24,16 @@ export default function PostTextarea({
   const dict = useTranslation().createPost.placeholder;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       <Textarea
         ref={textareaRef}
         value={value}
         onChange={onChange}
         placeholder={dict.text}
-        className={`min-h-18 md:min-h-20 border-0 p-4 text-lg resize-none bg-primary/10 
-          placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:outline-none break-all
+        className={`min-h-18 md:min-h-20 border-0 p-4 md:text-lg resize-none bg-primary/10 
+          placeholder:text-muted-foreground/70 text-xs  placeholder:text-xs placeholder:md:text-sm focus-visible:ring-0 focus-visible:outline-none break-all
           ${shake ? "animate-shake" : ""}
+          
         `}
       />
 
@@ -43,7 +44,10 @@ export default function PostTextarea({
             : "text-muted-foreground"
         }`}
       >
+        <span className="text-xs md:text-sm">
+
         {charactersRemaining} / {maxChars}
+        </span>
       </div>
     </div>
   );

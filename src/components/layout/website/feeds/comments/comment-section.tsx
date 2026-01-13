@@ -29,7 +29,7 @@ export default function CommentSection({
   );
 
   return (
-    <div className="pt-5 px-5">
+    <div className="pt-5 px-0 md:px-5">
       {comments.length > 0 ? (
         comments.map((comment) => (
           <CommentCard key={comment.id} comment={comment} />

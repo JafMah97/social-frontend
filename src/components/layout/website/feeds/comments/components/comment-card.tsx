@@ -55,7 +55,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
   };
 
   return (
-    <Card id={comment.id} className="my-2 gap-1 p-4 bg-primary/10">
+    <Card id={comment.id} className="my-2 gap-1 p-2 md:p-4 bg-primary/10">
       {isUpdateCommentPending || isDeleteCommentPending ? (
         <div className="flex justify-center items-center">
 
@@ -91,7 +91,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
             />
           </CardHeader>
 
-          <CardContent className="py-2 px-0 flex justify-between gap-2 items-center break-all">
+          <CardContent className="py-2 px-2 flex justify-between gap-2 items-center break-all">
             <div className="flex-1">
               <p className="text-sm whitespace-pre-wrap">{displayedText}</p>
               {isLong && (
@@ -116,7 +116,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
                 size={16}
                 className={comment.isLiked ? "fill-red-500 text-red-500" : ""}
               />
-              <span className="ml-1">{comment.likesCount}</span>
+              <span className="ml-1 text-xs md:text-sm">{comment.likesCount}</span>
             </Button>
           </CardContent>
         </>

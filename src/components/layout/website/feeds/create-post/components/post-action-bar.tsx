@@ -3,7 +3,7 @@
 import TooltipButton from "@/components/layout/custom/tooltip-button";
 import { Spinner } from "@/components/ui/spinner";
 import { useTranslation } from "@/providers/translation-provider";
-import { ImageIcon, LocationEditIcon, VideoIcon } from "lucide-react";
+import { ImageIcon, VideoIcon } from "lucide-react";
 import EmojiesPicker from "./emojies-picker";
 import PostPrivacyIndicator from "./post-privacy-indicator";
 
@@ -29,7 +29,7 @@ export default function PostActionBar({
   const dict = useTranslation().createPost;
 
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
       <div className="flex items-center gap-1">
         <TooltipButton
           toolTipMessage={dict.actions.addPhoto}
@@ -37,10 +37,6 @@ export default function PostActionBar({
           onClick={openFileDialog}
         />
 
-        <TooltipButton
-          toolTipMessage={dict.actions.addLocation}
-          button={<LocationEditIcon className="w-5 h-5" />}
-        />
 
         <TooltipButton
           toolTipMessage={dict.actions.videoComingSoon}
@@ -55,18 +51,22 @@ export default function PostActionBar({
         {canClear && (
           <button
             onClick={onClear}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             {dict.actions.clear}
           </button>
         )}
+        <div className="hidden md:flex">
+
         <PostPrivacyIndicator label={dict.privacyIndicator} />
+        </div>
 
         <TooltipButton
+        size="sm"
           toolTipMessage={dict.actions.sharePost}
           button={
             !isPending ? (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 text-xs md:text-sm">
                 <span>{dict.actions.post}</span>
               </span>
             ) : (

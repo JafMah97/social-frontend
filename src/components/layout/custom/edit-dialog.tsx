@@ -36,7 +36,20 @@ export default function EditDialog({
   const { title, description, cancel, confrim } = dict;
   return (
     <Dialog modal={false} open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-3xl gap-3">
+      <DialogContent
+        className="
+    w-full 
+    max-w-[95vw] 
+    sm:max-w-lg 
+    md:max-w-xl 
+    lg:max-w-2xl 
+    p-4 sm:p-6 
+    rounded-xl 
+    gap-3 
+    max-h-[90vh] 
+    overflow-y-auto
+  "
+      >
         <DialogHeader>
           <DialogTitle className="m-0 p-0">{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
@@ -44,17 +57,17 @@ export default function EditDialog({
         {children}
         <DialogFooter>
           <DialogClose
-            className="cursor-pointer"
+            className="cursor-pointer text-xs md:text-sm"
             onClick={() => onOpenChange(false)}
           >
             {cancel}
           </DialogClose>
           <Button
-            className="cursor-pointer disabled:cursor-not-allowed"
+            className="cursor-pointer disabled:cursor-not-allowed text-xs md:text-sm"
             disabled={confirmDisabled}
-            onClick={()=>{
+            onClick={() => {
               onConfirm();
-              onOpenChange(false)
+              onOpenChange(false);
             }}
           >
             {confrim}

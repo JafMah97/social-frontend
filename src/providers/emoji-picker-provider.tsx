@@ -58,7 +58,7 @@ export function EmojiPickerProvider({ children }: { children: ReactNode }) {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-background/50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-background/50 flex items-center justify-center z-50 "
           onClick={closeEmojiPicker}
         >
           <div
@@ -66,7 +66,7 @@ export function EmojiPickerProvider({ children }: { children: ReactNode }) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header row */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 w-fit">
               <span className="text-sm font-medium text-muted-foreground">
                 Pick an emoji
               </span>
@@ -85,8 +85,11 @@ export function EmojiPickerProvider({ children }: { children: ReactNode }) {
                 </div>
               }
             >
-              <div className="rounded-xl">
+              <div className="rounded-xl w-fit">
                 <EmojiPicker
+                lazyLoadEmojis
+                width={250}
+                className="w-fit p-2"
                   searchDisabled
                   onEmojiClick={handleSelect}
                   previewConfig={previewConfig}

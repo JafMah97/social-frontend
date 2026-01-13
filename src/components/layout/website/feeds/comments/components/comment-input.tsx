@@ -29,7 +29,7 @@ export default function CommentInput({ postId }: { postId: string }) {
   };
 
   return (
-    <div className="flex flex-row justify-center items-center gap-2">
+    <div className="flex flex-col md:flex-row justify-center items-center gap-2">
       <div className="w-full mt-5">
         <Input
           disabled={isCreateCommentPending}
@@ -43,24 +43,28 @@ export default function CommentInput({ postId }: { postId: string }) {
               setTimeout(() => setShake(false), 500);
             }
           }}
-          className={shake ? "animate-shake" : ""}
+          className={`text-xs md:text-sm ${shake ? "animate-shake" : ""}`}
         />
-        <div className={`px-2 pt-1 ${shake && "animate-shake"}`}>
+        <div
+          className={`px-2 pt-1 text-xs md:text-sm ${shake && "animate-shake"}`}
+        >
           <span className={charactersRemaining === 0 ? "text-red-500" : ""}>
             {charactersRemaining}
           </span>
           /1000
         </div>
       </div>
-      <EmojiesPicker setPostContent={setCommentValue} />
-      <Button
-        type="submit"
-        className="ml-2 cursor-pointer"
-        onClick={handleCreate}
-        disabled={isCreateCommentPending}
-      >
-        {isCreateCommentPending ? <Spinner /> : <Send />}
-      </Button>
+      <div>
+        <EmojiesPicker setPostContent={setCommentValue} />
+        <Button
+          type="submit"
+          className="ml-2 cursor-pointer"
+          onClick={handleCreate}
+          disabled={isCreateCommentPending}
+        >
+          {isCreateCommentPending ? <Spinner /> : <Send />}
+        </Button>
+      </div>
     </div>
   );
 }

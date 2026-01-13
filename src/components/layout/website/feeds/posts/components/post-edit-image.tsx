@@ -41,24 +41,18 @@ export default function PostEditImage({
 
   const previewUrl = files[0]?.preview ?? null;
 
-  // Only report a real File to parent
   useEffect(() => {
     const f = files[0]?.file;
-    if (f instanceof File) {
-      setImage(f);
-    }
+    if (f instanceof File) setImage(f);
   }, [files, setImage]);
 
-  // Revoke object URLs on unmount
   useEffect(() => {
     return () => {
       for (const f of files ?? []) {
         if (f.preview && f.file instanceof File) {
           try {
             URL.revokeObjectURL(f.preview);
-          } catch {
-            /* ignore */
-          }
+          } catch {}
         }
       }
     };
@@ -68,7 +62,7 @@ export default function PostEditImage({
   const showExisting = initialImage && !removedInitial && files.length === 0;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       {/* Errors */}
       <div className="h-5 mt-2">
         {errors.length > 0 && (
@@ -84,7 +78,7 @@ export default function PostEditImage({
 
       <div className="relative">
         <div
-          className="relative flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border-3 border-input border-dashed p-4 transition-colors aspect-video has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50"
+          className="relative flex min-h-40 sm:min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border-3 border-input border-dashed p-4 transition-colors aspect-video data-[dragging=true]:bg-accent/50"
           data-dragging={isDragging || undefined}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
@@ -120,20 +114,22 @@ export default function PostEditImage({
               />
             </div>
           ) : (
-            // Empty dropzone
-            <div className="flex flex-row items-center justify-center px-4 py-3 text-center gap-3">
+            // Empty dropzone (responsive)
+            <div className="flex flex-col sm:flex-row items-center justify-center px-4 py-3 text-center gap-3 w-full">
               <div
                 aria-hidden="true"
-                className="mb-2 hidden md:flex size-11 shrink-0 items-center justify-center rounded-full border bg-background"
+                className="flex size-11 shrink-0 items-center justify-center rounded-full border bg-background"
               >
-                <ImageIcon className="size-4 opacity-60 " />
+                <ImageIcon className="size-4 opacity-60" />
               </div>
-              <p className="mb-1.5 font-medium text-sm hidden md:block">
-                {dict.dropHere}
-              </p>
-              <p className="text-muted-foreground text-xs hidden lg:block">
-                {fmt(dict.fileTypes, { size: maxSizeMB })}
-              </p>
+
+              <div className="flex flex-col items-center sm:items-start gap-1">
+                <p className="font-medium text-sm">{dict.dropHere}</p>
+                <p className="text-muted-foreground text-xs">
+                  {fmt(dict.fileTypes, { size: maxSizeMB })}
+                </p>
+              </div>
+
               <Button
                 onClick={openFileDialog}
                 variant="outline"
@@ -141,7 +137,7 @@ export default function PostEditImage({
               >
                 <UploadIcon
                   aria-hidden="true"
-                  className="-ms-1 size-4 opacity-60 "
+                  className="-ms-1 size-4 opacity-60"
                 />
                 {dict.selectImage}
               </Button>
@@ -151,20 +147,20 @@ export default function PostEditImage({
 
         {/* Remove button */}
         {(showExisting || previewUrl) && (
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
             <button
               aria-label={dict.removeImage}
-              className="z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-none transition hover:bg-black/80 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              className="z-50 flex size-7 sm:size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-none transition hover:bg-black/80"
               onClick={() => {
                 if (showExisting) {
                   setRemovedInitial(true);
                   setImage(null);
-                  onInitialRemove(); // notify parent initial removed
+                  onInitialRemove();
                 }
                 if (files[0]) {
                   removeFile(files[0].id);
                   clearFiles();
-                  setImage(null); // notify parent new upload removed
+                  setImage(null);
                 }
               }}
               type="button"

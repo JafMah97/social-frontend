@@ -135,15 +135,20 @@ export default function PostCard({ post, isLoading }: PostCardProps) {
           <CardFooter className="px-0 pt-4 flex justify-between text-sm text-muted-foreground">
             <div className="flex flex-col w-full">
               <div className="px-2 flex flex-row justify-between items-center w-full">
-                <div className="flex gap-3">
+                <div className="flex gap-3 text-xs md:text-sm">
                   <span>
                     <span className="text-primary mx-1">
                       {post.commentsCount}
                     </span>
+                    
+
                     {dictComment.comments}
+                    
                   </span>
                   <span>
-                    <span className="text-primary mx-1">{post.likesCount}</span>
+                    <span className="text-primary mx-1 ">
+                      {post.likesCount}
+                    </span>
                     {dictPost.likes}
                   </span>
                 </div>
@@ -152,51 +157,49 @@ export default function PostCard({ post, isLoading }: PostCardProps) {
               <div className="mt-2 py-2 flex border-t border-b border-foreground/20 flex-row justify-evenly">
                 <Button
                   variant="ghost"
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer text-xs md:text-sm ${
                     post.isLiked ? "text-red-600" : ""
                   }`}
-                  onClick={() =>
-                    handleLikeButton(post.isLiked)
-                  }
-                  
+                  onClick={() => handleLikeButton(post.isLiked)}
                 >
                   <Heart />
-                  <span>{post.isLiked ? dictPost.liked : dictPost.like}</span>
+                  <span className="hidden md:block">{post.isLiked ? dictPost.liked : dictPost.like}</span>
                 </Button>
 
                 <Button
-                  className="cursor-pointer"
                   variant="ghost"
+                  className="cursor-pointer text-xs md:text-sm"
                   onClick={() => setShowComments((prev) => !prev)}
                 >
-                  <MessageCircle /> {dictPost.comment}
+                  <MessageCircle /> 
+                  <span className="hidden md:block">
+                  {dictPost.comment}
+
+                  </span>
                 </Button>
 
                 <Button
                   variant="ghost"
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer text-xs md:text-sm ${
                     post.isSaved ? "text-blue-600" : ""
                   }`}
-                  onClick={() =>
-                    handleSaveButton(post.isSaved)
-                  }
-                  
+                  onClick={() => handleSaveButton(post.isSaved)}
                 >
-                  <Bookmark/>
-                  <span>{post.isSaved ? dictPost.saved : dictPost.save}</span>
+                  <Bookmark />
+                  <span className="hidden md:block">{post.isSaved ? dictPost.saved : dictPost.save}</span>
                 </Button>
               </div>
 
               {showComments && (
-            <CommentSection
-            postId={post.id}
-              comments={comments}
-              isCommentsPending={isLoadingComments}
-              loadMoreComments={loadMore}
-              hasMoreComments={hasMore}
-              isFetchingMoreComments={isFetchingMoreComments}
-            />
-          )}
+                <CommentSection
+                  postId={post.id}
+                  comments={comments}
+                  isCommentsPending={isLoadingComments}
+                  loadMoreComments={loadMore}
+                  hasMoreComments={hasMore}
+                  isFetchingMoreComments={isFetchingMoreComments}
+                />
+              )}
             </div>
           </CardFooter>
         </div>
